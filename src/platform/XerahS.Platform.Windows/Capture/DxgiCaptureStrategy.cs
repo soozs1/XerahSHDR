@@ -227,7 +227,7 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
                 Height = (uint)sourceHeight,
                 MipLevels = 1,
                 ArraySize = 1,
-                Format = Format.B8G8R8A8_UNorm,
+                Format = context.IsHdr ? Format.R16G16B16A16_Float : Format.B8G8R8A8_UNorm,
                 SampleDescription = new SampleDescription(1, 0),
                 Usage = ResourceUsage.Staging,
                 BindFlags = BindFlags.None,
@@ -250,11 +250,9 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
             try
             {
                 // Create SKBitmap from mapped data
-                using var sourceBitmap = new SKBitmap(
-                    sourceWidth,
-                    sourceHeight,
-                    SKColorType.Bgra8888,
-                    SKAlphaType.Premul);
+                using var sourceBitmap = context.IsHdr
+                    ? new SKBitmap(new SKImageInfo(sourceWidth, sourceHeight, SKColorType.RgbaF16, SKAlphaType.Premul, SKColorSpace.CreateSrgbLinear()))
+                    : new SKBitmap(sourceWidth, sourceHeight, SKColorType.Bgra8888, SKAlphaType.Premul);
 
                 var info = sourceBitmap.Info;
                 var rowBytes = info.RowBytes;
@@ -264,10 +262,11 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
                     (int)mapped.RowPitch,
                     sourceBitmap.GetPixels(),
                     rowBytes,
-                    sourceWidth * 4,
+                    sourceWidth * (context.IsHdr ? 8 : 4),
                     sourceHeight);
 
                 SKBitmap bitmap = BitmapRotationHelper.RotateClockwise(sourceBitmap, monitor.Rotation);
+                // TODO HDR: verify cursor color space — cursor is decoded without an explicit profile (design doc §4.3)
                 TryCompositeCursor(bitmap, captureRegion, options);
                 return new CapturedBitmap(bitmap, captureRegion, monitor.ScaleFactor);
             }
@@ -329,14 +328,51 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
             if (result.Failure || device == null)
                 throw new InvalidOperationException($"Failed to create D3D11 device: {result}");
 
+            bool isHdr = IsOutputHdr(output);
+
             // Create output duplication
-            var duplication = output1.DuplicateOutput(device);
+            IDXGIOutputDuplication duplication;
+            if (isHdr)
+            {
+                // HDR: request fp16 scRGB frames via DXGI 1.5 format list (DuplicateOutput1).
+                // Fall back to the 8-bit path when the driver rejects fp16 or ignores the
+                // format hint (design doc RISK-06): a mismatch between the staging format
+                // and the duplicated frame format would be undefined behavior.
+                try
+                {
+                    using var output5 = output.QueryInterface<IDXGIOutput5>();
+                    var hdrDup = output5.DuplicateOutput1(device, new[] { Format.R16G16B16A16_Float });
+                    if (hdrDup.Description.ModeDescription.Format == Format.R16G16B16A16_Float)
+                    {
+                        duplication = hdrDup;
+                    }
+                    else
+                    {
+                        hdrDup.Dispose();
+                        DebugHelper.WriteLine("HDR: driver ignored the fp16 format hint; falling back to 8-bit duplication.");
+                        duplication = output1.DuplicateOutput(device);
+                        isHdr = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DebugHelper.WriteLine($"HDR: DuplicateOutput1 failed ({ex.Message}); falling back to 8-bit duplication.");
+                    duplication = output1.DuplicateOutput(device);
+                    isHdr = false;
+                }
+            }
+            else
+            {
+                duplication = output1.DuplicateOutput(device);
+            }
+
             var context = new DxgiMonitorContext
             {
                 Device = device,
                 ImmediateContext = device.ImmediateContext,
                 Output = output1,
-                IDXGIOutputDuplication = duplication
+                IDXGIOutputDuplication = duplication,
+                IsHdr = isHdr
             };
 
             DisposableContextDictionary.Replace(_monitorContexts, monitorId, context);
@@ -424,6 +460,7 @@ internal sealed class DxgiMonitorContext : IDisposable
     public required ID3D11DeviceContext ImmediateContext { get; init; }
     public required IDXGIOutput1 Output { get; init; }
     public required IDXGIOutputDuplication IDXGIOutputDuplication { get; init; }
+    public bool IsHdr { get; init; }
 
     public void Dispose()
     {

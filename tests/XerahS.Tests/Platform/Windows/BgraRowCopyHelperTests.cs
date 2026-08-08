@@ -142,4 +142,37 @@ public class BgraRowCopyHelperTests
             5, 6, 7, 8
         }));
     }
+
+    [Test]
+    public void CopyRows_Fp16WideRow_CopiesAllBytes()
+    {
+        // fp16 buffer: 2×2 pixels × 8 bytes per pixel (4 half-float channels), 16 bytes per row.
+        const int width = 2;
+        const int height = 2;
+        const int bytesPerRow = width * 8;
+
+        byte[] source =
+        [
+            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+            0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F
+        ];
+        byte[] destination = new byte[bytesPerRow * height];
+
+        IntPtr sourcePtr = Marshal.AllocHGlobal(source.Length);
+        IntPtr destinationPtr = Marshal.AllocHGlobal(destination.Length);
+
+        try
+        {
+            Marshal.Copy(source, 0, sourcePtr, source.Length);
+            BgraRowCopyHelper.CopyRows(sourcePtr, bytesPerRow, destinationPtr, bytesPerRow, bytesPerRow, height);
+            Marshal.Copy(destinationPtr, destination, 0, destination.Length);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(destinationPtr);
+            Marshal.FreeHGlobal(sourcePtr);
+        }
+
+        Assert.That(destination, Is.EqualTo(source));
+    }
 }

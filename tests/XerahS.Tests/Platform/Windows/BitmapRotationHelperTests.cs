@@ -190,6 +190,37 @@ public class BitmapRotationHelperTests
     }
 
     // ──────────────────────────────────────────────────────────────────────
+    // F16 (scRGB) format preservation
+    //
+    // HDR capture produces RgbaF16 bitmaps with a linear sRGB color space;
+    // rotation must not downgrade them to Bgra8888 (which would clip values > 1.0).
+    // ──────────────────────────────────────────────────────────────────────
+
+    [TestCase(90)]
+    [TestCase(180)]
+    [TestCase(270)]
+    public void RotateClockwise_F16_PreservesColorTypeAndColorSpace(int clockwiseDegrees)
+    {
+        using var src = MakeF16TestBitmap(4, 2);
+        using var result = BitmapRotationHelper.RotateClockwise(src, clockwiseDegrees);
+
+        Assert.That(result.ColorType, Is.EqualTo(SKColorType.RgbaF16),
+            "F16 source must stay F16 after rotation (scRGB values > 1.0 must not be clipped)");
+        Assert.That(result.ColorSpace, Is.Not.Null,
+            "F16 source color space must be preserved after rotation");
+    }
+
+    [Test]
+    public void RotateClockwise_F16_SwapsDimensionsLikeBgra8888()
+    {
+        using var src = MakeF16TestBitmap(4, 2);
+        using var result = BitmapRotationHelper.RotateClockwise(src, 90);
+
+        Assert.That(result.Width, Is.EqualTo(2));
+        Assert.That(result.Height, Is.EqualTo(4));
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
     // DMDO constant contract (issue #148 specification guard)
     //
     // These tests encode the correct semantic meaning of Windows DEVMODE
@@ -260,6 +291,21 @@ public class BitmapRotationHelperTests
     private static SKBitmap MakeTestBitmap(int width, int height)
     {
         var bmp = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
+        bmp.Erase(SKColors.DimGray);
+        return bmp;
+    }
+
+    /// <summary>
+    /// Creates an F16 bitmap with a linear sRGB color space, matching the HDR capture path.
+    /// </summary>
+    private static SKBitmap MakeF16TestBitmap(int width, int height)
+    {
+        var bmp = new SKBitmap(new SKImageInfo(
+            width,
+            height,
+            SKColorType.RgbaF16,
+            SKAlphaType.Premul,
+            SKColorSpace.CreateSrgbLinear()));
         bmp.Erase(SKColors.DimGray);
         return bmp;
     }

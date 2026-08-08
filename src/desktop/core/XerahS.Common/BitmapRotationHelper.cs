@@ -38,6 +38,7 @@ public static class BitmapRotationHelper
     /// Rotates <paramref name="source"/> clockwise by <paramref name="clockwiseDegrees"/>.
     /// Supported values: 0, 90, 180, 270. Any other value is treated as 0 (identity).
     /// Returns a new SKBitmap; the caller owns it and must dispose it.
+    /// The result inherits the source color type and color space (e.g. F16 scRGB stays F16).
     /// </summary>
     public static SKBitmap RotateClockwise(SKBitmap source, int clockwiseDegrees)
     {
@@ -53,7 +54,13 @@ public static class BitmapRotationHelper
             targetHeight = source.Width;
         }
 
-        var result = new SKBitmap(targetWidth, targetHeight, SKColorType.Bgra8888, SKAlphaType.Premul);
+        // Inherit the source format so fp16 (scRGB) captures survive rotation unchanged.
+        var result = new SKBitmap(new SKImageInfo(
+            targetWidth,
+            targetHeight,
+            source.ColorType,
+            SKAlphaType.Premul,
+            source.ColorSpace));
         using var canvas = new SKCanvas(result);
         canvas.Clear(SKColors.Black);
 
