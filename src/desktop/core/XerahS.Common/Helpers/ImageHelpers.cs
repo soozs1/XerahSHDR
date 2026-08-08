@@ -50,16 +50,40 @@ public static class ImageHelpers
 
     public static void SaveBitmap(SKBitmap bitmap, string filePath, int quality = 100)
     {
+        SaveBitmap(bitmap, filePath, PNGBitDepth.Default, quality);
+    }
+
+    public static void SaveBitmap(SKBitmap bitmap, string filePath, PNGBitDepth pngBitDepth, int quality = 100)
+    {
         if (bitmap is null) throw new ArgumentNullException(nameof(bitmap));
         if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("File path cannot be empty.", nameof(filePath));
 
         FileHelpers.CreateDirectoryFromFilePath(filePath);
 
-        SKEncodedImageFormat format = GetEncodedFormat(filePath);
-        using SKImage image = SKImage.FromBitmap(bitmap);
-        using SKData data = image.Encode(format, quality);
-        using FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
-        data.SaveTo(stream);
+        // RgbaF16 (HDR) input and explicit Bit16 must be written as 16-bit PNG:
+        // the other encoders are 8-bit and would clamp the extended-range values.
+        bool write16BitPng = bitmap.ColorType == SKColorType.RgbaF16 || pngBitDepth == PNGBitDepth.Bit16;
+        SKEncodedImageFormat format = write16BitPng ? SKEncodedImageFormat.Png : GetEncodedFormat(filePath);
+
+        SKBitmap? converted = null;
+        try
+        {
+            if (write16BitPng && bitmap.ColorType != SKColorType.RgbaF16)
+            {
+                // Widen SDR pixels to 16-bit sRGB so the encoder emits bitDepth=16
+                // while preserving the encoded appearance.
+                converted = bitmap.Copy(SKColorType.Rgba16161616);
+            }
+
+            using SKImage image = SKImage.FromBitmap(converted ?? bitmap);
+            using SKData data = image.Encode(format, quality);
+            using FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            data.SaveTo(stream);
+        }
+        finally
+        {
+            converted?.Dispose();
+        }
     }
 
     public static SKBitmap ResizeImage(SKBitmap bitmap, int width, int height, SKSamplingOptions? sampling = null)

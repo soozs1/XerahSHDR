@@ -581,10 +581,32 @@ public static partial class TaskHelpers
         if (bmp == null) return null;
 
         var ms = new MemoryStream();
+        SkiaSharp.SKBitmap? converted = null;
 
         try
         {
-            using var image = SkiaSharp.SKImage.FromBitmap(bmp);
+            // RgbaF16 (HDR) input must be saved as PNG: the JPEG/GIF/WEBP/BMP encoders are
+            // 8-bit and would clamp the extended-range values. Bit16 opts SDR content into
+            // 16-bit PNG as well.
+            var isHdrInput = bmp.ColorType == SkiaSharp.SKColorType.RgbaF16;
+            var use16BitPng = isHdrInput || pngBitDepth == PNGBitDepth.Bit16;
+
+            SkiaSharp.SKBitmap? source = bmp;
+
+            if (use16BitPng)
+            {
+                imageFormat = EImageFormat.PNG;
+
+                if (!isHdrInput)
+                {
+                    // Widen SDR pixels to 16-bit sRGB so the PNG encoder emits bitDepth=16
+                    // while preserving the encoded appearance.
+                    converted = bmp.Copy(SkiaSharp.SKColorType.Rgba16161616);
+                    source = converted;
+                }
+            }
+
+            using var image = SkiaSharp.SKImage.FromBitmap(source);
             using var data = imageFormat switch
             {
                 EImageFormat.JPEG => image.Encode(SkiaSharp.SKEncodedImageFormat.Jpeg, jpegQuality),
@@ -606,6 +628,10 @@ public static partial class TaskHelpers
             ms.Dispose();
             return null;
         }
+        finally
+        {
+            converted?.Dispose();
+        }
     }
 
     /// <summary>
@@ -616,7 +642,10 @@ public static partial class TaskHelpers
         string screenshotsFolder = GetScreenshotsFolder(taskSettings);
         FileHelpers.CreateDirectory(screenshotsFolder);
 
-        string extension = EnumExtensions.GetDescription(taskSettings.ImageSettings.ImageFormat);
+        string extension = bmp.ColorType == SkiaSharp.SKColorType.RgbaF16 ||
+            taskSettings.ImageSettings.ImagePNGBitDepth == PNGBitDepth.Bit16
+            ? "png"
+            : EnumExtensions.GetDescription(taskSettings.ImageSettings.ImageFormat);
         string fileName = GetFileName(taskSettings, extension, bmp);
         string filePath = Path.Combine(screenshotsFolder, fileName);
 
@@ -634,7 +663,7 @@ public static partial class TaskHelpers
             return null;
         }
 
-        ImageHelpers.SaveBitmap(bmp, filePath);
+        ImageHelpers.SaveBitmap(bmp, filePath, taskSettings.ImageSettings.ImagePNGBitDepth);
         return filePath;
     }
 
