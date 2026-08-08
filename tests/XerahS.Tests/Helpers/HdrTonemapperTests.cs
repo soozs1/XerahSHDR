@@ -193,9 +193,9 @@ public class HdrTonemapperTests
     }
 
     [Test]
-    public void TonemapToBgra8888_Reinhard_SdrWhiteSurvives()
+    public void TonemapToBgra8888_Reinhard_MeetsNumericCriteria()
     {
-        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (10f, 10f, 10f, 1f));
+        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (125f, 125f, 125f, 1f));
         using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
 
         Assert.That(result, Is.Not.Null);
@@ -204,51 +204,98 @@ public class HdrTonemapperTests
         Assert.That(result.Height, Is.EqualTo(1));
 
         (byte b, byte g, byte r, byte a) white = ReadPixel(result, 0);
-        (byte b, byte g, byte r, byte a) bright = ReadPixel(result, 1);
+        (byte b, byte g, byte r, byte a) peak = ReadPixel(result, 1);
 
-        // SDR white (L=1.0) is essentially unchanged by Reinhard at peak=1000 → ~255.
-        Assert.That(white.r, Is.EqualTo(255).Within(3));
-        Assert.That(white.g, Is.EqualTo(255).Within(3));
-        Assert.That(white.b, Is.EqualTo(255).Within(3));
+        Assert.Multiple(() =>
+        {
+            // SDR white (1.0 scRGB = 80 nits) must stay bright, not crushed by the 1000-nit normalization.
+            Assert.That(white.r, Is.InRange(128, 255));
+            Assert.That(white.g, Is.InRange(128, 255));
+            Assert.That(white.b, Is.InRange(128, 255));
 
-        // 10× luminance: Reinhard(10, 1000) = 9.9, whose sRGB OETF saturates the 8-bit range,
-        // so it clamps to 255 and must never be crushed below SDR white.
-        Assert.That(bright.r, Is.EqualTo(255));
-        Assert.That(bright.g, Is.EqualTo(255));
-        Assert.That(bright.b, Is.EqualTo(255));
+            // HDR peak (125 scRGB = 10000 nits) must be visibly compressed below 255.
+            Assert.That(peak.r, Is.InRange(200, 254));
+            Assert.That(peak.g, Is.InRange(200, 254));
+            Assert.That(peak.b, Is.InRange(200, 254));
 
-        // Hue preserved: all channels mapped with the same scale → R ≈ G ≈ B.
-        Assert.That(white.r, Is.EqualTo(white.g));
-        Assert.That(white.g, Is.EqualTo(white.b));
-        Assert.That(bright.r, Is.EqualTo(bright.g));
-        Assert.That(bright.g, Is.EqualTo(bright.b));
+            // Monotonic: peak is brighter than SDR white.
+            Assert.That(peak.r, Is.GreaterThan(white.r));
 
-        Assert.That(white.a, Is.EqualTo(255));
+            // Hue preserved: all channels mapped with the same scale → R ≈ G ≈ B.
+            Assert.That(white.r, Is.EqualTo(white.g));
+            Assert.That(white.g, Is.EqualTo(white.b));
+            Assert.That(peak.r, Is.EqualTo(peak.g));
+            Assert.That(peak.g, Is.EqualTo(peak.b));
+
+            Assert.That(white.a, Is.EqualTo(255));
+        });
     }
 
     [Test]
-    public void TonemapToBgra8888_Aces_CompressesWhite()
+    public void TonemapToBgra8888_Aces_MeetsNumericCriteria()
     {
-        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (10f, 10f, 10f, 1f));
+        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (125f, 125f, 125f, 1f));
         using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapAces, 1000f);
 
         Assert.That(result, Is.Not.Null);
 
         (byte b, byte g, byte r, byte a) white = ReadPixel(result, 0);
-        (byte b, byte g, byte r, byte a) bright = ReadPixel(result, 1);
+        (byte b, byte g, byte r, byte a) peak = ReadPixel(result, 1);
 
-        // ACES(1.0) = 0.8038 → sRGB OETF(0.8038) ≈ 0.908 → ~232: the ACES preset visibly compresses SDR white.
-        Assert.That(white.r, Is.EqualTo(232).Within(3));
-        Assert.That(white.g, Is.EqualTo(232).Within(3));
-        Assert.That(white.b, Is.EqualTo(232).Within(3));
+        Assert.Multiple(() =>
+        {
+            // SDR white (1.0 scRGB = 80 nits) must stay bright.
+            Assert.That(white.r, Is.InRange(128, 255));
+            Assert.That(white.g, Is.InRange(128, 255));
+            Assert.That(white.b, Is.InRange(128, 255));
 
-        // ACES(10) = 1.009 → clamps to 255.
-        Assert.That(bright.r, Is.EqualTo(255));
-        Assert.That(bright.g, Is.EqualTo(255));
-        Assert.That(bright.b, Is.EqualTo(255));
+            // HDR peak (125 scRGB = 10000 nits) must be visibly compressed below 255.
+            Assert.That(peak.r, Is.InRange(200, 254));
+            Assert.That(peak.g, Is.InRange(200, 254));
+            Assert.That(peak.b, Is.InRange(200, 254));
 
-        Assert.That(white.r, Is.EqualTo(white.g));
-        Assert.That(white.g, Is.EqualTo(white.b));
+            // Monotonic: peak is brighter than SDR white.
+            Assert.That(peak.r, Is.GreaterThan(white.r));
+
+            // Hue preserved: all channels mapped with the same scale → R ≈ G ≈ B.
+            Assert.That(white.r, Is.EqualTo(white.g));
+            Assert.That(white.g, Is.EqualTo(white.b));
+            Assert.That(peak.r, Is.EqualTo(peak.g));
+            Assert.That(peak.g, Is.EqualTo(peak.b));
+        });
+    }
+
+    [Test]
+    public void TonemapToBgra8888_IsDeterministic()
+    {
+        using var hdr = MakeF16Bitmap((0.5f, 0.25f, 0.125f, 1f), (125f, 1f, 0.5f, 1f));
+        using var first = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+        using var second = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+
+        Assert.That(first, Is.Not.Null);
+        Assert.That(second, Is.Not.Null);
+        Assert.That(first.GetPixelSpan().SequenceEqual(second.GetPixelSpan()), Is.True);
+    }
+
+    [Test]
+    public void TonemapToBgra8888_NonFiniteAndNegativeHalves_MapToBlack()
+    {
+        using var hdr = MakeF16Bitmap(
+            (float.NaN, float.NaN, float.NaN, 1f),
+            (float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity, 1f),
+            (-1f, -1f, -1f, 1f));
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+
+        Assert.That(result, Is.Not.Null);
+
+        for (int x = 0; x < 3; x++)
+        {
+            (byte b, byte g, byte r, byte a) pixel = ReadPixel(result, x);
+            Assert.That(pixel.r, Is.EqualTo(0));
+            Assert.That(pixel.g, Is.EqualTo(0));
+            Assert.That(pixel.b, Is.EqualTo(0));
+            Assert.That(pixel.a, Is.EqualTo(255));
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────

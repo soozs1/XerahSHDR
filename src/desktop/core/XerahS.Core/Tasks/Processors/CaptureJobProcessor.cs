@@ -32,6 +32,7 @@ using XerahS.Uploaders;
 using XerahS.Uploaders.PluginSystem;
 using ShareX.ImageEditor.Core.Persistence;
 using ShareX.ImageEditor.Hosting;
+using XerahS.Core.Helpers;
 using XerahS.Core.Services;
 using SkiaSharp;
 
@@ -66,6 +67,35 @@ namespace XerahS.Core.Tasks.Processors
             string? annotationSidecarPath = null;
             bool annotationSidecarSaveAttempted = false;
 
+            // HDR (fp16) captures are scRGB-linear; SDR-only steps (UI, effects, editor, clipboard,
+            // upload) need an 8-bit tonemapped copy. Tonemap once, before ShowAfterCaptureWindow
+            // (HDR_CAPTURE_PLAN §6.3).
+            SKBitmap currentImage = info.Metadata.Image; // non-null (checked above)
+            if (currentImage.ColorType == SKColorType.RgbaF16)
+            {
+                HdrToneMappingMode toneMapMode = settings.ImageSettings.ImageHdrToneMapping;
+
+                if (HdrTonemapper.ShouldTonemapToSdr(toneMapMode, settings.AfterCaptureJob))
+                {
+                    SKBitmap? sdr = HdrTonemapper.TonemapToBgra8888(
+                        currentImage,
+                        toneMapMode == HdrToneMappingMode.TonemapAces ? HdrToneMappingMode.TonemapAces : HdrToneMappingMode.TonemapReinhard,
+                        peakNits: 1000f); // TODO HDR-03: use real display peak from MonitorInfo/OutputDescription1
+
+                    if (sdr != null)
+                    {
+                        info.Metadata.Image = sdr;
+                        currentImage.Dispose();
+                        currentImage = sdr;
+                        DebugHelper.WriteLine("Tonemapped HDR (fp16) capture to 8-bit SDR.");
+                    }
+                    else
+                    {
+                        DebugHelper.WriteLine("Tonemapping HDR capture failed; keeping fp16 image.");
+                    }
+                }
+            }
+
             if (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.ShowAfterCaptureWindow))
             {
                 if (!PlatformServices.IsInitialized)
@@ -76,7 +106,7 @@ namespace XerahS.Core.Tasks.Processors
                 {
                     var originalAfterCapture = settings.AfterCaptureJob;
                     var result = await PlatformServices.UI.ShowAfterCaptureWindowAsync(
-                        info.Metadata.Image,
+                        currentImage,
                         settings.AfterCaptureJob,
                         settings.AfterUploadJob);
                     if (result.Cancel)

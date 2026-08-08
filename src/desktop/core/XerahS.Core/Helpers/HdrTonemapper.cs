@@ -51,6 +51,13 @@ public static class HdrTonemapper
     private const float PeakMinNits = 80f;
     private const float PeakMaxNits = 10000f;
 
+    // scRGB-linear capture: 1.0 == 80 cd/m² (HDR_CAPTURE_PLAN §4.2, TODO HDR-02).
+    private const float ScRgbToNits = 80f;
+
+    // White-preservation exponent applied after peak normalization so SDR white (80 nits at a
+    // 1000-nit peak) is not crushed by the Reinhard/ACES rolloff (HDR_CAPTURE_PLAN TODO HDR-02).
+    private const float WhitePreservationGamma = 0.5f;
+
     /// <summary>
     /// SMPTE ST 2084 (PQ) EOTF: normalized code value V → absolute luminance in cd/m².
     /// L = ((max(V^(1/m2) − c1, 0)) / (c2 − c3·V^(1/m2)))^(1/m1) · 10000; V clamped to [0, 1].
@@ -138,9 +145,36 @@ public static class HdrTonemapper
         return Math.Clamp(peak, PeakMinNits, PeakMaxNits);
     }
 
+    // After-capture steps that require an 8-bit SDR image. With Auto, an HDR (fp16) capture is
+    // tonemapped iff any of these is selected; SaveImageToFile alone keeps fp16 so the 16-bit PNG
+    // path is preserved (HDR_CAPTURE_PLAN §6.3/§6.5).
+    private const AfterCaptureTasks SdrOnlyAfterCaptureTasks =
+        AfterCaptureTasks.ShowAfterCaptureWindow |
+        AfterCaptureTasks.AddImageEffects |
+        AfterCaptureTasks.AnnotateMedia |
+        AfterCaptureTasks.CopyImageToClipboard |
+        AfterCaptureTasks.UploadImageToHost;
+
     /// <summary>
-    /// Tonemaps an RgbaF16 bitmap to 8-bit Bgra8888 (premul). Returns null for any non-F16 input.
-    /// Auto falls back to the default Reinhard curve; None only clamps.
+    /// Decides whether an HDR (fp16) capture must be converted to 8-bit SDR before the
+    /// after-capture pipeline runs (HDR_CAPTURE_PLAN §6.3). Explicit Reinhard/ACES always
+    /// tonemap; None never does; Auto tonemaps iff any SDR-only step is selected.
+    /// </summary>
+    internal static bool ShouldTonemapToSdr(HdrToneMappingMode mode, AfterCaptureTasks afterCaptureJob)
+    {
+        return mode switch
+        {
+            HdrToneMappingMode.TonemapReinhard or HdrToneMappingMode.TonemapAces => true,
+            HdrToneMappingMode.None => false,
+            _ => (afterCaptureJob & SdrOnlyAfterCaptureTasks) != 0 // Auto
+        };
+    }
+
+    /// <summary>
+    /// Tonemaps an RgbaF16 bitmap (scRGB-linear, 1.0 == 80 cd/m²) to 8-bit Bgra8888 (premul).
+    /// Pixels are converted to nits (×80), normalized by <paramref name="peakNits"/> and
+    /// compressed by the selected curve (HDR_CAPTURE_PLAN §6.2). Returns null for any non-F16
+    /// input. Auto falls back to the default Reinhard curve; None only clamps.
     /// </summary>
     public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode, float peakNits = PeakDefaultNits)
     {
@@ -186,9 +220,9 @@ public static class HdrTonemapper
                     {
                         float mapped = mode switch
                         {
-                            HdrToneMappingMode.TonemapAces => TonemapAces(lum),
+                            HdrToneMappingMode.TonemapAces => TonemapAcesNormalized(lum, peakNits),
                             HdrToneMappingMode.None => lum,
-                            _ => TonemapReinhard(lum, peakNits) // Auto falls back to the default Reinhard curve
+                            _ => TonemapReinhardNormalized(lum, peakNits) // Auto falls back to the default Reinhard curve
                         };
                         scale = mapped / lum;
                     }
@@ -207,6 +241,25 @@ public static class HdrTonemapper
             result.Dispose();
             throw;
         }
+    }
+
+    /// <summary>
+    /// Peak-normalized Reinhard with white preservation: Ln = L·80/peak; Ld = Ln/(1+Ln); sqrt(Ld).
+    /// </summary>
+    private static float TonemapReinhardNormalized(float luminanceScRgb, float peakNits)
+    {
+        float normalized = luminanceScRgb * ScRgbToNits / peakNits;
+        float mapped = normalized / (1f + normalized);
+        return MathF.Pow(mapped, WhitePreservationGamma);
+    }
+
+    /// <summary>
+    /// Peak-normalized ACES with white preservation: Ln = L·80/peak; Ld = ACES(sqrt(Ln)).
+    /// </summary>
+    private static float TonemapAcesNormalized(float luminanceScRgb, float peakNits)
+    {
+        float normalized = luminanceScRgb * ScRgbToNits / peakNits;
+        return TonemapAces(MathF.Pow(normalized, WhitePreservationGamma));
     }
 
     private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)
