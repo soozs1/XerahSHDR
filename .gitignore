@@ -1,0 +1,200 @@
+# Build (explicit at any depth so IDEs and git both ignore ~1800+ bin/obj files)
+**/bin/
+**/obj/
+bin/
+obj/
+[Bb]uild/
+[Bb]uildOutput/
+TestResults/
+[Tt]est[Rr]esults/
+*.VisualState.xml
+*.csproj.user
+project.lock.json
+project.fragment.lock.json
+
+# NuGet / .NET
+.nuget/
+packages/
+**/packages/
+*.nupkg
+
+# User-specific
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE
+.vs/
+.vscode/
+.cursor/*
+# Track graphify Cursor rule so agents on fresh clones get the pointer
+!.cursor/rules/
+.cursor/rules/*
+!.cursor/rules/graphify.mdc
+*.rsuser
+
+# OS
+.DS_Store
+Thumbs.db
+src/ShareX.Avalonia.UI/build_log.txt
+
+# Debug logs
+debug/
+
+# Local tooling
+.dotnet/
+.tmp/
+.tools/
+.env
+*.env
+secrets.json
+credentials.*
+
+# graphify rebuild cache (canonical graph lives in docs/architecture/graphify-out/)
+docs/architecture/graphify-out/cache/
+# Convenience symlink at repo root (targets docs/architecture/graphify-out/)
+/graphify-out
+
+# Clawpatch — track reports (durable audit trail), ignore runtime artefacts
+# (per-feature JSON blobs, lock files, workspace config, in-progress patches).
+# See docs/technical/clawpatch-report-tracking.md for the policy.
+.clawpatch/features/
+.clawpatch/findings/
+.clawpatch/locks/
+.clawpatch/patches/
+.clawpatch/runs/
+.clawpatch/config.json
+.clawpatch/project.json
+
+# Local build logs
+*.log
+*.binlog
+release-run-*.log
+errors.md
+
+# Local packaging output
+dist/
+.flatpak-builder/
+.claude/
+.SRCINFO
+artifacts/
+*.deb
+*.gz
+*.zip
+*.exe
+*.sxadp
+iscc_log_win-arm64.txt
+iscc_log_win-x64.txt
+build_log.txt
+/.continue
+/build/publish-temp-win-arm64
+/build/publish-temp-win-x64
+
+# Native macOS build artifact (rebuilt from source in CI)
+native/macos/libscreencapturekit_bridge.dylib
+
+# AUR build artifacts (makepkg outputs)
+/build/linux/aur/xerahs-git/src/
+/build/linux/aur/xerahs-git/pkg/
+/build/linux/aur/xerahs-git/XerahS/
+/build/linux/aur/xerahs-git/*.pkg.tar.zst
+/build/linux/aur/xerahs-git/.PKGINFO
+/build/linux/aur/xerahs-git/.BUILDINFO
+/build/linux/aur/xerahs-git/.MTREE
+
+# Local iOS bundle id override files
+src/XerahS.Mobile.iOS/Main.BundleId.plist
+src/XerahS.Mobile.iOS.ShareExtension/ShareExtension.BundleId.plist
+.claude/settings.local.json
+.claude/settings.local.json
+/temp_debug_logs
+
+# Kotlin / Android / Gradle (e.g. src/XerahS.Mobile.Kt)
+*.class
+.gradle/
+**/build/
+!src/mobile/ios/build/
+src/mobile/ios/build/*
+!src/mobile/ios/build/AppStoreScreenshots/
+!src/mobile/ios/build/AppStoreScreenshots/**
+src/mobile/ios/build/AppStoreScreenshots/.DS_Store
+!build/
+!build/windows/
+!build/windows/chocolatey/
+!build/windows/chocolatey/Sync-ChocolateyPackage.ps1
+!build/windows/chocolatey/Test-ChocolateyPackage.ps1
+!build/windows/chocolatey/tools/
+!build/windows/chocolatey/tools/chocolateyBeforeModify.ps1
+!build/windows/chocolatey/tools/VERIFICATION.txt
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+**/captures/
+externalNativeBuild/
+**/externalNativeBuild/
+.cxx/
+*.hprof
+*.apk
+*.ap_
+*.aab
+out/
+**/out/
+
+# Swift / Xcode (e.g. src/XerahS.Mobile.Swift)
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+**/xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+**/DerivedData/
+.DerivedData/
+**/.DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcscmblueprint
+SwiftPackageManager.build/
+.build/
+*.swp
+*~
+.openapi-generator/
+/build/publish-aot-win-arm64
+/build/publish-aot-win-x64
+/build/publish-temp-win-arm64-manual
+/build/release-inspect
+/build/sizeprobe
+/build/tmp-daemon-test
+/build/xip0043-publish
+/build/tmp-deb-check
+/build/logs
+/build/r2r-eval-no-r2r
+/build/r2r-eval-r2r
+
+# Autoresearch bundle and generated run state
+.autoresearch/*
+!.autoresearch/AUTORESEARCH_PS1.md
+!.autoresearch/autoresearch.ps1
+!.autoresearch/missions/
+!.autoresearch/missions/*.md
+
+# Local environment setup and agent session artifacts
+/.env-setup/
+/TestResults-*/
+/base.txt
+/cur.txt
+/failed-*.txt
+/grepskipped.txt
+/skipped-*.txt
+/tmp-*.sh

@@ -1,0 +1,517 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System.Collections.Specialized;
+using System.Net;
+using System.Text;
+
+namespace XerahS.Common
+{
+    // SlashType moved to Enums.cs
+
+    public static class URLHelpers
+    {
+        public static string[] URLPrefixes = new string[]
+        {
+            "http://", "https://", "ftp://", "ftps://", "sftp://", "file://"
+        };
+
+        /// <summary>
+        /// Determines whether a URL is safe to open in the default browser.
+        /// Only absolute http/https URLs are accepted; all other schemes (<c>file://</c>, UNC paths,
+        /// <c>javascript:</c>, <c>steam://</c>, <c>ftp://</c>, etc.) are rejected because URLs that
+        /// reach this check may originate from untrusted server data.
+        /// </summary>
+        public static bool IsValidURL(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return false;
+            }
+
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+            {
+                return false;
+            }
+
+            return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+        }
+
+        public static string AddSlash(string url, SlashType slashType)
+        {
+            return AddSlash(url, slashType, 1);
+        }
+
+        public static string AddSlash(string url, SlashType slashType, int count)
+        {
+            if (slashType == SlashType.Prefix)
+            {
+                if (url.StartsWith("/"))
+                {
+                    url = url.Remove(0, 1);
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    url = "/" + url;
+                }
+            }
+            else
+            {
+                if (url.EndsWith("/"))
+                {
+                    url = url.Substring(0, url.Length - 1);
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    url += "/";
+                }
+            }
+
+            return url;
+        }
+
+        public static string GetFileName(string path)
+        {
+            if (path.Contains('/'))
+            {
+                path = path.Substring(path.LastIndexOf('/') + 1);
+            }
+
+            if (path.Contains('?'))
+            {
+                path = path.Remove(path.IndexOf('?'));
+            }
+
+            if (path.Contains('#'))
+            {
+                path = path.Remove(path.IndexOf('#'));
+            }
+
+            return path;
+        }
+
+        public static bool IsFileURL(string url)
+        {
+            int index = url.LastIndexOf('/');
+
+            if (index < 0)
+            {
+                return false;
+            }
+
+            string path = url.Substring(index + 1);
+
+            return !string.IsNullOrEmpty(path) && path.Contains(".");
+        }
+
+        public static string GetDirectoryPath(string path)
+        {
+            if (path.Contains("/"))
+            {
+                path = path.Substring(0, path.LastIndexOf('/'));
+            }
+
+            return path;
+        }
+
+        public static List<string> GetPaths(string path)
+        {
+            List<string> paths = new List<string>();
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                if (path[i] == '/')
+                {
+                    string currentPath = path.Remove(i);
+
+                    if (!string.IsNullOrEmpty(currentPath))
+                    {
+                        paths.Add(currentPath);
+                    }
+                }
+                else if (i == path.Length - 1)
+                {
+                    paths.Add(path);
+                }
+            }
+
+            return paths;
+        }
+
+        public static bool HasPrefix(string url)
+        {
+            return URLPrefixes.Any(x => url.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static string? GetPrefix(string url)
+        {
+            return URLPrefixes.FirstOrDefault(x => url.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static string FixPrefix(string url, string prefix = "https://")
+        {
+            if (!string.IsNullOrEmpty(url) && !HasPrefix(url))
+            {
+                return prefix + url;
+            }
+
+            return url;
+        }
+
+        public static string ForcePrefix(string url, string prefix = "https://")
+        {
+            if (!string.IsNullOrEmpty(url))
+            {
+                url = prefix + RemovePrefixes(url);
+            }
+
+            return url;
+        }
+
+        public static string RemovePrefixes(string url)
+        {
+            foreach (string prefix in URLPrefixes)
+            {
+                if (url.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    url = url.Remove(0, prefix.Length);
+                    break;
+                }
+            }
+
+            return url;
+        }
+
+        public static string GetHostName(string url)
+        {
+            if (!string.IsNullOrEmpty(url) && Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+            {
+                string host = uri.Host;
+
+                if (!string.IsNullOrEmpty(host))
+                {
+                    if (host.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
+                    {
+                        host = host.Substring(4);
+                    }
+
+                    return host;
+                }
+            }
+
+            return url;
+        }
+
+        public static string CreateQueryString(Dictionary<string, string> args, bool customEncoding = false)
+        {
+            if (args != null && args.Count > 0)
+            {
+                List<string> pairs = new List<string>();
+
+                foreach (KeyValuePair<string, string> arg in args)
+                {
+                    string pair;
+
+                    if (string.IsNullOrEmpty(arg.Value))
+                    {
+                        pair = arg.Key;
+                    }
+                    else
+                    {
+                        string value;
+
+                        if (customEncoding)
+                        {
+                            value = URLEncode(arg.Value);
+                        }
+                        else
+                        {
+                            value = WebUtility.UrlEncode(arg.Value);
+                        }
+
+                        pair = arg.Key + "=" + value;
+                    }
+
+                    pairs.Add(pair);
+                }
+
+                return string.Join("&", pairs);
+            }
+
+            return "";
+        }
+
+        public static string CreateQueryString(string url, Dictionary<string, string> args, bool customEncoding = false)
+        {
+            string query = CreateQueryString(args, customEncoding);
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                if (url.Contains("?"))
+                {
+                    return url + "&" + query;
+                }
+                else
+                {
+                    return url + "?" + query;
+                }
+            }
+
+            return url;
+        }
+
+        public static string RemoveQueryString(string url)
+        {
+            if (!string.IsNullOrEmpty(url))
+            {
+                int index = url.IndexOf("?");
+
+                if (index > -1)
+                {
+                    return url.Remove(index);
+                }
+            }
+
+            return url;
+        }
+
+        public static NameValueCollection? ParseQueryString(string url)
+        {
+            if (string.IsNullOrEmpty(url)) return null;
+
+            NameValueCollection collection = new NameValueCollection();
+            int index = url.IndexOf("?");
+            string query = index > -1 ? url.Substring(index + 1) : url;
+
+            if (string.IsNullOrEmpty(query)) return collection;
+
+            string[] pairs = query.Split('&');
+            foreach (string pair in pairs)
+            {
+                string[] parts = pair.Split(new[] { '=' }, 2);
+                string key = WebUtility.UrlDecode(parts[0]);
+                string value = parts.Length > 1 ? WebUtility.UrlDecode(parts[1]) : "";
+                collection.Add(key, value);
+            }
+
+            return collection;
+        }
+
+        public static string BuildUri(string root, string path, string? query = null)
+        {
+            UriBuilder builder = new UriBuilder(root);
+            builder.Path = path;
+            builder.Query = query;
+            return builder.Uri.AbsoluteUri;
+        }
+
+        public static string GetValidURL(string url, bool replaceSpace = false)
+        {
+            if (replaceSpace) url = url.Replace(' ', '_');
+
+            return URLEncode(url, isPath: true);
+        }
+
+        public static void OpenURL(string url)
+        {
+            if (string.IsNullOrEmpty(url)) return;
+
+            try
+            {
+                if (!IsValidURL(url))
+                {
+                    throw new Exception("Invalid URL.");
+                }
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+        }
+
+        public static string URLEncode(string text, bool isPath = false, bool ignoreEmoji = false)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+
+            if (ignoreEmoji)
+            {
+                return URLEncodeIgnoreEmoji(text, isPath);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            string unreservedCharacters = isPath ? URLPathCharacters : URLCharacters;
+
+            foreach (char c in System.Text.Encoding.UTF8.GetBytes(text))
+            {
+                if (unreservedCharacters.IndexOf(c) != -1)
+                {
+                    sb.Append(c);
+                }
+                else
+                {
+                    sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "%{0:X2}", (int)c);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static string URLEncodeIgnoreEmoji(string text, bool isPath = false)
+        {
+            // Simplified version without emoji support for now
+            // TODO: Implement full emoji support when needed
+            return URLEncode(text, isPath, false);
+        }
+
+        public static string CombineURL(string url1, string url2)
+        {
+            bool url1Empty = string.IsNullOrEmpty(url1);
+            bool url2Empty = string.IsNullOrEmpty(url2);
+
+            if (url1Empty && url2Empty)
+            {
+                return string.Empty;
+            }
+
+            if (url1Empty)
+            {
+                return url2;
+            }
+
+            if (url2Empty)
+            {
+                return url1;
+            }
+
+            if (url1.EndsWith("/"))
+            {
+                url1 = url1.Substring(0, url1.Length - 1);
+            }
+
+            if (url2.StartsWith("/"))
+            {
+                url2 = url2.Remove(0, 1);
+            }
+
+            return url1 + "/" + url2;
+        }
+
+        public static string CombineURL(params string[]? urls)
+        {
+            if (urls == null || urls.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return urls.Aggregate(CombineURL);
+        }
+
+        // URL character sets for encoding
+        private const string URLCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+        private const string URLPathCharacters = URLCharacters + "!$&'()*+,;=:@/";
+
+        /// <summary>
+        /// JSON encodes a string
+        /// </summary>
+        public static string JSONEncode(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+
+            StringBuilder sb = new StringBuilder(text.Length);
+
+            foreach (char c in text)
+            {
+                switch (c)
+                {
+                    case '\"':
+                        sb.Append("\\\"");
+                        break;
+                    case '\\':
+                        sb.Append("\\\\");
+                        break;
+                    case '\b':
+                        sb.Append("\\b");
+                        break;
+                    case '\f':
+                        sb.Append("\\f");
+                        break;
+                    case '\n':
+                        sb.Append("\\n");
+                        break;
+                    case '\r':
+                        sb.Append("\\r");
+                        break;
+                    case '\t':
+                        sb.Append("\\t");
+                        break;
+                    default:
+                        if (c < ' ')
+                        {
+                            sb.AppendFormat("\\u{0:x4}", (int)c);
+                        }
+                        else
+                        {
+                            sb.Append(c);
+                        }
+                        break;
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// XML encodes a string
+        /// </summary>
+        public static string XMLEncode(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
+
+            return text
+                .Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;")
+                .Replace("\"", "&quot;")
+                .Replace("'", "&apos;");
+        }
+    }
+}

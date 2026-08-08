@@ -1,0 +1,84 @@
+<views:OverlayWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:XerahS.UI.ViewModels"
+        xmlns:views="using:XerahS.UI.Views"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+        x:Class="XerahS.UI.Views.ToastWindow"
+        x:DataType="vm:ToastViewModel"
+        Title="Toast"
+        Topmost="True"
+        ShowInTaskbar="False"
+        CanResize="False"
+        WindowDecorations="None"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        WindowStartupLocation="Manual"
+        Cursor="Hand"
+        AutomationProperties.Name="Notification Toast">
+    
+    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="6"
+            Padding="1"
+            BoxShadow="0 4 12 0 #40000000">
+        
+        <Grid>
+            <!-- Image display (when available) -->
+            <Image Source="{Binding Image}"
+                   IsVisible="{Binding HasImage}"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   AutomationProperties.Name="Notification Image"/>
+            
+            <!-- Text display (when no image or as overlay) -->
+            <StackPanel VerticalAlignment="Top"
+                        HorizontalAlignment="Stretch"
+                        IsVisible="{Binding !HasImage}"
+                        Margin="12">
+                
+                <!-- Title -->
+                <TextBlock Text="{Binding Title}"
+                           IsVisible="{Binding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                           Theme="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,4"/>
+                
+                <!-- Main text -->
+                <TextBlock Text="{Binding Text}"
+                           Theme="{StaticResource BodyTextBlockStyle}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           TextWrapping="Wrap"
+                           TextTrimming="CharacterEllipsis"
+                           MaxHeight="200"/>
+            </StackPanel>
+            
+            <!-- URL overlay when hovering over image -->
+            <Border Background="{DynamicResource XerahS.Brush.Overlay.Soft}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    Height="40"
+                    IsVisible="{Binding HasHeaderText}"
+                    x:Name="UrlOverlay"
+                    Opacity="0">
+                <TextBlock Text="{Binding HeaderText}"
+                           Foreground="{DynamicResource XerahS.Brush.Overlay.Foreground}"
+                           FontSize="11"
+                           Margin="12,0"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"/>
+            </Border>
+
+            <!-- Transparent overlay for shared HistoryItemMenuFlyout (context menu); fills grid so right-click works -->
+            <Border Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    x:Name="FlyoutHost"
+                    ContextFlyout="{StaticResource HistoryItemMenuFlyout}"/>
+        </Grid>
+    </Border>
+</views:OverlayWindow>

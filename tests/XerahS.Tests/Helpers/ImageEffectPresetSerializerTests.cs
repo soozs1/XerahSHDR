@@ -1,0 +1,335 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using ShareX.ImageEditor.Core.ImageEffects.Adjustments;
+using SkiaSharp;
+using System.IO.Compression;
+using XerahS.Common.Helpers;
+using XerahS.Core;
+using XerahS.Core.Helpers;
+
+namespace XerahS.Tests.Helpers;
+
+[TestFixture]
+public class ImageEffectPresetSerializerTests
+{
+    [Test]
+    public void SaveLoadXsie_RoundTripsEffects()
+    {
+        var preset = new ImageEffectPreset
+        {
+            Name = "TestPreset",
+            Effects =
+            {
+                new BrightnessImageEffect { Amount = 25 },
+                new ColorizeImageEffect { Strength = 40, Color = new SKColor(10, 20, 30, 40) }
+            }
+        };
+
+        var path = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}.xsie");
+
+        try
+        {
+            ImageEffectPresetSerializer.SaveXsieFile(path, preset);
+
+            using (var archive = ZipFile.OpenRead(path))
+            using (var reader = new StreamReader(archive.GetEntry("Config.json")!.Open()))
+            {
+                var savedJson = JObject.Parse(reader.ReadToEnd());
+                var savedEffects = (JArray?)savedJson["Effects"];
+                Assert.That(savedEffects, Is.Not.Null);
+                Assert.That(savedEffects![0]?["Parameters"], Is.Null);
+                Assert.That(savedEffects[1]?["Parameters"], Is.Null);
+            }
+
+            var loaded = ImageEffectPresetSerializer.LoadXsieFile(path);
+
+            Assert.That(loaded, Is.Not.Null);
+            Assert.That(loaded!.Name, Is.EqualTo("TestPreset"));
+            Assert.That(loaded.Effects.Count, Is.EqualTo(2));
+
+            Assert.That(loaded.Effects[0], Is.TypeOf<BrightnessImageEffect>());
+            var brightness = (BrightnessImageEffect)loaded.Effects[0];
+            Assert.That(brightness.Amount, Is.EqualTo(25).Within(0.01));
+
+            Assert.That(loaded.Effects[1], Is.TypeOf<ColorizeImageEffect>());
+            var colorize = (ColorizeImageEffect)loaded.Effects[1];
+            Assert.That(colorize.Strength, Is.EqualTo(40).Within(0.01));
+            Assert.That(colorize.Color, Is.EqualTo(new SKColor(10, 20, 30, 40)));
+        }
+        finally
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void SaveXsieFile_CreatesMissingParentDirectory()
+    {
+        var preset = new ImageEffectPreset
+        {
+            Name = "NestedPreset",
+            Effects = { new BrightnessImageEffect { Amount = 10 } }
+        };
+
+        var root = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}");
+        var path = Path.Combine(root, "missing", "nested.xsie");
+
+        try
+        {
+            ImageEffectPresetSerializer.SaveXsieFile(path, preset);
+
+            Assert.That(File.Exists(path), Is.True);
+            var loaded = ImageEffectPresetSerializer.LoadXsieFile(path);
+            Assert.That(loaded, Is.Not.Null);
+            Assert.That(loaded!.Name, Is.EqualTo("NestedPreset"));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Test]
+    public void ExportSxie_WritesLegacyConfig()
+    {
+        var effects = new object[]
+        {
+            new BrightnessImageEffect { Amount = 15 },
+            new ColorizeImageEffect { Strength = 60, Color = new SKColor(200, 10, 20, 255) }
+        };
+
+        var path = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}.sxie");
+
+        try
+        {
+            var result = LegacyImageEffectExporter.ExportSxieFile(path, "LegacyPreset", effects);
+            Assert.That(result.Success, Is.True, result.ErrorMessage);
+
+            using var archive = ZipFile.OpenRead(path);
+            var entry = archive.GetEntry("Config.json");
+            Assert.That(entry, Is.Not.Null);
+
+            using var reader = new StreamReader(entry!.Open());
+            var configJson = reader.ReadToEnd();
+
+            var json = JObject.Parse(configJson);
+            Assert.That(json["Name"]?.ToString(), Is.EqualTo("LegacyPreset"));
+
+            var effectsArray = json["Effects"] as JArray;
+            Assert.That(effectsArray, Is.Not.Null);
+            Assert.That(effectsArray!.Count, Is.EqualTo(2));
+
+            Assert.That(effectsArray[0]?["$type"]?.ToString(), Is.EqualTo("ShareX.ImageEffectsLib.Brightness, ShareX.ImageEffectsLib"));
+            Assert.That(effectsArray[1]?["$type"]?.ToString(), Is.EqualTo("ShareX.ImageEffectsLib.Colorize, ShareX.ImageEffectsLib"));
+        }
+        finally
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [TestCase(".xsie", "ShareX.Editor.ImageEffects.Adjustments.BrightnessImageEffect, ShareX.Editor")]
+    [TestCase(".sxie", "XerahS.Editor.ImageEffects.Adjustments.BrightnessImageEffect, XerahS.Editor")]
+    public void LoadXsie_AcceptsLegacyEditorNamespaces(string extension, string serializedType)
+    {
+        var config = new JObject
+        {
+            ["Version"] = 1,
+            ["Name"] = "NamespacePreset",
+            ["Effects"] = new JArray
+            {
+                new JObject
+                {
+                    ["$type"] = serializedType,
+                    ["Amount"] = 37
+                }
+            }
+        };
+
+        var path = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}{extension}");
+
+        try
+        {
+            WriteConfigArchive(path, config);
+            var loaded = ImageEffectPresetSerializer.LoadXsieFile(path);
+
+            Assert.That(loaded, Is.Not.Null);
+            Assert.That(loaded!.Name, Is.EqualTo("NamespacePreset"));
+            Assert.That(loaded.Effects.Count, Is.EqualTo(1));
+            Assert.That(loaded.Effects[0], Is.TypeOf<BrightnessImageEffect>());
+            Assert.That(((BrightnessImageEffect)loaded.Effects[0]).Amount, Is.EqualTo(37).Within(0.01));
+        }
+        finally
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void LoadXsie_MalformedArchive_ReturnsNull()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}.xsie");
+
+        try
+        {
+            File.WriteAllText(path, "not a zip archive");
+
+            var loaded = ImageEffectPresetSerializer.LoadXsieFile(path);
+
+            Assert.That(loaded, Is.Null);
+        }
+        finally
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void LoadXsie_InvalidConfigJson_ReturnsNull()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"xip0020-{Guid.NewGuid():N}.xsie");
+
+        try
+        {
+            using (var archive = ZipFile.Open(path, ZipArchiveMode.Create))
+            {
+                var entry = archive.CreateEntry("Config.json");
+                using var writer = new StreamWriter(entry.Open());
+                writer.Write("{");
+            }
+
+            var loaded = ImageEffectPresetSerializer.LoadXsieFile(path);
+
+            Assert.That(loaded, Is.Null);
+        }
+        finally
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void SettingsPath_Rejects_UnknownType()
+    {
+        // SettingsBase uses TypeNameHandling.Auto; ImageEffectPreset.Effects must still
+        // refuse arbitrary $type payloads via ImageEffectListJsonConverter.
+        var json = """
+            {
+              "Name": "Malicious",
+              "Effects": [
+                { "$type": "System.Diagnostics.Process, System", "Amount": 1 }
+              ]
+            }
+            """;
+
+        var settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
+        var ex = Assert.Throws<JsonSerializationException>(() =>
+            JsonConvert.DeserializeObject<ImageEffectPreset>(json, settings));
+
+        Assert.That(ex!.Message, Does.Contain("Unsupported image effect type").Or.Contain("Unknown image effect type"));
+    }
+
+    [Test]
+    public void SettingsPath_Accepts_KnownEffectType()
+    {
+        var preset = new ImageEffectPreset
+        {
+            Name = "SafePreset",
+            Effects = { new BrightnessImageEffect { Amount = 12 } }
+        };
+
+        var settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
+        string json = JsonConvert.SerializeObject(preset, Formatting.None, settings);
+        var loaded = JsonConvert.DeserializeObject<ImageEffectPreset>(json, settings);
+
+        Assert.That(loaded, Is.Not.Null);
+        Assert.That(loaded!.Name, Is.EqualTo("SafePreset"));
+        Assert.That(loaded.Effects.Count, Is.EqualTo(1));
+        Assert.That(loaded.Effects[0], Is.TypeOf<BrightnessImageEffect>());
+        Assert.That(((BrightnessImageEffect)loaded.Effects[0]).Amount, Is.EqualTo(12).Within(0.01));
+    }
+
+    [Test]
+    public void SettingsPath_Rejects_AbstractEffectType()
+    {
+        var json = """
+            {
+              "Name": "Abstract",
+              "Effects": [
+                { "$type": "ShareX.ImageEditor.Core.ImageEffects.ImageEffect, ShareX.ImageEditor" }
+              ]
+            }
+            """;
+
+        var settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
+        var ex = Assert.Throws<JsonSerializationException>(() =>
+            JsonConvert.DeserializeObject<ImageEffectPreset>(json, settings));
+
+        Assert.That(ex!.Message, Does.Contain("Unsupported image effect type").Or.Contain("Unknown image effect type"));
+    }
+
+    private static void WriteConfigArchive(string filePath, JObject config)
+    {
+        using var archive = ZipFile.Open(filePath, ZipArchiveMode.Create);
+        var entry = archive.CreateEntry("Config.json");
+        using var writer = new StreamWriter(entry.Open());
+        writer.Write(config.ToString());
+    }
+}
+

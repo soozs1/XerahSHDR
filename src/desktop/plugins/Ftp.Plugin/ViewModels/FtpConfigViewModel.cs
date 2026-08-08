@@ -1,0 +1,289 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using XerahS.Uploaders;
+using XerahS.Uploaders.PluginSystem;
+
+namespace ShareX.Ftp.Plugin.ViewModels;
+
+public partial class FtpConfigViewModel : ObservableObject, IUploaderConfigViewModel, IProviderContextAware
+{
+    private FTPProtocol _previousProtocol = FTPProtocol.FTP;
+    private FTPSEncryption _previousFtpsEncryptionMode = FTPSEncryption.Explicit;
+    private const FTPProtocol DefaultProtocol = FTPProtocol.FTP;
+    private const BrowserProtocol DefaultBrowserProtocol = BrowserProtocol.http;
+    private const FTPSEncryption DefaultFtpsEncryptionMode = FTPSEncryption.Explicit;
+
+    private string _secretKey = Guid.NewGuid().ToString("N");
+    private ISecretStore? _secrets;
+
+    [ObservableProperty]
+    private string _accountName = "FTP Account";
+
+    [ObservableProperty]
+    private FTPProtocol _protocol = FTPProtocol.FTP;
+
+    [ObservableProperty]
+    private string _host = string.Empty;
+
+    [ObservableProperty]
+    private int _port = 21;
+
+    [ObservableProperty]
+    private string _username = string.Empty;
+
+    [ObservableProperty]
+    private string _password = string.Empty;
+
+    [ObservableProperty]
+    private bool _isActive;
+
+    [ObservableProperty]
+    private string _subFolderPath = string.Empty;
+
+    [ObservableProperty]
+    private BrowserProtocol _browserProtocol = BrowserProtocol.http;
+
+    [ObservableProperty]
+    private string _httpHomePath = string.Empty;
+
+    [ObservableProperty]
+    private bool _httpHomePathAutoAddSubFolderPath = true;
+
+    [ObservableProperty]
+    private bool _httpHomePathNoExtension;
+
+    [ObservableProperty]
+    private FTPSEncryption _ftpsEncryptionMode = FTPSEncryption.Explicit;
+
+    [ObservableProperty]
+    private string _keypath = string.Empty;
+
+    [ObservableProperty]
+    private string _passphrase = string.Empty;
+
+    [ObservableProperty]
+    private string? _statusMessage;
+
+    public bool ShowFtpsOptions => Protocol == FTPProtocol.FTPS;
+    public bool ShowSftpKeyOptions => Protocol == FTPProtocol.SFTP;
+
+    partial void OnProtocolChanged(FTPProtocol value)
+    {
+        if (Port == GetDefaultPort(_previousProtocol, _previousFtpsEncryptionMode))
+        {
+            Port = GetDefaultPort(value, FtpsEncryptionMode);
+        }
+
+        _previousProtocol = value;
+
+        OnPropertyChanged(nameof(ShowFtpsOptions));
+        OnPropertyChanged(nameof(ShowSftpKeyOptions));
+    }
+
+    partial void OnFtpsEncryptionModeChanged(FTPSEncryption value)
+    {
+        if (Protocol == FTPProtocol.FTPS && Port == GetDefaultPort(FTPProtocol.FTPS, _previousFtpsEncryptionMode))
+        {
+            Port = GetDefaultPort(FTPProtocol.FTPS, value);
+        }
+
+        _previousFtpsEncryptionMode = value;
+    }
+
+    public IReadOnlyList<FTPProtocol> ProtocolOptions { get; } = new[] { FTPProtocol.FTP, FTPProtocol.FTPS, FTPProtocol.SFTP };
+    public IReadOnlyList<BrowserProtocol> BrowserProtocolOptions { get; } = new[] { BrowserProtocol.http, BrowserProtocol.https, BrowserProtocol.ftp, BrowserProtocol.ftps, BrowserProtocol.sftp };
+    public IReadOnlyList<FTPSEncryption> FtpsEncryptionOptions { get; } = new[] { FTPSEncryption.Explicit, FTPSEncryption.Implicit };
+
+    public void LoadFromJson(string json)
+    {
+        try
+        {
+            var config = JsonConvert.DeserializeObject<FtpConfigModel>(json);
+            if (config != null)
+            {
+                FTPProtocol protocol = NormalizeEnum(config.Protocol, DefaultProtocol);
+                BrowserProtocol browserProtocol = NormalizeEnum(config.BrowserProtocol, DefaultBrowserProtocol);
+                FTPSEncryption ftpsEncryptionMode = NormalizeEnum(config.FTPSEncryption, DefaultFtpsEncryptionMode);
+
+                _secretKey = string.IsNullOrWhiteSpace(config.SecretKey) ? Guid.NewGuid().ToString("N") : config.SecretKey;
+                AccountName = config.AccountName ?? "FTP Account";
+                Protocol = protocol;
+                Host = NormalizeHost(config.Host);
+                Username = config.Username ?? string.Empty;
+                Password = ResolveSecret(json, "Password", "password");
+                IsActive = config.IsActive;
+                SubFolderPath = config.SubFolderPath ?? string.Empty;
+                BrowserProtocol = browserProtocol;
+                HttpHomePath = config.HttpHomePath ?? string.Empty;
+                HttpHomePathAutoAddSubFolderPath = config.HttpHomePathAutoAddSubFolderPath;
+                HttpHomePathNoExtension = config.HttpHomePathNoExtension;
+                FtpsEncryptionMode = ftpsEncryptionMode;
+                Port = IsValidPort(config.Port) ? config.Port : GetDefaultPort(protocol, ftpsEncryptionMode);
+                Keypath = config.Keypath ?? string.Empty;
+                Passphrase = ResolveSecret(json, "Passphrase", "passphrase");
+                StatusMessage = null;
+            }
+        }
+        catch
+        {
+            StatusMessage = "Failed to load configuration";
+        }
+    }
+
+    public string ToJson()
+    {
+        var config = new FtpConfigModel
+        {
+            AccountName = AccountName ?? "FTP Account",
+            Protocol = Protocol,
+            Host = NormalizeHost(Host),
+            Port = Port,
+            Username = Username ?? string.Empty,
+            SecretKey = _secretKey,
+            IsActive = IsActive,
+            SubFolderPath = SubFolderPath ?? string.Empty,
+            BrowserProtocol = BrowserProtocol,
+            HttpHomePath = HttpHomePath ?? string.Empty,
+            HttpHomePathAutoAddSubFolderPath = HttpHomePathAutoAddSubFolderPath,
+            HttpHomePathNoExtension = HttpHomePathNoExtension,
+            FTPSEncryption = FtpsEncryptionMode,
+            Keypath = Keypath ?? string.Empty
+        };
+
+        if (_secrets != null)
+        {
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                _secrets.DeleteSecret("ftp", _secretKey, "password");
+            }
+            else
+            {
+                _secrets.SetSecret("ftp", _secretKey, "password", Password);
+            }
+
+            if (string.IsNullOrWhiteSpace(Passphrase))
+            {
+                _secrets.DeleteSecret("ftp", _secretKey, "passphrase");
+            }
+            else
+            {
+                _secrets.SetSecret("ftp", _secretKey, "passphrase", Passphrase);
+            }
+        }
+
+        return JsonConvert.SerializeObject(config, Formatting.Indented);
+    }
+
+    public void SetContext(IProviderContext context)
+    {
+        _secrets = context.Secrets;
+    }
+
+    private string ResolveSecret(string settingsJson, string legacyJsonProperty, string secretName)
+    {
+        if (!string.IsNullOrWhiteSpace(_secretKey) && _secrets != null)
+        {
+            string? stored = _secrets.GetSecret("ftp", _secretKey, secretName);
+            if (!string.IsNullOrEmpty(stored))
+            {
+                return stored;
+            }
+        }
+
+        return TryGetLegacyValue(settingsJson, legacyJsonProperty);
+    }
+
+    private static string TryGetLegacyValue(string settingsJson, string propertyName)
+    {
+        try
+        {
+            var json = JObject.Parse(settingsJson);
+            return json.Value<string>(propertyName) ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    public bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Host))
+        {
+            StatusMessage = "Host is required.";
+            return false;
+        }
+
+        if (!IsValidPort(Port))
+        {
+            StatusMessage = "Port must be between 1 and 65535.";
+            return false;
+        }
+
+        if (Protocol == FTPProtocol.SFTP)
+        {
+            string keypath = Keypath?.Trim() ?? string.Empty;
+            bool hasPassword = !string.IsNullOrWhiteSpace(Password);
+
+            if (string.IsNullOrWhiteSpace(keypath) && !hasPassword)
+            {
+                StatusMessage = "SFTP requires either a key file path or password.";
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(keypath) && !File.Exists(keypath) && !hasPassword)
+            {
+                StatusMessage = "SFTP key file does not exist.";
+                return false;
+            }
+        }
+
+        StatusMessage = null;
+        return true;
+    }
+
+    private static string NormalizeHost(string? host) => host?.Trim() ?? string.Empty;
+
+    private static int GetDefaultPort(FTPProtocol protocol, FTPSEncryption ftpsEncryptionMode)
+    {
+        return protocol switch
+        {
+            FTPProtocol.SFTP => 22,
+            FTPProtocol.FTPS when ftpsEncryptionMode == FTPSEncryption.Implicit => 990,
+            _ => 21
+        };
+    }
+
+    private static bool IsValidPort(int port) => port is > 0 and <= 65535;
+
+    private static TEnum NormalizeEnum<TEnum>(TEnum value, TEnum fallback) where TEnum : struct, Enum
+    {
+        return Enum.IsDefined(typeof(TEnum), value) ? value : fallback;
+    }
+}

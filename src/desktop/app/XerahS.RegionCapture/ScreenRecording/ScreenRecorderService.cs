@@ -1,0 +1,780 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+using System;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Diagnostics;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using XerahS.Common;
+
+namespace XerahS.RegionCapture.ScreenRecording;
+
+/// <summary>
+/// Platform-agnostic screen recording orchestration service
+/// Coordinates ICaptureSource and IVideoEncoder
+/// Stage 1: Native recording with automatic FFmpeg fallback
+/// </summary>
+public class ScreenRecorderService : IRecordingService
+{
+    private ICaptureSource? _captureSource;
+    private IVideoEncoder? _encoder;
+    private RecordingOptions? _currentOptions;
+    private string? _activeOutputPath;
+    private RecordingStatus _status = RecordingStatus.Idle;
+    private readonly Stopwatch _stopwatch = new();
+    private readonly object _lock = new();
+    private bool _disposed;
+
+    /// <summary>
+    /// Window handle for tracking bounds during Window capture mode.
+    /// When set, frames are captured from the full monitor and cropped to this window's current bounds.
+    /// This ensures menus, dialogs, and popups (which are separate HWNDs) are captured.
+    /// </summary>
+    private IntPtr _windowTrackingHandle = IntPtr.Zero;
+
+    /// <summary>
+    /// Factory function for creating platform-specific capture sources
+    /// Set by PlatformManager during initialization
+    /// </summary>
+    public static Func<ICaptureSource>? CaptureSourceFactory { get; set; }
+
+    /// <summary>
+    /// Factory function for creating platform-specific encoders
+    /// Set by PlatformManager during initialization
+    /// </summary>
+    public static Func<IVideoEncoder>? EncoderFactory { get; set; }
+
+    /// <summary>
+    /// Fallback factory for FFmpeg-based recording
+    /// Set during platform initialization (Stage 4)
+    /// </summary>
+    public static Func<IRecordingService>? FallbackServiceFactory { get; set; }
+
+    /// <summary>
+    /// Factory for creating native platform-specific recording service.
+    /// This is a complete IRecordingService (not capture+encoder pattern).
+    /// On macOS, this creates MacOSNativeRecordingService using ScreenCaptureKit.
+    /// </summary>
+    public static Func<IRecordingService>? NativeRecordingServiceFactory { get; set; }
+
+    public RecordingRuntimeCapabilities GetCapabilities(RecordingOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RecordingRuntimeCapabilities.SegmentedRestart;
+    }
+
+    /// <summary>
+    /// Debug: dump the first captured frame to disk for orientation analysis.
+    /// </summary>
+    public static bool DebugDumpFirstFrame { get; set; } = false;
+    public static int DebugDumpFirstFrameCount { get; set; } = 0;
+    public static int DebugDumpEveryNthFrame { get; set; } = 0;
+    public static int DebugDumpMaxFrames { get; set; } = 0;
+    public static bool DebugDumpRawFrame { get; set; } = false;
+    private static bool _debugFrameDumped = false;
+    private static int _debugFrameIndex = 0;
+    private static int _debugFramesDumped = 0;
+    private static readonly object DebugConfigLock = new();
+    private static bool _debugConfigInitialized = false;
+
+    public event EventHandler<RecordingErrorEventArgs>? ErrorOccurred;
+    public event EventHandler<RecordingStatusEventArgs>? StatusChanged;
+
+    public async Task StartRecordingAsync(RecordingOptions options)
+    {
+        if (options == null) throw new ArgumentNullException(nameof(options));
+
+        EnsureDebugConfigInitialized();
+        ResetDebugFrameCounters();
+
+        lock (_lock)
+        {
+            if (_disposed) throw new ObjectDisposedException(nameof(ScreenRecorderService));
+            if (_status != RecordingStatus.Idle)
+            {
+                throw new InvalidOperationException("Recording already in progress");
+            }
+
+            _currentOptions = options;
+            UpdateStatus(RecordingStatus.Initializing);
+        }
+
+        try
+        {
+            // Create capture source
+            if (CaptureSourceFactory == null)
+            {
+                throw new InvalidOperationException("CaptureSourceFactory not set. Platform initialization missing.");
+            }
+
+            _captureSource = CaptureSourceFactory();
+
+            // Initialize capture source based on mode
+            await InitializeCaptureSource(options);
+
+            // Create encoder
+            if (EncoderFactory == null)
+            {
+                throw new InvalidOperationException("EncoderFactory not set. Platform initialization missing.");
+        }
+
+            _encoder = EncoderFactory();
+
+            // Determine output path
+            string outputPath = GetOutputPath(options);
+            _activeOutputPath = outputPath;
+            DebugHelper.WriteLine($"[ScreenRecorder] Output path resolved: {outputPath}");
+
+            // Configure video format
+            var videoFormat = new VideoFormat
+            {
+                Width = GetCaptureWidth(options),
+                Height = GetCaptureHeight(options),
+                FPS = options.Settings?.FPS ?? 30,
+                Bitrate = (options.Settings?.BitrateKbps ?? 4000) * 1000, // Convert kbps to bps
+                Codec = options.Settings?.Codec ?? VideoCodec.H264
+            };
+
+            // Initialize encoder
+            _encoder.Initialize(videoFormat, outputPath);
+
+            // Wire up frame capture
+            _captureSource.FrameArrived += OnFrameCaptured;
+
+            // Start capture
+            await _captureSource.StartCaptureAsync();
+
+            lock (_lock)
+            {
+                _stopwatch.Restart();
+                UpdateStatus(RecordingStatus.Recording);
+            }
+        }
+        catch (PlatformNotSupportedException ex)
+        {
+            // Stage 4: Trigger FFmpeg fallback for unsupported platforms
+            HandleFatalError(ex, true);
+            throw;
+        }
+        catch (COMException ex)
+        {
+            // Stage 4: Trigger FFmpeg fallback for driver issues
+            HandleFatalError(ex, true);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            HandleFatalError(ex, true);
+            throw;
+        }
+    }
+
+    public async Task StopRecordingAsync()
+    {
+        ICaptureSource? captureSource;
+        IVideoEncoder? encoder;
+        string? outputPath;
+        TimeSpan elapsed;
+
+        lock (_lock)
+        {
+            if (_status != RecordingStatus.Recording)
+            {
+                return; // Already stopped or never started
+            }
+
+            UpdateStatus(RecordingStatus.Finalizing);
+            _stopwatch.Stop();
+
+            captureSource = _captureSource;
+            encoder = _encoder;
+            outputPath = _activeOutputPath;
+            elapsed = _stopwatch.Elapsed;
+        }
+
+        DebugHelper.WriteLine($"[ScreenRecorder] StopRecordingAsync invoked. Duration={elapsed.TotalSeconds:F2}s, outputPath={outputPath ?? "(null)"}");
+
+        try
+        {
+            // Stop capture
+            if (captureSource != null)
+            {
+                captureSource.FrameArrived -= OnFrameCaptured;
+                await captureSource.StopCaptureAsync();
+                captureSource.Dispose();
+            }
+
+            // Finalize encoder
+            encoder?.FinalizeEncoding();
+            encoder?.Dispose();
+
+            if (!string.IsNullOrEmpty(outputPath))
+            {
+                var info = new FileInfo(outputPath);
+                long? outputSize = info.Exists ? info.Length : null;
+                DebugHelper.WriteLine($"[ScreenRecorder] Output validation: exists={info.Exists}, size={(outputSize?.ToString() ?? "(missing)")} bytes");
+
+                // [2026-01-10T14:02:37+08:00] Fail fast on zero-byte recordings observed intermittently; outcome (2026-01-10T14:09:06+08:00) validated mp4 > 0 bytes after guarded finalize.
+                if (!info.Exists || outputSize <= 0)
+                {
+                    throw new InvalidOperationException($"Recording output invalid (exists={info.Exists}, size={(outputSize?.ToString() ?? "missing")}) for {outputPath}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HandleFatalError(ex, false);
+        }
+        finally
+        {
+            lock (_lock)
+            {
+                _captureSource = null;
+                _encoder = null;
+                _currentOptions = null;
+                _activeOutputPath = null;
+                _windowTrackingHandle = IntPtr.Zero;
+                UpdateStatus(RecordingStatus.Idle);
+            }
+        }
+    }
+
+    private async Task InitializeCaptureSource(RecordingOptions options)
+    {
+        if (_captureSource == null)
+        {
+            throw new InvalidOperationException("Capture source not created");
+        }
+
+        // Use dynamic dispatch to call platform-specific initialization
+        // This allows us to stay platform-agnostic here
+        dynamic source = _captureSource;
+
+        // Stage 2: Configure cursor capture if supported
+        try
+        {
+            source.ShowCursor = options.Settings?.ShowCursor ?? true;
+        }
+        catch
+        {
+            // Platform doesn't support ShowCursor property - ignore
+        }
+
+        switch (options.Mode)
+        {
+            case CaptureMode.Screen:
+                source.InitializeForPrimaryMonitor();
+                break;
+
+            case CaptureMode.Window:
+                if (options.TargetWindowHandle == IntPtr.Zero)
+                {
+                    throw new ArgumentException("TargetWindowHandle must be specified for Window mode");
+                }
+                // Store window handle for dynamic bounds tracking during frame capture.
+                // We use monitor capture + cropping instead of direct window capture so that
+                // menus, dialogs, and other popup windows (separate HWNDs) are included.
+                _windowTrackingHandle = options.TargetWindowHandle;
+                source.InitializeForPrimaryMonitor();
+                DebugHelper.WriteLine($"[ScreenRecorder] Window mode: using monitor capture with dynamic cropping for hwnd 0x{options.TargetWindowHandle:X}");
+                break;
+
+            case CaptureMode.Region:
+                // Stage 2: Region mode uses full screen capture + post-capture cropping
+                // This is more efficient than trying to capture a specific region with WGC
+                source.InitializeForPrimaryMonitor();
+                break;
+
+            default:
+                throw new NotSupportedException($"Capture mode {options.Mode} not supported");
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private void OnFrameCaptured(object? sender, FrameArrivedEventArgs e)
+    {
+        if (_disposed || _status != RecordingStatus.Recording) return;
+        
+        System.Console.WriteLine("SRS: OnFrameCaptured called"); // Low-level trace
+
+        FrameData? croppedFrame = null;
+        int frameIndex = System.Threading.Interlocked.Increment(ref _debugFrameIndex);
+        try
+        {
+            FrameData frameToEncode = e.Frame;
+
+            // Crop frame if in Window mode (dynamic window bounds tracking)
+            // This captures menus, dialogs, and popups that are separate HWNDs
+            if (_windowTrackingHandle != IntPtr.Zero)
+            {
+                try
+                {
+                    var windowBounds = XerahS.Platform.Abstractions.PlatformServices.Window.GetWindowBounds(_windowTrackingHandle);
+                    if (windowBounds.Width > 0 && windowBounds.Height > 0)
+                    {
+                        // Clamp window bounds to frame bounds (window may be partially offscreen)
+                        // Ensure even dimensions for Media Foundation H.264 encoder compatibility
+                        var clampedRegion = new Rectangle(
+                            Math.Max(0, windowBounds.X),
+                            Math.Max(0, windowBounds.Y),
+                            Math.Min(windowBounds.Width, e.Frame.Width - Math.Max(0, windowBounds.X)) & ~1,
+                            Math.Min(windowBounds.Height, e.Frame.Height - Math.Max(0, windowBounds.Y)) & ~1);
+
+                        if (clampedRegion.Width > 0 && clampedRegion.Height > 0)
+                        {
+                            if (OperatingSystem.IsWindows() && DebugDumpRawFrame)
+                            {
+                                TryDumpDebugFrame(e.Frame, $"raw_win_f{frameIndex:000000}");
+                            }
+
+                            croppedFrame = RegionCropper.CropFrame(e.Frame, clampedRegion);
+                            frameToEncode = croppedFrame.Value;
+                        }
+                    }
+                }
+                catch (Exception windowEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Failed to get window bounds or crop frame: {windowEx.Message}");
+                    // Fall back to uncropped frame if window bounds unavailable
+                }
+            }
+            // Stage 2: Crop frame if in Region mode
+            else if (_currentOptions?.Mode == CaptureMode.Region && _currentOptions.Region.Width > 0 && _currentOptions.Region.Height > 0)
+            {
+                try
+                {
+                    if (OperatingSystem.IsWindows() && DebugDumpRawFrame)
+                    {
+                        TryDumpDebugFrame(e.Frame, $"raw_f{frameIndex:000000}");
+                    }
+
+                    croppedFrame = RegionCropper.CropFrame(e.Frame, _currentOptions.Region);
+                    frameToEncode = croppedFrame.Value;
+                }
+                catch (Exception cropEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Failed to crop frame: {cropEx.Message}");
+                    // Fall back to uncropped frame
+                }
+            }
+
+            if (OperatingSystem.IsWindows())
+            {
+                bool dumpFirst = DebugDumpFirstFrame && !_debugFrameDumped;
+                bool dumpFirstCount = DebugDumpFirstFrameCount > 0 && frameIndex <= DebugDumpFirstFrameCount;
+                bool dumpEvery = DebugDumpEveryNthFrame > 0 && frameIndex % DebugDumpEveryNthFrame == 0;
+
+                if ((dumpFirst || dumpFirstCount || dumpEvery) && ShouldDumpMoreFrames())
+                {
+                    TryDumpDebugFrame(frameToEncode, $"capture_f{frameIndex:000000}");
+                    if (dumpFirst)
+                    {
+                        _debugFrameDumped = true;
+                    }
+                }
+            }
+
+            _encoder?.WriteFrame(frameToEncode);
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine($"SRS: Error in OnFrameCaptured: {ex.Message}");
+            HandleFatalError(ex, true);
+        }
+        finally
+        {
+            // Free cropped frame memory to prevent leak
+            if (croppedFrame.HasValue)
+            {
+                RegionCropper.FreeCroppedFrame(croppedFrame.Value);
+            }
+        }
+    }
+
+    private string GetOutputPath(RecordingOptions options)
+    {
+        string outputPath;
+
+        if (!string.IsNullOrEmpty(options.OutputPath))
+        {
+            outputPath = Path.GetFullPath(options.OutputPath);
+            string? outputDirectory = Path.GetDirectoryName(outputPath);
+
+            if (!string.IsNullOrEmpty(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
+            }
+
+            return outputPath;
+        }
+
+        string screencastsFolder = PathsManager.ScreencastsFolder;
+        Directory.CreateDirectory(screencastsFolder);
+
+        string fileName = $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.mp4";
+        outputPath = Path.Combine(screencastsFolder, fileName);
+        return outputPath;
+    }
+
+    private int GetCaptureWidth(RecordingOptions options)
+    {
+        int width;
+
+        if (options.Mode == CaptureMode.Region && options.Region.Width > 0)
+        {
+            width = options.Region.Width;
+        }
+        else if (options.Mode == CaptureMode.Window && options.TargetWindowHandle != IntPtr.Zero)
+        {
+            try
+            {
+                var windowBounds = XerahS.Platform.Abstractions.PlatformServices.Window.GetWindowBounds(options.TargetWindowHandle);
+                if (windowBounds.Width > 0)
+                {
+                    DebugHelper.WriteLine($"[ScreenRecorder] Window capture width from handle: {windowBounds.Width}");
+                    width = windowBounds.Width;
+                }
+                else
+                {
+                    width = GetPrimaryScreenWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.WriteLine($"[ScreenRecorder] Failed to get window bounds: {ex.Message}");
+                width = GetPrimaryScreenWidth();
+            }
+        }
+        else
+        {
+            width = GetPrimaryScreenWidth();
+        }
+
+        return NormalizeEncoderDimension(width);
+    }
+
+    private int GetCaptureHeight(RecordingOptions options)
+    {
+        int height;
+
+        if (options.Mode == CaptureMode.Region && options.Region.Height > 0)
+        {
+            height = options.Region.Height;
+        }
+        else if (options.Mode == CaptureMode.Window && options.TargetWindowHandle != IntPtr.Zero)
+        {
+            try
+            {
+                var windowBounds = XerahS.Platform.Abstractions.PlatformServices.Window.GetWindowBounds(options.TargetWindowHandle);
+                if (windowBounds.Height > 0)
+                {
+                    DebugHelper.WriteLine($"[ScreenRecorder] Window capture height from handle: {windowBounds.Height}");
+                    height = windowBounds.Height;
+                }
+                else
+                {
+                    height = GetPrimaryScreenHeight();
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.WriteLine($"[ScreenRecorder] Failed to get window bounds: {ex.Message}");
+                height = GetPrimaryScreenHeight();
+            }
+        }
+        else
+        {
+            height = GetPrimaryScreenHeight();
+        }
+
+        return NormalizeEncoderDimension(height);
+    }
+
+    private static int NormalizeEncoderDimension(int dimension)
+    {
+        if (dimension <= 0)
+        {
+            return 2;
+        }
+
+        int evenDimension = dimension & ~1;
+        return evenDimension > 0 ? evenDimension : 2;
+    }
+
+    private static int GetPrimaryScreenWidth()
+    {
+        try
+        {
+            var screens = XerahS.Platform.Abstractions.PlatformServices.Screen.GetAllScreens();
+            var primaryScreen = screens.FirstOrDefault(s => s.IsPrimary);
+            if (primaryScreen != null)
+            {
+                return primaryScreen.Bounds.Width;
+            }
+        }
+        catch
+        {
+            // Fallback if platform services not available
+        }
+        return 1920;
+    }
+
+    private static int GetPrimaryScreenHeight()
+    {
+        try
+        {
+            var screens = XerahS.Platform.Abstractions.PlatformServices.Screen.GetAllScreens();
+            var primaryScreen = screens.FirstOrDefault(s => s.IsPrimary);
+            if (primaryScreen != null)
+            {
+                return primaryScreen.Bounds.Height;
+            }
+        }
+        catch
+        {
+            // Fallback if platform services not available
+        }
+        return 1080;
+    }
+
+    private void UpdateStatus(RecordingStatus newStatus)
+    {
+        lock (_lock)
+        {
+            if (_status == newStatus) return;
+
+            _status = newStatus;
+            var duration = _stopwatch.Elapsed;
+
+            StatusChanged?.Invoke(this, new RecordingStatusEventArgs(newStatus, duration));
+        }
+    }
+
+    private void HandleFatalError(Exception ex, bool isFatal)
+    {
+        lock (_lock)
+        {
+            if (_status != RecordingStatus.Error)
+            {
+                UpdateStatus(RecordingStatus.Error);
+            }
+        }
+
+        ErrorOccurred?.Invoke(this, new RecordingErrorEventArgs(ex, isFatal));
+
+        if (isFatal)
+        {
+            // Cleanup
+            try
+            {
+                _captureSource?.Dispose();
+                _encoder?.Dispose();
+            }
+            catch
+            {
+                // Ignore cleanup errors
+            }
+
+            _captureSource = null;
+            _encoder = null;
+            _activeOutputPath = null;
+            _windowTrackingHandle = IntPtr.Zero;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        lock (_lock)
+        {
+            _disposed = true;
+
+            try
+            {
+                if (_status == RecordingStatus.Recording)
+                {
+                    StopRecordingAsync().Wait();
+                }
+            }
+            catch
+            {
+                // Best effort cleanup
+            }
+
+            _captureSource?.Dispose();
+            _encoder?.Dispose();
+        }
+
+        GC.SuppressFinalize(this);
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static void DumpFrame(FrameData frame, string tag)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        try
+        {
+            string dumpDir = PathsManager.FrameDumpsFolder;
+            Directory.CreateDirectory(dumpDir);
+
+            string fileName = $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{tag}_{frame.Width}x{frame.Height}.png";
+            string path = Path.Combine(dumpDir, fileName);
+
+            using var bitmap = new Bitmap(frame.Width, frame.Height, frame.Stride, System.Drawing.Imaging.PixelFormat.Format32bppArgb, frame.DataPtr);
+            bitmap.Save(path, ImageFormat.Png);
+
+            DebugHelper.WriteLine($"[ScreenRecorder] Dumped frame to {path}");
+        }
+        catch (Exception ex)
+        {
+            DebugHelper.WriteLine($"[ScreenRecorder] Frame dump failed: {ex.Message}");
+        }
+    }
+
+    private static void EnsureDebugConfigInitialized()
+    {
+        lock (DebugConfigLock)
+        {
+            if (_debugConfigInitialized)
+            {
+                return;
+            }
+
+            _debugConfigInitialized = true;
+            ApplyDebugFrameDumpOverridesFromEnvironment();
+        }
+    }
+
+    private static void ApplyDebugFrameDumpOverridesFromEnvironment()
+    {
+        var dumpFirst = Environment.GetEnvironmentVariable("XERAHS_RECORDING_DUMP_FIRST_FRAME");
+        if (TryParseBool(dumpFirst, out var dumpFirstValue))
+        {
+            DebugDumpFirstFrame = dumpFirstValue;
+        }
+
+        var dumpFirstCount = Environment.GetEnvironmentVariable("XERAHS_RECORDING_DUMP_FIRST_COUNT");
+        if (TryParseInt(dumpFirstCount, out var dumpFirstCountValue))
+        {
+            DebugDumpFirstFrameCount = Math.Max(0, dumpFirstCountValue);
+        }
+
+        var dumpEvery = Environment.GetEnvironmentVariable("XERAHS_RECORDING_DUMP_EVERY");
+        if (TryParseInt(dumpEvery, out var dumpEveryValue))
+        {
+            DebugDumpEveryNthFrame = Math.Max(0, dumpEveryValue);
+        }
+
+        var dumpMax = Environment.GetEnvironmentVariable("XERAHS_RECORDING_DUMP_MAX");
+        if (TryParseInt(dumpMax, out var dumpMaxValue))
+        {
+            DebugDumpMaxFrames = Math.Max(0, dumpMaxValue);
+        }
+
+        var dumpRaw = Environment.GetEnvironmentVariable("XERAHS_RECORDING_DUMP_RAW");
+        if (TryParseBool(dumpRaw, out var dumpRawValue))
+        {
+            DebugDumpRawFrame = dumpRawValue;
+        }
+
+        if (DebugDumpFirstFrame || DebugDumpFirstFrameCount > 0 || DebugDumpEveryNthFrame > 0)
+        {
+            DebugHelper.WriteLine($"[ScreenRecorder] Frame dump debug enabled: first={DebugDumpFirstFrame}, firstCount={DebugDumpFirstFrameCount}, every={DebugDumpEveryNthFrame}, max={DebugDumpMaxFrames}, raw={DebugDumpRawFrame}");
+        }
+    }
+
+    private static bool TryParseBool(string? value, out bool result)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            result = false;
+            return false;
+        }
+
+        if (bool.TryParse(value, out result))
+        {
+            return true;
+        }
+
+        if (int.TryParse(value, out var numeric))
+        {
+            result = numeric != 0;
+            return true;
+        }
+
+        result = false;
+        return false;
+    }
+
+    private static bool TryParseInt(string? value, out int result)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            result = 0;
+            return false;
+        }
+
+        return int.TryParse(value, out result);
+    }
+
+    private static void ResetDebugFrameCounters()
+    {
+        _debugFrameDumped = false;
+        _debugFrameIndex = 0;
+        _debugFramesDumped = 0;
+    }
+
+    private static bool ShouldDumpMoreFrames()
+    {
+        if (DebugDumpMaxFrames > 0 && _debugFramesDumped >= DebugDumpMaxFrames)
+        {
+            return false;
+        }
+
+        System.Threading.Interlocked.Increment(ref _debugFramesDumped);
+        return true;
+    }
+
+    private static void TryDumpDebugFrame(FrameData frame, string tag)
+    {
+        try
+        {
+            DumpFrame(frame, tag);
+        }
+        catch
+        {
+            // DumpFrame already logs failures; avoid cascading
+        }
+    }
+}

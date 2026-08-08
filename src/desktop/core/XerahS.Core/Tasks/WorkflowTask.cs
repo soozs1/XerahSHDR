@@ -1,0 +1,256 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using SkiaSharp;
+using XerahS.Common;
+using XerahS.Common.Helpers;
+using XerahS.Platform.Abstractions;
+using XerahS.Core.Managers;
+using XerahS.History;
+using XerahS.Uploaders;
+using XerahS.Uploaders.PluginSystem;
+
+namespace XerahS.Core.Tasks;
+
+/// <summary>
+/// Represents a minimal workflow task for quick automation (Path A)
+/// Handles: Capture → Upload → URL to Clipboard
+/// </summary>
+public class WorkflowTask : IDisposable
+{
+#pragma warning disable CS0067 // Event is never used - kept for future implementation
+    public event EventHandler<UploadProgressEventArgs>? UploadProgressChanged;
+#pragma warning restore CS0067
+    public event EventHandler? TaskCompleted;
+
+    private readonly IClipboardService? _clipboardService;
+
+    public string FileName { get; set; } = string.Empty;
+    public string? FilePath { get; set; }
+    public SKBitmap? Image { get; set; }
+    public Stream? Data { get; set; }
+    public UploadResult? Result { get; private set; }
+    public bool IsCompleted { get; private set; }
+    public bool IsError => Result?.IsError ?? false;
+
+    private bool _disposed;
+
+    public WorkflowTask() : this(null)
+    {
+    }
+
+    public WorkflowTask(IClipboardService? clipboardService)
+    {
+        _clipboardService = clipboardService;
+    }
+
+    /// <summary>
+    /// Creates a workflow task for image upload
+    /// </summary>
+    public static WorkflowTask CreateImageUploadTask(SKBitmap image, string fileName, IClipboardService? clipboardService = null)
+    {
+        return new WorkflowTask(clipboardService)
+        {
+            Image = image,
+            FileName = fileName
+        };
+    }
+
+    /// <summary>
+    /// Executes the workflow: Image → Stream → Upload → URL → Clipboard
+    /// </summary>
+    public async Task ExecuteAsync()
+    {
+        try
+        {
+            // Step 1: Convert image to stream
+            if (Image == null)
+            {
+                Result = new UploadResult { IsSuccess = false };
+                Result.Errors.Add("No image provided");
+                return;
+            }
+
+            Data = ConvertImageToStream(Image);
+
+            // Step 2: Upload to configured provider
+            Result = await UploadAsync();
+
+            // Step 3: Copy URL to clipboard if successful
+            if (Result != null && !Result.IsError && !string.IsNullOrEmpty(Result.URL))
+            {
+                CopyURLToClipboard(Result.ToString());
+            }
+
+            if (!string.IsNullOrEmpty(Result?.URL))
+            {
+                TryAppendHistoryItem(Result.URL);
+            }
+        }
+        catch (Exception ex)
+        {
+            Result = new UploadResult { IsSuccess = false };
+            Result.Errors.Add($"Workflow failed: {SecretMasker.MaskSecrets(ex.Message)}");
+        }
+        finally
+        {
+            IsCompleted = true;
+            TaskCompleted?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private void TryAppendHistoryItem(string url)
+    {
+        try
+        {
+            var historyPath = SettingsManager.GetHistoryFilePath();
+            using var historyManager = new HistoryManagerSQLite(historyPath);
+            var historyItem = new HistoryItem
+            {
+                FilePath = FilePath ?? string.Empty,
+                FileName = TaskHelpers.GetHistoryFileName(FileName, FilePath, url),
+                DateTime = DateTime.Now,
+                Type = "Image",
+                URL = url
+            };
+
+            historyManager.AppendHistoryItem(historyItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Failed to add history item: {ex.Message}");
+        }
+    }
+
+    private Stream ConvertImageToStream(SKBitmap image)
+    {
+        var stream = new MemoryStream();
+        using var skImage = SKImage.FromBitmap(image);
+        using var data = skImage.Encode(SKEncodedImageFormat.Png, 100);
+        data.SaveTo(stream);
+        stream.Position = 0;
+        return stream;
+    }
+
+    private async Task<UploadResult> UploadAsync()
+    {
+        try
+        {
+            // Get the default image uploader instance
+            var instanceManager = InstanceManager.Instance;
+            var defaultInstance = instanceManager.GetDefaultInstance(UploaderCategory.Image);
+
+            if (defaultInstance == null)
+            {
+                var result = new UploadResult { IsSuccess = false };
+                result.Errors.Add("No image uploader configured. Please set a default uploader in settings.");
+                return result;
+            }
+
+            // Get the provider
+            var provider = ProviderCatalog.GetProvider(defaultInstance.ProviderId);
+            if (provider == null)
+            {
+                var result = new UploadResult { IsSuccess = false };
+                result.Errors.Add($"Provider '{defaultInstance.ProviderId}' not found.");
+                return result;
+            }
+
+            // Create uploader instance from settings JSON
+            var uploader = provider.CreateInstance(defaultInstance.SettingsJson) as GenericUploader;
+            if (uploader == null)
+            {
+                var result = new UploadResult { IsSuccess = false };
+                result.Errors.Add("Provider did not return a valid uploader instance.");
+                return result;
+            }
+
+            // Ensure data is at start
+            if (Data != null && Data.CanSeek)
+            {
+                Data.Position = 0;
+            }
+
+            // Perform upload on a worker thread since GenericUploader.Upload is synchronous.
+            var uploadResult = await Task.Run(() => uploader.Upload(Data!, FileName));
+            var url = uploadResult.URL;
+
+            if (string.IsNullOrEmpty(url))
+            {
+                var result = new UploadResult { IsSuccess = false };
+                result.Errors.Add("Upload succeeded but returned empty URL");
+                return result;
+            }
+
+            return new UploadResult
+            {
+                URL = url,
+                IsSuccess = true
+            };
+        }
+        catch (Exception ex)
+        {
+            var result = new UploadResult { IsSuccess = false };
+            result.Errors.Add($"Upload failed: {ex.Message}");
+            return result;
+        }
+    }
+
+    private void CopyURLToClipboard(string url)
+    {
+        try
+        {
+            // Use injected service if available, otherwise fall back to PlatformServices
+            var clipboard = _clipboardService ?? (PlatformServices.IsInitialized ? PlatformServices.Clipboard : null);
+            clipboard?.SetText(url);
+        }
+        catch (Exception ex)
+        {
+            // Non-critical failure, just log
+            System.Diagnostics.Debug.WriteLine($"Failed to copy URL to clipboard: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        Data?.Dispose();
+        Image?.Dispose();
+
+        _disposed = true;
+        GC.SuppressFinalize(this);
+    }
+}
+
+/// <summary>
+/// Event args for upload progress
+/// </summary>
+public class UploadProgressEventArgs : EventArgs
+{
+    public long BytesSent { get; set; }
+    public long TotalBytes { get; set; }
+    public double Percentage => TotalBytes > 0 ? (BytesSent / (double)TotalBytes) * 100 : 0;
+}

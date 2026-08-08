@@ -1,0 +1,104 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System.Drawing;
+using System.Threading;
+
+namespace XerahS.Platform.Abstractions
+{
+    public class CaptureOptions
+    {
+        public bool UseModernCapture { get; set; } = true;
+        public LinuxInteractiveRegionSelectorPreference LinuxRegionSelectorPreference { get; set; } =
+            LinuxInteractiveRegionSelectorPreference.Automatic;
+        public MacOSInteractiveRegionSelectorPreference MacOSRegionSelectorPreference { get; set; } =
+            MacOSInteractiveRegionSelectorPreference.Automatic;
+        public bool MacOSPlayCaptureSound { get; set; } = true;
+        public bool LinuxForceLegacyCapturePath { get; set; } = false;
+        /// <summary>
+        /// Linux-only guard used by the XerahS overlay flow after the user has already chosen a region.
+        /// When true, the follow-up bitmap capture must not re-open the XDG portal selector/dialog again.
+        /// </summary>
+        public bool LinuxDisallowPortalAfterOverlaySelection { get; set; } = false;
+        public bool ShowCursor { get; set; } = true;
+        /// <summary>
+        /// For window captures: capture transparent regions of the window.
+        /// This is the original ShareX CaptureTransparent setting.
+        /// </summary>
+        public bool CaptureTransparent { get; set; } = false;
+
+        /// <summary>
+        /// For region captures: use transparent overlay (live desktop visible) vs frozen screenshot background.
+        /// When true, the overlay is shown immediately without waiting for full-screen capture (faster on Linux).
+        /// True for RectangleTransparent workflow, false for other region capture workflows.
+        /// </summary>
+        public bool UseTransparentOverlay { get; set; } = false;
+
+        public bool CaptureShadow { get; set; } = true;
+        public bool CaptureClientArea { get; set; } = false;
+
+        /// <summary>
+        /// ID of the workflow triggering this capture
+        /// </summary>
+        public string? WorkflowId { get; set; }
+
+        /// <summary>
+        /// Workflow category (ScreenCapture, ScreenRecord, etc.) used for logging.
+        /// </summary>
+        public string? WorkflowCategory { get; set; }
+
+        /// <summary>
+        /// Optional delay (in seconds) before capture starts.
+        /// </summary>
+        public double CaptureStartDelaySeconds { get; set; } = 0;
+
+        /// <summary>
+        /// Cancellation token used during capture start delay.
+        /// </summary>
+        public CancellationToken CaptureStartDelayCancellationToken { get; set; } = CancellationToken.None;
+
+        /// <summary>
+        /// When set, the capture backend may use this to map the crop rect from app virtual screen
+        /// coordinates to the actual capture bitmap size (e.g. when portal returns different resolution).
+        /// Used on Linux when cropping a full-screen portal capture to the selected region.
+        /// Coordinates are in logical (compositor) pixels — matches the logical overlay layout.
+        /// </summary>
+        public Rectangle? VirtualScreenBoundsForCrop { get; set; }
+
+        /// <summary>
+        /// Physical (device-pixel) virtual screen bounds. Set alongside <see cref="VirtualScreenBoundsForCrop"/>
+        /// on Linux so <c>LinuxScreenCaptureService</c> can detect whether the portal screenshot is in
+        /// physical or logical pixel space and choose the correct crop mapping.
+        /// </summary>
+        public Rectangle? PhysicalVirtualScreenBoundsForCrop { get; set; }
+
+        /// <summary>
+        /// Selection rectangle in physical (device) pixel coordinates.
+        /// Used together with <see cref="PhysicalVirtualScreenBoundsForCrop"/> when the portal
+        /// screenshot is detected to be in physical pixel space (e.g. KDE Plasma portal).
+        /// </summary>
+        public Rectangle? PhysicalRectForCrop { get; set; }
+    }
+}

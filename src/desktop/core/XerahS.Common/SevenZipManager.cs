@@ -1,0 +1,94 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System.Diagnostics;
+
+namespace XerahS.Common
+{
+    public class SevenZipManager
+    {
+        public string SevenZipPath { get; set; }
+
+        public SevenZipManager()
+        {
+            SevenZipPath = FileHelpers.GetAbsolutePath("7za.exe");
+        }
+
+        public SevenZipManager(string sevenZipPath)
+        {
+            SevenZipPath = sevenZipPath;
+        }
+
+        public bool Extract(string archivePath, string destination)
+        {
+            string arguments = $"x {ProcessArgumentQuoter.Quote(archivePath)} -o{ProcessArgumentQuoter.Quote(destination)} -y";
+            return Run(arguments) == 0;
+        }
+
+        public bool Extract(string archivePath, string destination, List<string> files)
+        {
+            string fileArgs = string.Join(" ", files.Select(x => ProcessArgumentQuoter.Quote(x)));
+            string arguments = $"e {ProcessArgumentQuoter.Quote(archivePath)} -o{ProcessArgumentQuoter.Quote(destination)} {fileArgs} -r -y";
+            return Run(arguments) == 0;
+        }
+
+        public bool Compress(string archivePath, List<string> files, string workingDirectory = "")
+        {
+            if (File.Exists(archivePath))
+            {
+                File.Delete(archivePath);
+            }
+
+            string fileArgs = string.Join(" ", files.Select(x => ProcessArgumentQuoter.Quote(x)));
+            string arguments = $"a -tzip {ProcessArgumentQuoter.Quote(archivePath)} {fileArgs} -mx=9";
+            return Run(arguments, workingDirectory) == 0;
+        }
+
+        private int Run(string arguments, string workingDirectory = "")
+        {
+            using (Process process = new Process())
+            {
+                ProcessStartInfo psi = new ProcessStartInfo()
+                {
+                    FileName = SevenZipPath,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                if (!string.IsNullOrEmpty(workingDirectory))
+                {
+                    psi.WorkingDirectory = workingDirectory;
+                }
+
+                process.StartInfo = psi;
+                process.Start();
+                process.WaitForExit();
+
+                return process.ExitCode;
+            }
+        }
+    }
+}

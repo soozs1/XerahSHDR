@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XerahS.App": {
+      "commandName": "Project",
+      "workingDirectory": "."
+    }
+  }
+}

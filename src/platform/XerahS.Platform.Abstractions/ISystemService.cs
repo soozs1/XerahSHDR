@@ -1,0 +1,85 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+namespace XerahS.Platform.Abstractions
+{
+    /// <summary>
+    /// Service for system-level operations like file explorer, URL opening, etc.
+    /// </summary>
+    public interface ISystemService
+    {
+        /// <summary>
+        /// Gets whether the current platform implementation can resolve desktop wallpaper metadata.
+        /// </summary>
+        bool IsDesktopWallpaperSupported { get; }
+
+        /// <summary>
+        /// Gets whether the current platform can run as a menu-bar-only application.
+        /// </summary>
+        bool IsMenuBarOnlyModeSupported => false;
+
+        /// <summary>
+        /// Enables or disables menu-bar-only presentation when supported.
+        /// </summary>
+        /// <param name="enabled">True to hide the application from the Dock/taskbar equivalent; false to restore the regular app presentation.</param>
+        /// <returns>True when the mode was applied or no platform action was needed; otherwise false.</returns>
+        bool SetMenuBarOnlyMode(bool enabled) => true;
+
+        /// <summary>
+        /// Opens the file explorer with the specified file selected.
+        /// </summary>
+        /// <param name="filePath">The full path to the file.</param>
+        /// <returns>True if successful, false otherwise.</returns>
+        bool ShowFileInExplorer(string filePath);
+
+        /// <summary>
+        /// Opens the specified URL in the default browser.
+        /// </summary>
+        /// <param name="url">The URL to open.</param>
+        /// <returns>True if successful, false otherwise.</returns>
+        bool OpenUrl(string url);
+
+        /// <summary>
+        /// Opens the specified file or folder using the default application/file manager.
+        /// </summary>
+        /// <param name="filePath">The path to the file or folder.</param>
+        /// <returns>True if successful, false otherwise.</returns>
+        bool OpenFile(string filePath);
+
+        /// <summary>
+        /// Tries to resolve the current desktop wallpaper metadata.
+        /// </summary>
+        /// <param name="wallpaper">Resolved wallpaper metadata when available.</param>
+        /// <returns>True if the wallpaper metadata could be resolved; otherwise false.</returns>
+        bool TryGetDesktopWallpaper(out DesktopWallpaperInfo? wallpaper);
+
+        /// <summary>
+        /// Tries to resolve the current desktop wallpaper file path.
+        /// </summary>
+        /// <param name="path">The wallpaper path when available.</param>
+        /// <returns>True if the wallpaper path could be resolved; otherwise false.</returns>
+        bool TryGetDesktopWallpaperPath(out string? path);
+    }
+}

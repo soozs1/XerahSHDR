@@ -1,0 +1,146 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System;
+using System.IO;
+using XerahS.Common;
+
+namespace XerahS.Indexer
+{
+    public abstract class Indexer
+    {
+        protected IndexerSettings settings = null!;
+
+        protected Indexer(IndexerSettings indexerSettings)
+        {
+            settings = indexerSettings ?? throw new ArgumentNullException(nameof(indexerSettings));
+        }
+
+        public static string Index(string folderPath, IndexerSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+            Indexer indexer = settings.Output switch
+            {
+                IndexerOutput.Html => new IndexerHtml(settings),
+                IndexerOutput.Txt => new IndexerText(settings),
+                IndexerOutput.Xml => new IndexerXml(settings),
+                IndexerOutput.Json => new IndexerJson(settings),
+                IndexerOutput.Markdown => new IndexerMarkdown(settings),
+                _ => throw new InvalidOperationException($"Unsupported indexer output: {settings.Output}")
+            };
+
+            return indexer.Index(folderPath);
+        }
+
+        public abstract string Index(string folderPath);
+
+        protected abstract void IndexFolder(FolderInfo dir, int level = 0);
+
+        protected FolderInfo GetFolderInfo(string folderPath, int level = 0)
+        {
+            FolderInfo folderInfo = new FolderInfo(folderPath);
+
+            if (settings.ShouldRecurseIntoLevel(level))
+            {
+                try
+                {
+                    DirectoryInfo currentDirectoryInfo = new DirectoryInfo(folderPath);
+
+                    foreach (DirectoryInfo directoryInfo in currentDirectoryInfo.EnumerateDirectories())
+                    {
+                        if (settings.SkipHiddenFolders && directoryInfo.Attributes.HasFlag(FileAttributes.Hidden))
+                        {
+                            continue;
+                        }
+
+                        FolderInfo subFolderInfo = GetFolderInfo(directoryInfo.FullName, level + 1);
+
+                        // Skip empty folders if the setting is enabled
+                        if (settings.IgnoreEmptyFolders && subFolderInfo.Files.Count == 0 && subFolderInfo.Folders.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        folderInfo.Folders.Add(subFolderInfo);
+                        subFolderInfo.Parent = folderInfo;
+                    }
+
+                    if (!settings.SkipFiles)
+                    {
+                        foreach (FileInfo fileInfo in currentDirectoryInfo.EnumerateFiles())
+                        {
+                            if (settings.SkipHiddenFiles && fileInfo.Attributes.HasFlag(FileAttributes.Hidden))
+                            {
+                                continue;
+                            }
+
+                            // Apply include filter: only include specified extensions
+                            if (settings.IncludedFileExtensions != null && settings.IncludedFileExtensions.Count > 0)
+                            {
+                                bool isIncluded = IndexerSettings.ExtensionMatchesFilter(fileInfo.Extension, settings.IncludedFileExtensions);
+                                if (!isIncluded)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            // Apply exclude filter: skip specified extensions
+                            if (settings.ExcludedFileExtensions != null && settings.ExcludedFileExtensions.Count > 0)
+                            {
+                                bool isExcluded = IndexerSettings.ExtensionMatchesFilter(fileInfo.Extension, settings.ExcludedFileExtensions);
+                                if (isExcluded)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            folderInfo.Files.Add(fileInfo);
+                        }
+
+                        folderInfo.Files.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    }
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    DebugHelper.WriteException(ex, $"Access denied: {folderPath}");
+                }
+                catch (PathTooLongException ex)
+                {
+                    DebugHelper.WriteException(ex, $"Path too long: {folderPath}");
+                }
+                catch (DirectoryNotFoundException ex)
+                {
+                    DebugHelper.WriteException(ex, $"Directory not found: {folderPath}");
+                }
+                catch (IOException ex) when (ex is not PathTooLongException && ex is not DirectoryNotFoundException)
+                {
+                    DebugHelper.WriteException(ex, $"I/O error in folder: {folderPath}");
+                }
+            }
+
+            return folderInfo;
+        }
+    }
+}

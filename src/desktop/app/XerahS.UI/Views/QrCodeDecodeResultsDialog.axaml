@@ -1,0 +1,76 @@
+<ui:SurfaceWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="using:XerahS.UI.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:XerahS.UI.ViewModels"
+        mc:Ignorable="d"
+        x:Class="XerahS.UI.Views.QrCodeDecodeResultsDialog"
+        x:DataType="vm:QrCodeDecodeResultsViewModel"
+        Width="800"
+        Height="500"
+        MinWidth="640"
+        WindowStartupLocation="CenterOwner"
+        Title="QR Code Results">
+
+    <Grid Margin="24" ColumnDefinitions="2*,12,*" RowDefinitions="Auto,*">
+        
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Spacing="4" Margin="0,0,0,24">
+            <TextBlock Text="QR Code Results" Theme="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding StatusMessage}"
+                       Theme="{StaticResource CaptionTextBlockStyle}"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Results List -->
+        <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*, Auto">
+            <Border Grid.Row="0" Theme="{StaticResource CardBorderTheme}" Padding="0">
+                <ListBox ItemsSource="{Binding Results}"
+                         SelectedItem="{Binding SelectedResult}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         AutomationProperties.Name="Decoded Results List">
+                   <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="12"/>
+                        </Style>
+                   </ListBox.Styles>
+                </ListBox>
+            </Border>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="0,16,0,0">
+                <Button Content="Copy Selected" 
+                        Command="{Binding CopySelectedCommand}" 
+                        AutomationProperties.Name="Copy Selected Result"/>
+                <Button Content="Copy All" 
+                        Command="{Binding CopyAllCommand}" 
+                        AutomationProperties.Name="Copy All Results"/>
+                <Button Content="Close" 
+                        Command="{Binding CloseCommand}" 
+                        Classes="accent"
+                        AutomationProperties.Name="Close Dialog"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Preview Image -->
+        <Border Grid.Row="1" Grid.Column="2" Theme="{StaticResource CardBorderTheme}" Padding="12">
+            <Grid>
+                <TextBlock Text="No preview available"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                           IsVisible="{Binding CapturedImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                
+                <Image Source="{Binding CapturedImage}"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       AutomationProperties.Name="Captured QR Code Image"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ui:SurfaceWindow>

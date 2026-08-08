@@ -1,0 +1,109 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+namespace XerahS.Platform.Abstractions;
+
+/// <summary>
+/// Platform-agnostic interface for global hotkey registration
+/// </summary>
+public interface IHotkeyService : IDisposable
+{
+    /// <summary>
+    /// Fired when a registered hotkey is triggered
+    /// </summary>
+    event EventHandler<HotkeyTriggeredEventArgs>? HotkeyTriggered;
+
+    /// <summary>
+    /// Fired when hotkey metadata changes without a register/unregister action,
+    /// for example when a portal-backed compositor updates the effective binding.
+    /// </summary>
+    event EventHandler? HotkeysChanged;
+
+    /// <summary>
+    /// Register a global hotkey
+    /// </summary>
+    /// <param name="hotkeyInfo">Hotkey to register</param>
+    /// <returns>True if registration succeeded</returns>
+    bool RegisterHotkey(HotkeyInfo hotkeyInfo);
+
+    /// <summary>
+    /// Unregister a previously registered hotkey
+    /// </summary>
+    /// <param name="hotkeyInfo">Hotkey to unregister</param>
+    /// <returns>True if unregistration succeeded</returns>
+    bool UnregisterHotkey(HotkeyInfo hotkeyInfo);
+
+    /// <summary>
+    /// Unregister all hotkeys
+    /// </summary>
+    void UnregisterAll();
+
+    /// <summary>
+    /// Check if a hotkey is currently registered
+    /// </summary>
+    bool IsRegistered(HotkeyInfo hotkeyInfo);
+
+    /// <summary>
+    /// Temporarily suspend all hotkey processing
+    /// </summary>
+    bool IsSuspended { get; set; }
+
+    /// <summary>
+    /// Invokes the native interactive configuration dialog for global shortcuts.
+    /// Returns true if the native configuration dialog was successfully shown and handled.
+    /// Platforms that do not support a native shortcut configuration UI return false.
+    /// </summary>
+    Task<bool> ShowInteractiveConfigurationAsync() => Task.FromResult(false);
+
+    /// <summary>
+    /// Called by the UI layer once the main window has fully opened and the native window
+    /// handle is available via <see cref="PlatformServices.NativeWindowHandleProvider"/>.
+    /// Implementations that deferred portal session setup (because the handle was not
+    /// yet available at registration time) should retry binding here.
+    /// The default implementation is a no-op.
+    /// </summary>
+    void NotifyWindowReady() { }
+
+    /// <summary>
+    /// Returns the current global-hotkey delivery state for settings UI and diagnostics (XIP0079 P1).
+    /// </summary>
+    HotkeyDiagnostics GetDiagnostics() => new(HotkeyBackendState.Native, "native", null);
+}
+
+/// <summary>
+/// Event args for hotkey trigger events
+/// </summary>
+public class HotkeyTriggeredEventArgs : EventArgs
+{
+    /// <summary>
+    /// The hotkey that was triggered
+    /// </summary>
+    public HotkeyInfo HotkeyInfo { get; }
+
+    public HotkeyTriggeredEventArgs(HotkeyInfo hotkeyInfo)
+    {
+        HotkeyInfo = hotkeyInfo;
+    }
+}

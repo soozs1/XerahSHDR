@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:ShareX.ImageEditor.Presentation.Controls;assembly=ShareX.ImageEditor"
+        x:Class="XerahS.RegionCapture.UI.OverlayWindow"
+        WindowDecorations="None"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        CanResize="False"
+        WindowStartupLocation="Manual"
+        ExtendClientAreaToDecorationsHint="True">
+
+    <Grid x:Name="OverlayRoot">
+        <!-- Region Capture Control Layer -->
+        <Panel x:Name="RootPanel" IsHitTestVisible="True">
+            <!-- Custom rendering control added in code-behind -->
+        </Panel>
+
+        <!-- XIP-0023: Annotation Canvas Layer for drawing shapes -->
+        <!-- IsHitTestVisible is set dynamically based on active tool (false for Select, true for drawing tools) -->
+        <Canvas x:Name="AnnotationCanvas"
+                Background="Transparent"
+                IsHitTestVisible="False"/>
+
+        <!-- XIP-0023: Annotation Toolbar for Overlay mode -->
+        <!-- Positioned below the instruction text (50px margin from top) -->
+        <!-- Press Tab to toggle visibility, ENTER to confirm capture -->
+        <!-- Stretch + MaxWidth give AnnotationToolbar a finite viewport so tool buttons scroll instead of clipping (Avalonia 12.1+). -->
+        <controls:AnnotationToolbar x:Name="AnnotationToolbarControl"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Stretch"
+                                    MaxWidth="{Binding Bounds.Width, ElementName=OverlayRoot}"
+                                    Margin="0,50,0,0"
+                                    IsVisible="True"/>
+    </Grid>
+</Window>

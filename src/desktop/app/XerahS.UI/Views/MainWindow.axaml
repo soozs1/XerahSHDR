@@ -1,0 +1,228 @@
+<Window x:Name="MainWindowRoot" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:XerahS.UI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hotkeys="using:XerahS.Core.Hotkeys"
+        xmlns:views="using:XerahS.UI.Views"
+        xmlns:common="clr-namespace:XerahS.Common;assembly=XerahS.Common"
+        xmlns:editvm="clr-namespace:ShareX.ImageEditor.Presentation.ViewModels;assembly=ShareX.ImageEditor"
+        xmlns:theming="clr-namespace:ShareX.ImageEditor.Presentation.Theming;assembly=ShareX.ImageEditor"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="650"
+        x:Class="XerahS.UI.Views.MainWindow"
+        x:DataType="editvm:MainViewModel"
+        Title="{x:Static common:AppResources.ProductNameWithVersion}"
+        Icon="/Assets/Logo.ico"
+        WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        Opened="OnWindowOpened">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://ShareX.ImageEditor/Presentation/Theming/ImageEditorTheme.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:ProviderCatalogViewModel}" x:DataType="vm:ProviderCatalogViewModel">
+            <views:ProviderCatalogDialog/>
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <Design.DataContext>
+        <editvm:MainViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Row 0: Main Menu Bar -->
+        <Border Grid.Row="0" Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
+            <Menu Background="Transparent" DataContext="{Binding #MainWindowRoot}">
+                <!-- File Menu -->
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open..." Command="{Binding OpenImageMenuCommand}" InputGesture="Ctrl+O"/>
+                    <Separator/>
+                    <MenuItem Header="_Upload">
+                        <MenuItem Header="Upload _File..." Command="{Binding NavigateMenuCommand}" CommandParameter="Upload_FileUpload"/>
+                        <MenuItem Header="Upload _Content..." Command="{Binding NavigateMenuCommand}" CommandParameter="Upload_ClipboardUploadWithContentViewer"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="_Save" Command="{Binding #MainWindowRoot.DataContext.SaveCommand}" InputGesture="Ctrl+S"/>
+                    <MenuItem Header="Save _As..." Command="{Binding #MainWindowRoot.DataContext.SaveAsCommand}" InputGesture="Ctrl+Shift+S"/>
+                    <Separator/>
+                    <MenuItem Header="E_xit" Command="{Binding ExitMenuCommand}" InputGesture="Alt+F4"/>
+                </MenuItem>
+                
+                <!-- Edit Menu -->
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="_Undo" Command="{Binding #MainWindowRoot.DataContext.UndoCommand}" InputGesture="Ctrl+Z"/>
+                    <MenuItem Header="_Redo" Command="{Binding #MainWindowRoot.DataContext.RedoCommand}" InputGesture="Ctrl+Y"/>
+                    <Separator/>
+                    <MenuItem Header="_Copy to Clipboard" Command="{Binding #MainWindowRoot.DataContext.CopyCommand}" InputGesture="Ctrl+Shift+C"/>
+                </MenuItem>
+                
+                <!-- View Menu -->
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Editor" Command="{Binding NavigateMenuCommand}" CommandParameter="Editor"/>
+                    <MenuItem Header="_History" Command="{Binding NavigateMenuCommand}" CommandParameter="History"/>
+                    <Separator/>
+                    <MenuItem Header="_Reset Zoom" Command="{Binding #MainWindowRoot.DataContext.ResetZoomCommand}" InputGesture="Ctrl+0"/>
+                    <MenuItem Header="Zoom _In" Command="{Binding #MainWindowRoot.DataContext.ZoomInCommand}" InputGesture="Ctrl++"/>
+                    <MenuItem Header="Zoom _Out" Command="{Binding #MainWindowRoot.DataContext.ZoomOutCommand}" InputGesture="Ctrl+-"/>
+                    <MenuItem Header="Zoom to _Fit" Command="{Binding #MainWindowRoot.DataContext.ZoomToFitCommand}" InputGesture="Ctrl+D9"/>
+                </MenuItem>
+                
+                <!-- Workflows Menu -->
+                <MenuItem Header="_Workflows" Name="WorkflowsMenuItem">
+                    <MenuItem Header="_Manage Workflows" Command="{Binding NavigateMenuCommand}" CommandParameter="Workflows"/>
+                    <Separator/>
+                    <MenuItem Header="_Run Workflow" Name="RunWorkflowsMenuItem"/>
+                </MenuItem>
+                
+                <!-- Tools Menu -->
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="_Color Picker..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_ColorPicker"/>
+                    <MenuItem Header="_Ruler" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_Ruler"/>
+                    <Separator/>
+                    <MenuItem Header="_QR Code">
+                        <MenuItem Header="_Generator..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_QrGenerator"/>
+                        <MenuItem Header="Scan from _Screen" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_QrScanScreen"/>
+                        <MenuItem Header="Scan from _Region" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_QrScanRegion"/>
+                    </MenuItem>
+                    <MenuItem Header="_Pin to Screen">
+                        <MenuItem Header="From _Screen" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_PinToScreenFromScreen"/>
+                        <MenuItem Header="From _Clipboard" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_PinToScreenFromClipboard"/>
+                        <MenuItem Header="From _File" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_PinToScreenFromFile"/>
+                        <MenuItem Header="Close _All" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_PinToScreenCloseAll"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="_OCR" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_OCR"/>
+                    <MenuItem Header="_Hash Checker..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_HashCheck"/>
+                    <MenuItem Header="_Index Folder..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_IndexFolder"/>
+                    <Separator/>
+                    <MenuItem Header="_Image Combiner..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_ImageCombiner"/>
+                    <MenuItem Header="Image _Splitter..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_ImageSplitter"/>
+                    <MenuItem Header="Image _Thumbnailer..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_ImageThumbnailer"/>
+                    <MenuItem Header="_Analyze Image..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_AnalyzeImage"/>
+                    <Separator/>
+                    <MenuItem Name="MenuItemVideoEditor" Header="_Video Editor..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_VideoEditor"/>
+                    <MenuItem Header="_Video Converter..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_VideoConverter"/>
+                    <MenuItem Header="Video Thumb_nailer..." Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_VideoThumbnailer"/>
+                    <Separator/>
+                    <MenuItem Header="Clipboard _Viewer" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_ClipboardViewer"/>
+                    <MenuItem Header="_Monitor Test" Command="{Binding NavigateMenuCommand}" CommandParameter="Tools_MonitorTest"/>
+                </MenuItem>
+                
+                <!-- Settings Menu -->
+                <MenuItem Header="_Settings">
+                    <MenuItem Header="_Application Settings" Command="{Binding NavigateMenuCommand}" CommandParameter="Settings_App"/>
+                    <MenuItem Header="_Destination Settings" Command="{Binding NavigateMenuCommand}" CommandParameter="Settings_Dest"/>
+                </MenuItem>
+                
+                <!-- Help Menu -->
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Command="{Binding NavigateMenuCommand}" CommandParameter="About"/>
+                    <MenuItem Header="_Debug" Command="{Binding NavigateMenuCommand}" CommandParameter="Debug"/>
+                </MenuItem>
+            </Menu>
+        </Border>
+
+        <!-- Main Navigation Shell -->
+        <Grid Grid.Row="1" ColumnDefinitions="300,*">
+            <!-- Navigation Pane (column 0) -->
+            <Border Grid.Column="0"
+                    Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}"
+                    BorderThickness="0,0,1,0">
+                <Grid Margin="12" RowDefinitions="Auto,*" RowSpacing="8">
+                    <TextBox Name="NavigationSearchBox"
+                             Watermark="Search"
+                             MinHeight="32"
+                             TextChanged="OnNavigationSearchTextChanged"
+                             AutomationProperties.Name="Navigation Search"/>
+                    <TreeView Name="NavigationTree"
+                              Grid.Row="1"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              SelectionChanged="OnNavSelectionChanged"
+                              KeyDown="OnNavigationTreeKeyDown"
+                              AutomationProperties.Name="Main Navigation">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate DataType="{x:Type vm:NavigationNode}"
+                                              x:DataType="vm:NavigationNode"
+                                              ItemsSource="{Binding Children}">
+                                <Border Background="Transparent"
+                                        CornerRadius="8"
+                                        Padding="10,8"
+                                        Tapped="OnNavigationNodeTapped"
+                                        AutomationProperties.Name="{Binding Text}">
+                                    <Grid ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="12">
+                                        <TextBlock Text="{Binding Glyph}"
+                                                   FontFamily="{DynamicResource ShareX.FontFamily.Icon}"
+                                                   FontSize="18"
+                                                   FontWeight="Normal"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding HasGlyph}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Text}"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </Border>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.Styles>
+                            <Style Selector="TreeView#NavigationTree TreeViewItem">
+                                <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
+                                <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                    </TreeView>
+                </Grid>
+            </Border>
+
+            <!-- Content Area (column 1) — bounded by * column, ensures ScrollViewers work -->
+            <Border Grid.Column="1"
+                    Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}">
+                <ContentControl Name="ContentFrame"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch" />
+            </Border>
+        </Grid>
+
+        <!-- Modal Overlay Layer (Bootstrap Style) -->
+        <Grid x:Name="MainWindowModalOverlay"
+              Grid.Row="0" Grid.RowSpan="2"
+              IsVisible="False"
+              ZIndex="1000">
+            <!-- Backdrop -->
+            <Border Background="{DynamicResource SolidBackgroundFillColorBaseBrush}" 
+                    Opacity="0.8"
+                    PointerPressed="OnBackdropPointerPressed"/>
+            
+            <!-- Modal Content Wrapper (Scrollable if needed) -->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <!-- Modal Dialog -->
+                    <Border Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+                            BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            MinWidth="400" MaxWidth="800"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="20"
+                            BoxShadow="0 4 20 0 #40000000">
+                        <ContentControl Content="{Binding ModalContent}"/>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+
+    </Grid>
+
+</Window>
