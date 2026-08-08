@@ -1,4 +1,5 @@
 using SkiaSharp;
+using XerahS.Common;
 using XerahS.Core;
 using XerahS.Platform.Abstractions;
 
@@ -16,11 +17,12 @@ internal sealed class HeadlessMcpUIService : IUIService
     public Task<string?> ShowVideoEditorAsync(string videoPath, string? ffmpegPath) =>
         Task.FromResult<string?>(null);
 
-    public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, bool Cancel)> ShowAfterCaptureWindowAsync(
+    public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, HdrToneMappingMode ToneMapping, bool Cancel)> ShowAfterCaptureWindowAsync(
         SKBitmap image,
         AfterCaptureTasks afterCapture,
-        AfterUploadTasks afterUpload) =>
-        Task.FromResult((afterCapture, afterUpload, false));
+        AfterUploadTasks afterUpload,
+        HdrToneMappingMode toneMapping) =>
+        Task.FromResult((afterCapture, afterUpload, HdrToneMappingMode.Auto, false));
 
     public Task ShowAfterUploadWindowAsync(AfterUploadWindowInfo info) => Task.CompletedTask;
 

@@ -173,6 +173,15 @@
             </StackPanel>
           </Border>
 
+          <StackPanel Spacing="{StaticResource SpaceXS}" IsVisible="{Binding IsHdrCapture}">
+            <TextBlock Text="HDR tone mapping:" Classes="caption" AutomationProperties.Name="HDR Tone Mapping Label"/>
+            <ComboBox ItemsSource="{Binding ToneMappingOptions}"
+                      SelectedItem="{Binding ToneMapping}"
+                      MinHeight="{StaticResource ControlHeight}"
+                      HorizontalAlignment="Stretch"
+                      AutomationProperties.Name="HDR Tone Mapping"/>
+          </StackPanel>
+
           <StackPanel Spacing="{StaticResource SpaceXS}">
             <TextBlock Text="After upload" Classes="section-header" AutomationProperties.Name="After Upload Heading"/>
             <TextBlock Text="Choose follow-up actions once the upload completes." Classes="caption" AutomationProperties.Name="After Upload Section Description"/>

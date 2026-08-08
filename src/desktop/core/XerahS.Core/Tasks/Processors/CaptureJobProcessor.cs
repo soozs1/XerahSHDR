@@ -52,6 +52,34 @@ namespace XerahS.Core.Tasks.Processors
         public static Func<SKBitmap, Task>? ShowAnalyzerCallback { get; set; }
 
         /// <summary>
+        /// Tonemaps an HDR (fp16 scRGB) capture to 8-bit Bgra8888 when the image is RgbaF16 and the
+        /// selected mode requires SDR output (HDR_CAPTURE_PLAN §6.3). Returns <c>true</c> and sets
+        /// <paramref name="tonemapped"/> to a NEW bitmap (caller owns it) when a conversion was made;
+        /// returns <c>false</c> and sets <paramref name="tonemapped"/> back to <paramref name="image"/>
+        /// (no ownership transfer) when no conversion is needed or the conversion failed.
+        /// </summary>
+        internal static bool TryTonemapHdr(SKBitmap image, HdrToneMappingMode mode, AfterCaptureTasks afterCaptureJob, out SKBitmap? tonemapped)
+        {
+            tonemapped = image;
+
+            if (image.ColorType != SKColorType.RgbaF16 ||
+                !HdrTonemapper.ShouldTonemapToSdr(mode, afterCaptureJob))
+            {
+                return false;
+            }
+
+            // TODO HDR-03: use real display peak from MonitorInfo/OutputDescription1
+            SKBitmap? sdr = HdrTonemapper.TonemapToBgra8888(image, mode, peakNits: 1000f);
+            if (sdr == null)
+            {
+                return false;
+            }
+
+            tonemapped = sdr;
+            return true;
+        }
+
+        /// <summary>
         /// Executes after-capture tasks for the current job.
         /// </summary>
         /// <returns><c>true</c> to continue the pipeline; <c>false</c> if the user cancelled.</returns>
@@ -71,29 +99,20 @@ namespace XerahS.Core.Tasks.Processors
             // upload) need an 8-bit tonemapped copy. Tonemap once, before ShowAfterCaptureWindow
             // (HDR_CAPTURE_PLAN §6.3).
             SKBitmap currentImage = info.Metadata.Image; // non-null (checked above)
-            if (currentImage.ColorType == SKColorType.RgbaF16)
+            bool needsTonemap = currentImage.ColorType == SKColorType.RgbaF16 &&
+                HdrTonemapper.ShouldTonemapToSdr(settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob);
+
+            if (TryTonemapHdr(currentImage, settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob, out SKBitmap? tonemapped) &&
+                tonemapped != null)
             {
-                HdrToneMappingMode toneMapMode = settings.ImageSettings.ImageHdrToneMapping;
-
-                if (HdrTonemapper.ShouldTonemapToSdr(toneMapMode, settings.AfterCaptureJob))
-                {
-                    SKBitmap? sdr = HdrTonemapper.TonemapToBgra8888(
-                        currentImage,
-                        toneMapMode == HdrToneMappingMode.TonemapAces ? HdrToneMappingMode.TonemapAces : HdrToneMappingMode.TonemapReinhard,
-                        peakNits: 1000f); // TODO HDR-03: use real display peak from MonitorInfo/OutputDescription1
-
-                    if (sdr != null)
-                    {
-                        info.Metadata.Image = sdr;
-                        currentImage.Dispose();
-                        currentImage = sdr;
-                        DebugHelper.WriteLine("Tonemapped HDR (fp16) capture to 8-bit SDR.");
-                    }
-                    else
-                    {
-                        DebugHelper.WriteLine("Tonemapping HDR capture failed; keeping fp16 image.");
-                    }
-                }
+                info.Metadata.Image = tonemapped;
+                currentImage.Dispose();
+                currentImage = tonemapped;
+                DebugHelper.WriteLine("Tonemapped HDR (fp16) capture to 8-bit SDR.");
+            }
+            else if (needsTonemap)
+            {
+                DebugHelper.WriteLine("Tonemapping HDR capture failed; keeping fp16 image.");
             }
 
             if (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.ShowAfterCaptureWindow))
@@ -108,7 +127,8 @@ namespace XerahS.Core.Tasks.Processors
                     var result = await PlatformServices.UI.ShowAfterCaptureWindowAsync(
                         currentImage,
                         settings.AfterCaptureJob,
-                        settings.AfterUploadJob);
+                        settings.AfterUploadJob,
+                        settings.ImageSettings.ImageHdrToneMapping);
                     if (result.Cancel)
                     {
                         DebugHelper.WriteLine("After capture window cancelled; aborting workflow.");
@@ -123,6 +143,21 @@ namespace XerahS.Core.Tasks.Processors
                         !result.Capture.HasFlag(AfterCaptureTasks.ShowAfterCaptureWindow))
                     {
                         PersistShowAfterCaptureWindowSetting(settings.WorkflowId, false);
+                    }
+
+                    // Persist the user's HDR tonemapping choice and apply it in case the image is
+                    // still HDR (fp16). If the pre-window hook already replaced the fp16 image with
+                    // an 8-bit copy, this is a no-op (the image is no longer RgbaF16). If the user
+                    // selected None after that replacement, the fp16 source is already disposed and
+                    // the 8-bit copy stays — acceptable, the choice still applies to future captures.
+                    settings.ImageSettings.ImageHdrToneMapping = result.ToneMapping;
+                    if (TryTonemapHdr(currentImage, result.ToneMapping, settings.AfterCaptureJob, out SKBitmap? postWindowTonemapped) &&
+                        postWindowTonemapped != null)
+                    {
+                        info.Metadata.Image = postWindowTonemapped;
+                        currentImage.Dispose();
+                        currentImage = postWindowTonemapped;
+                        DebugHelper.WriteLine("Applied HDR tonemapping selected in after-capture window.");
                     }
                 }
             }

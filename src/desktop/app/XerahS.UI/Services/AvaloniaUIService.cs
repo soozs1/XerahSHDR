@@ -458,14 +458,15 @@ namespace XerahS.UI.Services
             owner.WindowState != Avalonia.Controls.WindowState.Minimized &&
             owner.ShowInTaskbar;
 
-        public async Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, bool Cancel)> ShowAfterCaptureWindowAsync(
+        public async Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, HdrToneMappingMode ToneMapping, bool Cancel)> ShowAfterCaptureWindowAsync(
             SKBitmap image,
             AfterCaptureTasks afterCapture,
-            AfterUploadTasks afterUpload)
+            AfterUploadTasks afterUpload,
+            HdrToneMappingMode toneMapping)
         {
             return await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                var viewModel = new AfterCaptureViewModel(image, afterCapture, afterUpload);
+                var viewModel = new AfterCaptureViewModel(image, afterCapture, afterUpload, toneMapping);
                 var window = new Views.AfterCaptureWindow
                 {
                     DataContext = viewModel
@@ -495,7 +496,7 @@ namespace XerahS.UI.Services
                     await closedTcs.Task;
                 }
 
-                return (viewModel.AfterCaptureTasks, viewModel.AfterUploadTasks, viewModel.Cancelled);
+                return (viewModel.AfterCaptureTasks, viewModel.AfterUploadTasks, viewModel.ToneMapping, viewModel.Cancelled);
             });
         }
 

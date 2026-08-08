@@ -26,7 +26,9 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using XerahS.Common;
 using XerahS.Core;
+using XerahS.Core.Helpers;
 using ShareX.ImageEditor.Presentation.Rendering;
 
 namespace XerahS.UI.ViewModels;
@@ -42,19 +44,50 @@ public partial class AfterCaptureViewModel : ViewModelBase
     [ObservableProperty]
     private AfterUploadTasks _afterUploadTasks;
 
+    [ObservableProperty]
+    private HdrToneMappingMode _toneMapping;
+
+    /// <summary>
+    /// True when the captured image is an HDR (fp16) bitmap and the HDR tone-mapping selector applies.
+    /// </summary>
+    public bool IsHdrCapture { get; }
+
+    /// <summary>
+    /// Selectable HDR tone-mapping modes for the After Capture window (HDR_CAPTURE_PLAN §6.4).
+    /// </summary>
+    public static IReadOnlyList<HdrToneMappingMode> ToneMappingOptions => Enum.GetValues<HdrToneMappingMode>();
+
     public bool Cancelled { get; private set; } = true;
 
     public event Action? RequestClose;
 
-    public AfterCaptureViewModel(SkiaSharp.SKBitmap image, AfterCaptureTasks afterCapture, AfterUploadTasks afterUpload)
+    public AfterCaptureViewModel(SkiaSharp.SKBitmap image, AfterCaptureTasks afterCapture, AfterUploadTasks afterUpload, HdrToneMappingMode toneMapping)
     {
         if (image == null) throw new ArgumentNullException(nameof(image));
 
-        PreviewImage = BitmapConversionHelpers.ToAvaloniBitmap(image);
+        IsHdrCapture = image.ColorType == SkiaSharp.SKColorType.RgbaF16;
+        ToneMapping = toneMapping;
+        PreviewImage = BuildPreviewImage(image);
         // Keep the full flag set so the workflow setting is not implicitly cleared
         // after this dialog returns.
         AfterCaptureTasks = afterCapture;
         AfterUploadTasks = afterUpload;
+    }
+
+    private Bitmap BuildPreviewImage(SkiaSharp.SKBitmap image)
+    {
+        if (IsHdrCapture)
+        {
+            // The after-capture UI is 8-bit; preview an HDR (fp16) capture tonemapped to SDR
+            // (HDR_CAPTURE_PLAN §6.4). The source image is owned by the caller — never dispose it.
+            using var tonemapped = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapReinhard, peakNits: 1000f);
+            if (tonemapped != null)
+            {
+                return BitmapConversionHelpers.ToAvaloniBitmap(tonemapped);
+            }
+        }
+
+        return BitmapConversionHelpers.ToAvaloniBitmap(image);
     }
 
     public bool SaveImageToFile

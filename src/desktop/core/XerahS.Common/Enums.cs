@@ -45,14 +45,6 @@ namespace XerahS.Common
         Bit16
     }
 
-    public enum HdrToneMappingMode // Localized
-    {
-        None = 0,
-        Auto = 1,
-        TonemapReinhard = 2,
-        TonemapAces = 3
-    }
-
     public enum GIFQuality // Localized
     {
         Default,

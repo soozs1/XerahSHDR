@@ -24,6 +24,7 @@
 #endregion License Information (GPL v3)
 
 using System.Linq;
+using XerahS.Common;
 using XerahS.Core;
 using ShareX.ImageEditor.Hosting;
 using SkiaSharp;
@@ -85,11 +86,14 @@ namespace XerahS.Platform.Abstractions
 
         /// <summary>
         /// Shows the After Capture window and returns selected tasks.
+        /// The returned <see cref="HdrToneMappingMode"/> is the tonemapping choice for this capture;
+        /// headless implementations return <see cref="HdrToneMappingMode.Auto"/> (no change).
         /// </summary>
-        Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, bool Cancel)> ShowAfterCaptureWindowAsync(
+        Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, HdrToneMappingMode ToneMapping, bool Cancel)> ShowAfterCaptureWindowAsync(
             SKBitmap image,
             AfterCaptureTasks afterCapture,
-            AfterUploadTasks afterUpload);
+            AfterUploadTasks afterUpload,
+            HdrToneMappingMode toneMapping);
 
         /// <summary>
         /// Shows the After Upload window with upload results and actions.

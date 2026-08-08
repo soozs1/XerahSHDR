@@ -149,14 +149,15 @@ namespace XerahS.CLI.Services
             });
         }
 
-        public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, bool Cancel)> ShowAfterCaptureWindowAsync(
+        public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, HdrToneMappingMode ToneMapping, bool Cancel)> ShowAfterCaptureWindowAsync(
             SKBitmap image,
             AfterCaptureTasks afterCapture,
-            AfterUploadTasks afterUpload)
+            AfterUploadTasks afterUpload,
+            HdrToneMappingMode toneMapping)
         {
             // Return the tasks as-is without modification (no UI to change them)
             Console.WriteLine("[INFO] After-capture window not available in CLI mode. Using configured defaults.");
-            return Task.FromResult((afterCapture, afterUpload, false));
+            return Task.FromResult((afterCapture, afterUpload, HdrToneMappingMode.Auto, false));
         }
 
         public Task ShowAfterUploadWindowAsync(AfterUploadWindowInfo info)

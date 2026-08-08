@@ -26,6 +26,7 @@
 using NUnit.Framework;
 using SkiaSharp;
 using XerahS.App;
+using XerahS.Common;
 using XerahS.Core;
 using XerahS.Platform.Abstractions;
 using XerahS.Services.Abstractions;
@@ -294,12 +295,13 @@ public class SendToIntegrationCoordinatorTests
 
         public Task<string?> ShowVideoEditorAsync(string videoPath, string? ffmpegPath) => Task.FromResult<string?>(null);
 
-        public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, bool Cancel)> ShowAfterCaptureWindowAsync(
+        public Task<(AfterCaptureTasks Capture, AfterUploadTasks Upload, HdrToneMappingMode ToneMapping, bool Cancel)> ShowAfterCaptureWindowAsync(
             SKBitmap image,
             AfterCaptureTasks afterCapture,
-            AfterUploadTasks afterUpload)
+            AfterUploadTasks afterUpload,
+            HdrToneMappingMode toneMapping)
         {
-            return Task.FromResult((afterCapture, afterUpload, false));
+            return Task.FromResult((afterCapture, afterUpload, HdrToneMappingMode.Auto, false));
         }
 
         public Task ShowAfterUploadWindowAsync(AfterUploadWindowInfo info) => Task.CompletedTask;
