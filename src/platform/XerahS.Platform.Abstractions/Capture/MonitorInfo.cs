@@ -94,6 +94,12 @@ public sealed record MonitorInfo
     public int BitsPerPixel { get; init; } = 32;
 
     /// <summary>
+    /// Whether the display is currently in HDR mode (HDR10, scRGB).
+    /// Defaults to false (SDR) when unknown or not supported.
+    /// </summary>
+    public bool IsHdr { get; init; } = false;
+
+    /// <summary>
     /// Additional platform-specific metadata.
     /// </summary>
     public string? DevicePath { get; init; }

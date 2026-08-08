@@ -47,6 +47,7 @@ namespace ShareX.Avalonia.Platform.Windows.Capture;
 internal sealed class DxgiCaptureStrategy : ICaptureStrategy
 {
     private readonly Dictionary<string, DxgiMonitorContext> _monitorContexts = new();
+    private bool _anyHdrMonitor;
     private bool _disposed;
 
     public string Name => "DXGI Desktop Duplication";
@@ -109,7 +110,8 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
                     WorkingArea = workingArea,
                     ScaleFactor = scaleFactor,
                     Rotation = ConvertRotation(desc.Rotation),
-                    BitsPerPixel = 32 // DXGI always uses 32-bit BGRA
+                    BitsPerPixel = 32, // DXGI always uses 32-bit BGRA
+                    IsHdr = IsOutputHdr(output)
                 });
 
                 // Pre-initialize DXGI duplication for this output
@@ -130,7 +132,22 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
             adapterIndex++;
         }
 
+        _anyHdrMonitor = monitors.Any(m => m.IsHdr);
         return monitors.ToArray();
+    }
+
+    private static bool IsOutputHdr(IDXGIOutput output)
+    {
+        try
+        {
+            using var output6 = output.QueryInterface<IDXGIOutput6>();
+            return DxgiCapabilitiesHelper.IsHdrColorSpace(output6.Description1.ColorSpace);
+        }
+        catch
+        {
+            // QueryInterface/GetDesc1 may fail on old drivers or WARP; treat as SDR.
+            return false;
+        }
     }
 
     public async Task<CapturedBitmap> CaptureRegionAsync(
@@ -266,7 +283,7 @@ internal sealed class DxgiCaptureStrategy : ICaptureStrategy
         }
     }
 
-    public BackendCapabilities GetCapabilities() => DxgiCapabilitiesHelper.Create();
+    public BackendCapabilities GetCapabilities() => DxgiCapabilitiesHelper.Create(_anyHdrMonitor);
 
     private static void TryCompositeCursor(SKBitmap bitmap, PhysicalRectangle captureRegion, RegionCaptureOptions options)
     {
