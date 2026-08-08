@@ -259,6 +259,34 @@ namespace XerahS.Core.Tasks.Processors
             return targetInstance;
         }
 
+        internal static UploaderInstance? ResolveShortenerInstance(InstanceManager instanceManager, string? configuredInstanceId)
+        {
+            if (!string.IsNullOrWhiteSpace(configuredInstanceId))
+            {
+                var configured = instanceManager.GetInstance(configuredInstanceId);
+                if (configured != null && configured.IsAvailable)
+                {
+                    if (configured.Category != UploaderCategory.UrlShortener)
+                    {
+                        DebugHelper.WriteLine($"Configured URL shortener instance category mismatch. Expected {UploaderCategory.UrlShortener}, got {configured.Category}. Falling back to default.");
+                    }
+                    else
+                    {
+                        return configured;
+                    }
+                }
+            }
+
+            var defaultInstance = instanceManager.GetDefaultInstance(UploaderCategory.UrlShortener);
+            if (defaultInstance != null)
+            {
+                return defaultInstance;
+            }
+
+            return instanceManager.GetInstancesByCategory(UploaderCategory.UrlShortener)
+                .FirstOrDefault(i => i.IsAvailable);
+        }
+
         private static UploaderInstance? EnsureAutoFileDestinationInstance(InstanceManager instanceManager)
         {
             try
@@ -703,6 +731,69 @@ namespace XerahS.Core.Tasks.Processors
             };
         }
 
+        private static void ShortenUrl(UploadResult result, string? configuredInstanceId)
+        {
+            if (!URLHelpers.IsValidURL(result.URL ?? string.Empty))
+            {
+                DebugHelper.WriteLine("AfterUpload: URL shortening skipped (URL is not a valid http(s) URL).");
+                return;
+            }
+
+            EnsurePluginsLoaded();
+
+            var shortenerInstance = ResolveShortenerInstance(InstanceManager.Instance, configuredInstanceId);
+            if (shortenerInstance == null)
+            {
+                DebugHelper.WriteLine("AfterUpload: no URL shortener instance configured.");
+                return;
+            }
+
+            var provider = ProviderCatalog.GetProvider(shortenerInstance.ProviderId);
+            if (provider == null)
+            {
+                DebugHelper.WriteLine($"AfterUpload: provider for URL shortener not found: {shortenerInstance.ProviderId}");
+                return;
+            }
+
+            UrlShortener? shortener = null;
+            try
+            {
+                shortener = provider.CreateInstance(shortenerInstance.SettingsJson) as UrlShortener;
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.WriteLine($"AfterUpload: failed to create URL shortener instance: {SecretMasker.MaskSecrets(ex.Message)}");
+                return;
+            }
+
+            if (shortener == null)
+            {
+                DebugHelper.WriteLine($"AfterUpload: provider \"{shortenerInstance.DisplayName}\" did not create a URL shortener.");
+                return;
+            }
+
+            try
+            {
+                var shortenResult = shortener.ShortenURL(result.URL ?? string.Empty);
+                if (shortenResult != null && !string.IsNullOrEmpty(shortenResult.ShortenedURL))
+                {
+                    result.ShortenedURL = shortenResult.ShortenedURL;
+                    DebugHelper.WriteLine($"AfterUpload: URL shortened: {result.ShortenedURL}");
+                }
+                else
+                {
+                    var errorDetails = shortenResult == null
+                        ? "shortener returned no result"
+                        : SecretMasker.MaskSecrets(shortenResult.Errors.Count > 0 ? shortenResult.Errors.ToString() : shortenResult.Response);
+                    DebugHelper.WriteLine($"AfterUpload: URL shortening failed: {errorDetails}");
+                }
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.WriteException(ex, "AfterUpload: URL shortening failed");
+            }
+        }
+
         private async Task HandleAfterUploadTasksAsync(TaskInfo info, UploadResult result, CancellationToken token)
         {
             if (token.IsCancellationRequested) return;
@@ -710,8 +801,7 @@ namespace XerahS.Core.Tasks.Processors
             // Handle URL Shortening if requested
             if (info.TaskSettings.AfterUploadJob.HasFlag(AfterUploadTasks.UseURLShortener))
             {
-                DebugHelper.WriteLine("AfterUpload: URL shortener requested (not implemented).");
-                // TODO: Implement URL Shortening logic using UploaderFactory
+                ShortenUrl(result, info.TaskSettings.UrlShortenerDestinationInstanceId);
             }
 
             // Show After Upload window (non-blocking)
@@ -758,10 +848,11 @@ namespace XerahS.Core.Tasks.Processors
             // Handle Clipboard Copy
             if (info.TaskSettings.AfterUploadJob.HasFlag(AfterUploadTasks.CopyURLToClipboard))
             {
-                if (PlatformServices.IsInitialized && !string.IsNullOrEmpty(result.URL))
+                var urlToCopy = !string.IsNullOrEmpty(result.ShortenedURL) ? result.ShortenedURL : result.URL;
+                if (PlatformServices.IsInitialized && !string.IsNullOrEmpty(urlToCopy))
                 {
-                    await PlatformServices.Clipboard.SetTextAsync(result.URL);
-                    DebugHelper.WriteLine($"Copied URL to clipboard: {result.URL}");
+                    await PlatformServices.Clipboard.SetTextAsync(urlToCopy);
+                    DebugHelper.WriteLine($"Copied URL to clipboard: {urlToCopy}");
                 }
                 else
                 {

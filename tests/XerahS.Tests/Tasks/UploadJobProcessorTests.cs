@@ -67,6 +67,66 @@ public class UploadJobProcessorTests
     }
 
     [Test]
+    public void ResolveShortenerInstance_PrefersConfiguredInstance()
+    {
+        var configured = CreateShortenerInstance("Configured Shortener");
+        InstanceManager.Instance.AddInstance(configured);
+
+        var result = UploadJobProcessor.ResolveShortenerInstance(InstanceManager.Instance, configured.InstanceId);
+
+        Assert.That(result, Is.SameAs(configured));
+    }
+
+    [Test]
+    public void ResolveShortenerInstance_FallsBackToDefaultWhenConfiguredInstanceIsUnavailable()
+    {
+        var configured = CreateShortenerInstance("Configured Unavailable", isAvailable: false);
+        var defaultInstance = CreateShortenerInstance("Default Shortener");
+        InstanceManager.Instance.AddInstance(configured);
+        InstanceManager.Instance.AddInstance(defaultInstance);
+        InstanceManager.Instance.SetDefaultInstance(UploaderCategory.UrlShortener, defaultInstance.InstanceId);
+
+        var result = UploadJobProcessor.ResolveShortenerInstance(InstanceManager.Instance, configured.InstanceId);
+
+        Assert.That(result, Is.SameAs(defaultInstance));
+    }
+
+    [Test]
+    public void ResolveShortenerInstance_UsesDefaultWhenNoConfiguredInstance()
+    {
+        var defaultInstance = CreateShortenerInstance("Default Shortener");
+        var other = CreateShortenerInstance("Other Shortener");
+        InstanceManager.Instance.AddInstance(defaultInstance);
+        InstanceManager.Instance.AddInstance(other);
+        InstanceManager.Instance.SetDefaultInstance(UploaderCategory.UrlShortener, defaultInstance.InstanceId);
+
+        var result = UploadJobProcessor.ResolveShortenerInstance(InstanceManager.Instance, null);
+
+        Assert.That(result, Is.SameAs(defaultInstance));
+    }
+
+    [Test]
+    public void ResolveShortenerInstance_FallsBackToFirstAvailableInstanceWhenNoDefault()
+    {
+        var first = CreateShortenerInstance("First Available");
+        var second = CreateShortenerInstance("Second Available");
+        InstanceManager.Instance.AddInstance(first);
+        InstanceManager.Instance.AddInstance(second);
+
+        var result = UploadJobProcessor.ResolveShortenerInstance(InstanceManager.Instance, null);
+
+        Assert.That(result, Is.SameAs(first));
+    }
+
+    [Test]
+    public void ResolveShortenerInstance_ReturnsNullWhenNothingConfigured()
+    {
+        var result = UploadJobProcessor.ResolveShortenerInstance(InstanceManager.Instance, null);
+
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
     public void ApplyResolvedUploaderHost_PrefersActualSuccessfulUploaderOverConfiguredDefault()
     {
         var configuredDefault = CreateInstance("Configured Default");
@@ -218,6 +278,17 @@ public class UploadJobProcessorTests
         {
             ProviderId = "test-provider",
             Category = UploaderCategory.Image,
+            DisplayName = name,
+            IsAvailable = isAvailable
+        };
+    }
+
+    private static UploaderInstance CreateShortenerInstance(string name, bool isAvailable = true)
+    {
+        return new UploaderInstance
+        {
+            ProviderId = "test-provider",
+            Category = UploaderCategory.UrlShortener,
             DisplayName = name,
             IsAvailable = isAvailable
         };
