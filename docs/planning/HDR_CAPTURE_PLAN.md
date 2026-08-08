@@ -346,6 +346,13 @@ operates on raw F16 pixels, no Skia draw calls):
    (fallback 1000 nits); **clamp `peak` to a sane range (e.g. (80, 10000)) and reject 0/NaN/Inf**
    so a malformed driver value cannot leak NaN/Inf into saved files; optional **ACES fitted**
    curve as an alternative preset.
+   > **TODO HDR-02 (unit normalization, for Phase 2 integration):** the pixel values coming
+   > from the fp16 capture are scRGB-linear where `1.0 == 80 cd/m²`, while `peak` is in nits.
+   > `TonemapReinhard(L, peak)` must receive both in the same units — either convert pixels to
+   > nits (`L_nits = L_scRGB * 80`) or normalize `peak` to scRGB units (`peak_scRGB = peak/80`)
+   > before applying the curve, otherwise sub-peak HDR highlights map to ~255 with no visible
+   > compression. Decide the normalization at the integration point and pin it with a numeric
+   > regression test (e.g. 10.0 scRGB == 800 nits at peak 1000 must not saturate to 255).
 4. **sRGB OETF** (standard piecewise) → 8-bit `Bgra8888` output.
 
 Constants and the curve are pure functions → fully unit-testable (§8.2).

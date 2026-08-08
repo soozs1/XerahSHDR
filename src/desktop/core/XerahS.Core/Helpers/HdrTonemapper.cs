@@ -1,0 +1,223 @@
+#region License Information (GPL v3)
+
+/*
+    XerahS - The Avalonia UI implementation of ShareX
+    Copyright (c) 2007-2026 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System.Buffers.Binary;
+using SkiaSharp;
+using XerahS.Common;
+
+namespace XerahS.Core.Helpers;
+
+/// <summary>
+/// HDR → SDR tonemapping operating on raw F16 pixels (no Skia draw calls).
+/// Pure per-pixel functions, deterministic and unit-testable (HDR_CAPTURE_PLAN §6.2).
+/// </summary>
+public static class HdrTonemapper
+{
+    // SMPTE ST 2084 (PQ) EOTF constants
+    private const float PqM1 = 2610f / 16384f;
+    private const float PqM2 = 2523f / 32f;
+    private const float PqC1 = 3424f / 4096f;
+    private const float PqC2 = 2413f / 128f;
+    private const float PqC3 = 2392f / 128f;
+    private const float PqMaxNits = 10000f;
+
+    // sRGB piecewise transfer breakpoint
+    private const float SrgbLinearSegmentMax = 0.0031308f;
+
+    // Display peak bounds (HDR_CAPTURE_PLAN §6.2 item 3)
+    private const float PeakDefaultNits = 1000f;
+    private const float PeakMinNits = 80f;
+    private const float PeakMaxNits = 10000f;
+
+    /// <summary>
+    /// SMPTE ST 2084 (PQ) EOTF: normalized code value V → absolute luminance in cd/m².
+    /// L = ((max(V^(1/m2) − c1, 0)) / (c2 − c3·V^(1/m2)))^(1/m1) · 10000; V clamped to [0, 1].
+    /// </summary>
+    public static float PqEotf(float v)
+    {
+        if (!float.IsFinite(v))
+        {
+            return 0f;
+        }
+
+        v = Math.Clamp(v, 0f, 1f);
+
+        float vPow = MathF.Pow(v, 1f / PqM2);
+        float numerator = MathF.Max(vPow - PqC1, 0f);
+        float denominator = PqC2 - PqC3 * vPow;
+
+        return MathF.Pow(numerator / denominator, 1f / PqM1) * PqMaxNits;
+    }
+
+    /// <summary>
+    /// Standard piecewise sRGB OETF (linear segment ≤ 0.0031308), clamped to [0, 1].
+    /// </summary>
+    public static float SrgbOetf(float linear)
+    {
+        if (!float.IsFinite(linear))
+        {
+            return 0f;
+        }
+
+        linear = Math.Clamp(linear, 0f, 1f);
+
+        if (linear <= SrgbLinearSegmentMax)
+        {
+            return 12.92f * linear;
+        }
+
+        return 1.055f * MathF.Pow(linear, 1f / 2.4f) - 0.055f;
+    }
+
+    /// <summary>
+    /// Reinhard curve: L' = L / (1 + L·k) with k = 1/peak. Invalid peak (≤0/NaN/Inf) passes L through unchanged.
+    /// </summary>
+    public static float TonemapReinhard(float linear, float peak)
+    {
+        if (!float.IsFinite(peak) || peak <= 0f)
+        {
+            return linear;
+        }
+
+        if (!float.IsFinite(linear))
+        {
+            return 0f;
+        }
+
+        return linear / (1f + linear * (1f / peak));
+    }
+
+    /// <summary>
+    /// ACES fitted curve (RRT+ODT approximation): (x·(2.51x + 0.03)) / (x·(2.43x + 0.59) + 0.14), clamped to [0, 1].
+    /// </summary>
+    public static float TonemapAces(float linear)
+    {
+        if (!float.IsFinite(linear))
+        {
+            return 0f;
+        }
+
+        linear = MathF.Max(linear, 0f);
+
+        float result = (linear * (2.51f * linear + 0.03f)) / (linear * (2.43f * linear + 0.59f) + 0.14f);
+        return Math.Clamp(result, 0f, 1f);
+    }
+
+    /// <summary>
+    /// Clamps a display peak (cd/m²) to (80, 10000); rejects 0/NaN/Inf with fallback 1000 (HDR_CAPTURE_PLAN §6.2 item 3).
+    /// </summary>
+    public static float ClampPeak(float peak)
+    {
+        if (!float.IsFinite(peak) || peak <= 0f)
+        {
+            return PeakDefaultNits;
+        }
+
+        return Math.Clamp(peak, PeakMinNits, PeakMaxNits);
+    }
+
+    /// <summary>
+    /// Tonemaps an RgbaF16 bitmap to 8-bit Bgra8888 (premul). Returns null for any non-F16 input.
+    /// Auto falls back to the default Reinhard curve; None only clamps.
+    /// </summary>
+    public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode, float peakNits = PeakDefaultNits)
+    {
+        if (hdrBitmap is null || hdrBitmap.ColorType != SKColorType.RgbaF16)
+        {
+            return null;
+        }
+
+        peakNits = ClampPeak(peakNits);
+
+        int width = hdrBitmap.Width;
+        int height = hdrBitmap.Height;
+
+        SKBitmap result = new SKBitmap(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb()));
+
+        try
+        {
+            ReadOnlySpan<byte> src = hdrBitmap.GetPixelSpan();
+            Span<byte> dst = result.GetPixelSpan();
+            int srcStride = hdrBitmap.RowBytes;
+            int dstStride = result.RowBytes;
+
+            for (int y = 0; y < height; y++)
+            {
+                int srcRow = y * srcStride;
+                int dstRow = y * dstStride;
+
+                for (int x = 0; x < width; x++)
+                {
+                    int srcOffset = srcRow + x * 8;
+                    int dstOffset = dstRow + x * 4;
+
+                    float r = DecodeHalf(src, srcOffset);
+                    float g = DecodeHalf(src, srcOffset + 2);
+                    float b = DecodeHalf(src, srcOffset + 4);
+                    float a = DecodeHalf(src, srcOffset + 6);
+
+                    // Max-channel luminance; every channel is scaled by one factor to preserve hue.
+                    float lum = MathF.Max(r, MathF.Max(g, b));
+                    float scale = 1f;
+
+                    if (lum > 0f)
+                    {
+                        float mapped = mode switch
+                        {
+                            HdrToneMappingMode.TonemapAces => TonemapAces(lum),
+                            HdrToneMappingMode.None => lum,
+                            _ => TonemapReinhard(lum, peakNits) // Auto falls back to the default Reinhard curve
+                        };
+                        scale = mapped / lum;
+                    }
+
+                    dst[dstOffset] = ToByte(SrgbOetf(b * scale));
+                    dst[dstOffset + 1] = ToByte(SrgbOetf(g * scale));
+                    dst[dstOffset + 2] = ToByte(SrgbOetf(r * scale));
+                    dst[dstOffset + 3] = ToByte(a);
+                }
+            }
+
+            return result;
+        }
+        catch
+        {
+            result.Dispose();
+            throw;
+        }
+    }
+
+    private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)
+    {
+        ushort bits = BinaryPrimitives.ReadUInt16LittleEndian(buffer.Slice(offset, 2));
+        float value = (float)BitConverter.UInt16BitsToHalf(bits);
+        return float.IsFinite(value) ? MathF.Max(value, 0f) : 0f;
+    }
+
+    private static byte ToByte(float value)
+    {
+        return (byte)MathF.Round(Math.Clamp(value, 0f, 1f) * 255f);
+    }
+}

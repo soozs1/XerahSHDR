@@ -243,6 +243,10 @@ public class TaskSettingsImage
     public bool ImageAutoUseJPEG = true;
     public int ImageAutoUseJPEGSize = 2048;
     public bool ImageAutoJPEGQuality = false;
+    /// <summary>
+    /// HDR tonemapping applied when an HDR (fp16) capture must be converted to SDR.
+    /// </summary>
+    public HdrToneMappingMode ImageHdrToneMapping = HdrToneMappingMode.Auto;
     public FileExistAction FileExistAction = FileExistAction.Ask;
 
     #endregion Image / General
