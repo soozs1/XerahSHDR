@@ -27,6 +27,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using SkiaSharp;
+using XerahS.Common;
+using XerahS.Core.Helpers;
 using XerahS.Platform.Abstractions;
 
 namespace XerahS.Platform.Windows;
@@ -231,8 +233,42 @@ public class WindowsClipboardService : IClipboardService
         try
         {
             byte[] pngBytes = WindowsClipboardImageHelper.EncodePng(image);
-            byte[] dibV5Bytes = WindowsClipboardImageHelper.BuildDibV5(image);
-            byte[] dibBytes = WindowsClipboardImageHelper.BuildOpaqueDib(image, SKColors.White);
+            byte[] dibV5Bytes;
+            byte[] dibBytes;
+
+            if (image.ColorType == SKColorType.RgbaF16)
+            {
+                SKBitmap? sdrCopy;
+                try
+                {
+                    sdrCopy = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapReinhard, 1000f);
+                }
+                catch
+                {
+                    sdrCopy = null;
+                }
+
+                if (sdrCopy == null)
+                {
+                    DebugHelper.WriteLine("Failed to tonemap HDR image for clipboard DIB formats; aborting clipboard write.");
+                    return;
+                }
+
+                try
+                {
+                    dibV5Bytes = WindowsClipboardImageHelper.BuildDibV5(sdrCopy);
+                    dibBytes = WindowsClipboardImageHelper.BuildOpaqueDib(sdrCopy, SKColors.White);
+                }
+                finally
+                {
+                    sdrCopy.Dispose();
+                }
+            }
+            else
+            {
+                dibV5Bytes = WindowsClipboardImageHelper.BuildDibV5(image);
+                dibBytes = WindowsClipboardImageHelper.BuildOpaqueDib(image, SKColors.White);
+            }
 
             RunInStaThread(() =>
             {
