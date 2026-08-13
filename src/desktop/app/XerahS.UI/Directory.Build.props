@@ -7,6 +7,16 @@
     <_IntermediatePathSuffix Condition="'$(RuntimeIdentifier)' != ''">$(_IntermediatePathSuffix)rid-$(RuntimeIdentifier)/</_IntermediatePathSuffix>
     <_IntermediatePathSuffix Condition="'$(SelfContained)' == 'true'">$(_IntermediatePathSuffix)self-contained/</_IntermediatePathSuffix>
     <BaseIntermediateOutputPath Condition="'$(_IntermediatePathSuffix)' != ''">obj/$(_IntermediatePathSuffix)</BaseIntermediateOutputPath>
-    <MSBuildProjectExtensionsPath Condition="'$(_IntermediatePathSuffix)' != ''">$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+    <!-- project.assets.json must be RID-agnostic: NuGet restore and the build
+         phase can evaluate RuntimeIdentifier differently (restore treats it as a
+         global empty property, so a machine-local *.user override is not applied
+         there), and baking the RID into MSBuildProjectExtensionsPath makes restore
+         and build disagree on where project.assets.json lives. Keep OS/host
+         separation for the extensions path but exclude RID/self-contained. -->
+    <_ExtensionsPathSuffix></_ExtensionsPathSuffix>
+    <_ExtensionsPathSuffix Condition="'$(OS)' != ''">$(_ExtensionsPathSuffix)os-$(OS)/</_ExtensionsPathSuffix>
+    <_ExtensionsPathSuffix Condition="'$(OS)' == ''">$(_ExtensionsPathSuffix)os-none/</_ExtensionsPathSuffix>
+    <_ExtensionsPathSuffix Condition="'$(HostTargetFramework)' != ''">$(_ExtensionsPathSuffix)host-$(HostTargetFramework)/</_ExtensionsPathSuffix>
+    <MSBuildProjectExtensionsPath Condition="'$(_ExtensionsPathSuffix)' != ''">obj/$(_ExtensionsPathSuffix)</MSBuildProjectExtensionsPath>
   </PropertyGroup>
 </Project>
