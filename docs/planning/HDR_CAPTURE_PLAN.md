@@ -13,9 +13,11 @@
 | Phase | Verdict | Notes |
 |-------|---------|-------|
 | Design | ✅ Complete (2026-08-08) | Capture path, capability detection, output format, tonemapping approach, risks, gates — this document |
-| Phase 1 — HDR acquisition | ⏳ Planned | fp16 scRGB pipeline + per-monitor `SupportsHDR` detection |
-| Phase 2 — HDR output | ⏳ Planned | 16-bit PNG save path (verified working); AVIF-via-FFmpeg stretch goal |
-| Phase 3 — HDR→SDR tonemapping | ⏳ Planned | PQ/BT.2020 → sRGB, selectable in after-capture |
+| Phase 1 — HDR acquisition | ✅ Complete (2026-08-08) | HDR10 detection via `IDXGIOutput6.Description1.ColorSpace` (`MonitorInfo.IsHdr`, `BackendCapabilities.SupportsHDR`); fp16 scRGB duplication via `IDXGIOutput5.DuplicateOutput1(R16G16B16A16_FLOAT)` with 8-bit fallback when the driver rejects fp16 or ignores the format hint (RISK-06); `RgbaF16`+linear-sRGB readback; format-preserving rotation |
+| Phase 2 — HDR output | ✅ Complete (2026-08-08) | 16-bit PNG save for fp16 input regardless of selected format; `PNGBitDepth.Bit16` for SDR; clipboard: tonemapped SDR DIBV5/DIB + 16-bit PNG payload in CfPng; AVIF-via-FFmpeg remains a stretch goal (SEC-07/08 constraints pinned in §5.1) |
+| Phase 3 — HDR→SDR tonemapping | ✅ Complete (2026-08-08) | scRGB→nits normalization + white-preserving Reinhard/ACES in `HdrTonemapper`; pipeline hook in `CaptureJobProcessor` (Auto keeps fp16 for save-only); after-capture selector (None/Auto/Reinhard/ACES) with 8-bit preview; persisted via `ImageHdrToneMapping` |
+
+**Open items:** `HDR-01` partially resolved — fp16 implemented in the `DxgiCaptureStrategy` region-capture backend; the production full-screen path (`WindowsModernCaptureService.CaptureFullScreenDxgi`) still captures 8-bit and is the remaining wiring follow-up. `HDR-02` (unit normalization) closed. `HDR-03` open — real display peak (`OutputDescription1.MaxLuminance`) is not yet plumbed into the pipeline (hardcoded 1000 nits). Manual gates on a real HDR monitor (color accuracy, cursor brightness, mixed HDR/SDR regions) are still pending.
 
 ---
 
