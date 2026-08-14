@@ -282,6 +282,9 @@ namespace XerahS.UI.ViewModels
             UpdateChannel = settings.UpdateChannel;
             PreReleaseUpdateSource = settings.PreReleaseUpdateSource;
             CustomPreReleaseUpdateSource = settings.CustomPreReleaseUpdateSource;
+            SendToDefaultFolderPolicy = settings.SendToFolderPolicy;
+            SendToDefaultBatchPolicy = settings.SendToBatchExecutionPolicy;
+            SendToDefaultBatchThreshold = settings.SendToBatchConfirmThreshold;
             // Migrate legacy Dev channel to PreRelease (Dev was removed)
             if ((int)UpdateChannel >= 2)
             {
@@ -401,6 +404,9 @@ namespace XerahS.UI.ViewModels
             settings.UpdateChannel = UpdateChannel;
             settings.PreReleaseUpdateSource = PreReleaseUpdateSource;
             settings.CustomPreReleaseUpdateSource = CustomPreReleaseUpdateSource?.Trim() ?? string.Empty;
+            settings.SendToFolderPolicy = SendToDefaultFolderPolicy;
+            settings.SendToBatchExecutionPolicy = SendToDefaultBatchPolicy;
+            settings.SendToBatchConfirmThreshold = SendToDefaultBatchThreshold;
 
             // Proxy Settings
             settings.ProxySettings.ProxyMethod = ProxyMethod;

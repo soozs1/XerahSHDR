@@ -427,6 +427,44 @@
                                         </StackPanel>
                                     </Border>
 
+                                    <Border BorderThickness="1"
+                                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                            Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                                            CornerRadius="4"
+                                            Padding="12">
+                                        <StackPanel Spacing="12">
+                                            <TextBlock Text="Send-to default policies"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="12"/>
+                                            <Grid ColumnDefinitions="Auto, 16, *">
+                                                <TextBlock Grid.Column="0" Text="Folder policy:" VerticalAlignment="Center"/>
+                                                <ComboBox Grid.Column="2"
+                                                          ItemsSource="{Binding SendToDefaultFolderPolicyOptions}"
+                                                          SelectedItem="{Binding SendToDefaultFolderPolicy}"
+                                                          HorizontalAlignment="Stretch"
+                                                          MinWidth="200"
+                                                          AutomationProperties.Name="Send-to Default Folder Policy"/>
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto, 16, *">
+                                                <TextBlock Grid.Column="0" Text="Image batch policy:" VerticalAlignment="Center"/>
+                                                <ComboBox Grid.Column="2"
+                                                          ItemsSource="{Binding SendToDefaultBatchPolicyOptions}"
+                                                          SelectedItem="{Binding SendToDefaultBatchPolicy}"
+                                                          HorizontalAlignment="Stretch"
+                                                          MinWidth="200"
+                                                          AutomationProperties.Name="Send-to Default Batch Policy"/>
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto, 16, *">
+                                                <TextBlock Grid.Column="0" Text="Batch confirm threshold:" VerticalAlignment="Center"/>
+                                                <NumericUpDown Grid.Column="2"
+                                                               Value="{Binding SendToDefaultBatchThreshold}"
+                                                               Minimum="1" Maximum="100"
+                                                               MinWidth="120" HorizontalAlignment="Stretch"
+                                                               AutomationProperties.Name="Send-to Default Batch Threshold"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+
                                     <TextBlock Text="Clipboard" FontWeight="SemiBold" FontSize="12" Margin="0,8,0,0"/>
 
                                     <CheckBox IsChecked="{Binding EnableClipboardContentViewer}"

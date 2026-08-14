@@ -54,6 +54,21 @@ namespace XerahS.UI.ViewModels
         [ObservableProperty]
         private bool _supportsSendToIntegration;
 
+        [ObservableProperty]
+        private SendToFolderPolicy _sendToDefaultFolderPolicy;
+
+        [ObservableProperty]
+        private SendToBatchExecutionPolicy _sendToDefaultBatchPolicy;
+
+        [ObservableProperty]
+        private int _sendToDefaultBatchThreshold;
+
+        public SendToFolderPolicy[] SendToDefaultFolderPolicyOptions =>
+            (SendToFolderPolicy[])Enum.GetValues(typeof(SendToFolderPolicy));
+
+        public SendToBatchExecutionPolicy[] SendToDefaultBatchPolicyOptions =>
+            (SendToBatchExecutionPolicy[])Enum.GetValues(typeof(SendToBatchExecutionPolicy));
+
         public bool HasMcpApiKey => !string.IsNullOrWhiteSpace(McpApiKeyVault.Get());
 
         public bool HasRememberedSendToChoices => SettingsManager.Settings.SendToRememberedChoices.Count > 0;

@@ -35,6 +35,7 @@ using XerahS.Bootstrap;
 using XerahS.Common;
 using XerahS.Core;
 using XerahS.Platform.Abstractions;
+using XerahS.Services.Abstractions;
 using XerahS.UI.ViewModels;
 using ShareX.ImageEditor.Core.Annotations;
 using ShareX.ImageEditor.Hosting;
@@ -609,7 +610,7 @@ namespace XerahS.UI.Services
                 return;
             }
 
-            if (!ShouldRunImageBatch(selection, decision, "Image Editor"))
+            if (!await ShouldRunImageBatchAsync(selection, decision, "Image Editor"))
             {
                 return;
             }
@@ -650,14 +651,14 @@ namespace XerahS.UI.Services
             using SKBitmap? renderedImage = await showEditorAsync(bitmap, filePath);
         }
 
-        private static async Task PinSelectedImagesAsync(SendToSelection selection, SendToPromptResult decision)
+        private async Task PinSelectedImagesAsync(SendToSelection selection, SendToPromptResult decision)
         {
             if (!selection.CanPinToScreen)
             {
                 return;
             }
 
-            if (!ShouldRunImageBatch(selection, decision, "Pin to Screen"))
+            if (!await ShouldRunImageBatchAsync(selection, decision, "Pin to Screen"))
             {
                 return;
             }
@@ -677,33 +678,53 @@ namespace XerahS.UI.Services
             }
         }
 
-        private static bool ShouldRunImageBatch(SendToSelection selection, SendToPromptResult decision, string actionName)
+        private async Task<bool> ShouldRunImageBatchAsync(SendToSelection selection, SendToPromptResult decision, string actionName)
         {
             int itemCount = selection.FilePaths.Count;
             int threshold = XerahS.Core.SendTo.SendToPolicyResolver.NormalizeBatchThreshold(decision.BatchConfirmThreshold);
 
-            if (decision.BatchExecutionPolicy == SendToBatchExecutionPolicy.ConfirmBeforeOpeningMoreThanThreshold &&
-                itemCount > threshold &&
-                decision.IsRemembered)
+            if (decision.BatchExecutionPolicy != SendToBatchExecutionPolicy.ConfirmBeforeOpeningMoreThanThreshold ||
+                itemCount <= threshold ||
+                !decision.IsRemembered)
             {
-                DebugHelper.WriteLine(
-                    $"Shell integration: Skipped remembered Send-to {actionName} batch because {itemCount} item(s) exceed threshold {threshold}.");
-
-                if (PlatformServices.IsInitialized && PlatformServices.IsToastServiceInitialized)
-                {
-                    PlatformServices.Toast.ShowToast(new ToastConfig
-                    {
-                        Title = "Send-to needs confirmation",
-                        Text = $"Open XerahS and choose the action for {itemCount} image(s).",
-                        Duration = 5f,
-                        AutoHide = true
-                    });
-                }
-
-                return false;
+                return true;
             }
 
-            return true;
+            IDialogService? dialogService = PlatformServices.RootProvider?.GetService(typeof(IDialogService)) as IDialogService;
+            if (dialogService != null)
+            {
+                bool confirmed = await Dispatcher.UIThread.InvokeAsync(() =>
+                    dialogService.ShowConfirmationAsync(
+                        "Send-to needs confirmation",
+                        $"The remembered Send-to choice opens up to {threshold} image(s) at once. " +
+                        $"Open {itemCount} image(s) in {actionName}?"));
+
+                if (!confirmed)
+                {
+                    DebugHelper.WriteLine(
+                        $"Shell integration: User declined remembered Send-to {actionName} batch of {itemCount} item(s) (threshold {threshold}).");
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Fallback: no dialog service available (e.g. early/headless path).
+            DebugHelper.WriteLine(
+                $"Shell integration: Skipped remembered Send-to {actionName} batch because {itemCount} item(s) exceed threshold {threshold}.");
+
+            if (PlatformServices.IsInitialized && PlatformServices.IsToastServiceInitialized)
+            {
+                PlatformServices.Toast.ShowToast(new ToastConfig
+                {
+                    Title = "Send-to needs confirmation",
+                    Text = $"Open XerahS and choose the action for {itemCount} image(s).",
+                    Duration = 5f,
+                    AutoHide = true
+                });
+            }
+
+            return false;
         }
 
         private async Task OpenSelectedFoldersInIndexFolderAsync(SendToSelection selection, Window? owner)
