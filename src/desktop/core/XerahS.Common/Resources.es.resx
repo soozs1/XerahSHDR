@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SendToFolderPolicy_DoNotExpandFolders" xml:space="preserve">
+    <value>No expandir carpetas</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeTopLevelFiles" xml:space="preserve">
+    <value>Incluir archivos de nivel superior</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeFilesRecursively" xml:space="preserve">
+    <value>Incluir archivos recursivamente</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenAllImmediately" xml:space="preserve">
+    <value>Abrir todo inmediatamente</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenSequentially" xml:space="preserve">
+    <value>Abrir secuencialmente</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmBeforeOpeningMoreThanThreshold" xml:space="preserve">
+    <value>Confirmar antes de abrir más de {0} elementos</value>
+  </data>
+  <data name="SendToRememberScope_AllFiles" xml:space="preserve">
+    <value>todos los archivos</value>
+  </data>
+  <data name="SendToRememberScope_AllFolders" xml:space="preserve">
+    <value>todas las carpetas</value>
+  </data>
+  <data name="SendToRememberScope_MixedFilesAndFolders" xml:space="preserve">
+    <value>archivos y carpetas</value>
+  </data>
+  <data name="SendToRememberScope_ImageOnlyFiles" xml:space="preserve">
+    <value>solo archivos de imagen</value>
+  </data>
+  <data name="SendToRememberScope_Default" xml:space="preserve">
+    <value>esta selección</value>
+  </data>
+</root>

@@ -89,6 +89,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // Apply the persisted UI language before any views are constructed.
+        XerahS.Common.Localization.ApplyCulture(XerahS.Core.SettingsManager.Settings.Language.ToCultureCode());
+
         // Suppress benign Avalonia desktop-integration exceptions on Linux (DBus tray icon,
         // IME, portal glitches) so they cannot take down the whole app. Avalonia's dispatcher
         // only swallows an exception when the filter stage requests a catch AND an

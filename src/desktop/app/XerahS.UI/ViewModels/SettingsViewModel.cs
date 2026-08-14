@@ -109,6 +109,20 @@ namespace XerahS.UI.ViewModels
         }
 
         [ObservableProperty]
+        private SupportedLanguage _selectedLanguage;
+
+        public SupportedLanguage[] LanguageOptions => (SupportedLanguage[])Enum.GetValues(typeof(SupportedLanguage));
+
+        partial void OnSelectedLanguageChanged(SupportedLanguage value)
+        {
+            if (_isLoading) return;
+
+            // Apply the UI culture immediately so newly created views/windows pick it up.
+            // Existing views keep their already-resolved strings until the next restart.
+            Localization.ApplyCulture(value.ToCultureCode());
+        }
+
+        [ObservableProperty]
         private bool _useModernCapture;
 
         [ObservableProperty]
@@ -275,6 +289,7 @@ namespace XerahS.UI.ViewModels
             SilentRun = settings.SilentRun;
             SelectedTheme = settings.SelectedTheme;
             ThemeMode = settings.ThemeMode;
+            SelectedLanguage = settings.Language;
             TrayIconProgressEnabled = settings.TrayIconProgressEnabled;
             TaskbarProgressEnabled = settings.TaskbarProgressEnabled;
             DisableToastNotification = settings.DisableToastNotification;
@@ -404,6 +419,7 @@ namespace XerahS.UI.ViewModels
             settings.UpdateChannel = UpdateChannel;
             settings.PreReleaseUpdateSource = PreReleaseUpdateSource;
             settings.CustomPreReleaseUpdateSource = CustomPreReleaseUpdateSource?.Trim() ?? string.Empty;
+            settings.Language = SelectedLanguage;
             settings.SendToFolderPolicy = SendToDefaultFolderPolicy;
             settings.SendToBatchExecutionPolicy = SendToDefaultBatchPolicy;
             settings.SendToBatchConfirmThreshold = SendToDefaultBatchThreshold;

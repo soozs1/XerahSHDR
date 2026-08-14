@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SendToFolderPolicy_DoNotExpandFolders" xml:space="preserve">
+    <value>Ordner nicht erweitern</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeTopLevelFiles" xml:space="preserve">
+    <value>Dateien der obersten Ebene einbeziehen</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeFilesRecursively" xml:space="preserve">
+    <value>Dateien rekursiv einbeziehen</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenAllImmediately" xml:space="preserve">
+    <value>Alle sofort öffnen</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenSequentially" xml:space="preserve">
+    <value>Nacheinander öffnen</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmBeforeOpeningMoreThanThreshold" xml:space="preserve">
+    <value>Vor dem Öffnen von mehr als {0} Elementen bestätigen</value>
+  </data>
+  <data name="SendToRememberScope_AllFiles" xml:space="preserve">
+    <value>alle Dateien</value>
+  </data>
+  <data name="SendToRememberScope_AllFolders" xml:space="preserve">
+    <value>alle Ordner</value>
+  </data>
+  <data name="SendToRememberScope_MixedFilesAndFolders" xml:space="preserve">
+    <value>Dateien und Ordner</value>
+  </data>
+  <data name="SendToRememberScope_ImageOnlyFiles" xml:space="preserve">
+    <value>nur Bilddateien</value>
+  </data>
+  <data name="SendToRememberScope_Default" xml:space="preserve">
+    <value>diese Auswahl</value>
+  </data>
+</root>

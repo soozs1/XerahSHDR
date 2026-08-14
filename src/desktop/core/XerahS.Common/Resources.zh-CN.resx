@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SendToFolderPolicy_DoNotExpandFolders" xml:space="preserve">
+    <value>不展开文件夹</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeTopLevelFiles" xml:space="preserve">
+    <value>包含顶层文件</value>
+  </data>
+  <data name="SendToFolderPolicy_IncludeFilesRecursively" xml:space="preserve">
+    <value>递归包含文件</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenAllImmediately" xml:space="preserve">
+    <value>全部立即打开</value>
+  </data>
+  <data name="SendToBatchPolicy_OpenSequentially" xml:space="preserve">
+    <value>依次打开</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmBeforeOpeningMoreThanThreshold" xml:space="preserve">
+    <value>打开超过 {0} 个项目前确认</value>
+  </data>
+  <data name="SendToRememberScope_AllFiles" xml:space="preserve">
+    <value>所有文件</value>
+  </data>
+  <data name="SendToRememberScope_AllFolders" xml:space="preserve">
+    <value>所有文件夹</value>
+  </data>
+  <data name="SendToRememberScope_MixedFilesAndFolders" xml:space="preserve">
+    <value>文件和文件夹</value>
+  </data>
+  <data name="SendToRememberScope_ImageOnlyFiles" xml:space="preserve">
+    <value>仅图像文件</value>
+  </data>
+  <data name="SendToRememberScope_Default" xml:space="preserve">
+    <value>此选择</value>
+  </data>
+</root>
