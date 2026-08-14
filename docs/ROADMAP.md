@@ -1,6 +1,6 @@
 # XerahS - Project Status and Roadmap
 
-## Current Status (Updated 2026-02-23)
+## Current Status (Updated 2026-08-14)
 
 Core desktop workflow (capture -> annotate/edit -> save/copy/upload) is implemented and active.
 
@@ -42,8 +42,8 @@ This roadmap has been reconciled against the current codebase, including the `Im
 - [x] Linux packaging and Linux capture/hotkey orchestration test coverage
 - [ ] macOS on-device validation for capture/hotkeys/clipboard/permissions
 - [ ] macOS platform completion for remaining stubs/TODOs (ScreenCaptureKit strategy internals, window service gaps, OCR implementation)
-- [ ] Restore or replace editor regression scenarios removed during upstream ImageEditor swap
-- [ ] Complete remaining after-upload automation gaps (URL shortener and related tasks)
+- [x] Restore or replace editor regression scenarios removed during upstream ImageEditor swap
+- [x] Complete remaining after-upload automation gaps (URL shortener and related tasks)
 
 ### Phase 8: Security Hardening (Planned)
 
@@ -78,17 +78,17 @@ Linux repositories (auto-updates; deb/rpm/flatpak are already built per release)
 
 XIP0055/XIP0057 shipped the full Send-to behavior control (remembered choices, folder policies, naming parity, batch policies). Remaining polish:
 
-- [ ] Replace the remembered large-image-batch toast stop with an interactive confirmation dialog when the app can present one safely
-- [ ] Make default folder/batch policies editable in settings (today they are initialized to safe values; settings surface only lists/clears remembered rules)
+- [x] Replace the remembered large-image-batch toast stop with an interactive confirmation dialog when the app can present one safely
+- [x] Make default folder/batch policies editable in settings (today they are initialized to safe values; settings surface only lists/clears remembered rules)
 
 ### HDR Capture (Planned)
 
 Goal: HDR-aware screenshots on Windows, in two variants: (1) save/copy true HDR content, (2) HDR-to-SDR conversion. Current state: all capture backends report `SupportsHDR = false`; `DxgiCaptureStrategy` uses DXGI 1.2 `IDXGIOutput1.DuplicateOutput` (8-bit only); `WinRTCaptureStrategy` is a stub falling back to GDI.
 
-- [ ] Design doc / XIP: choose capture path — DXGI 1.5 `IDXGIOutput6.DuplicateOutput1` (fp16 scRGB) vs Windows.Graphics.Capture; define HDR clipboard strategy (CF_DIBV5 is 8-bit; decide between HDR-capable format on disk and tonemapped clipboard copy)
-- [ ] Phase 1: HDR frame acquisition on HDR-capable displays (fp16 scRGB pipeline) + capability detection (`SupportsHDR` reporting, per-monitor)
-- [ ] Phase 2: HDR output — save to disk in an HDR-capable container (candidates: JPEG XR / AVIF / 16-bit PNG with color metadata), copy-to-clipboard behavior per design doc
-- [ ] Phase 3: HDR-to-SDR conversion (tonemapping with display metadata: BT.2020/PQ -> sRGB), selectable in after-capture
+- [x] Design doc / XIP: choose capture path — DXGI 1.5 `IDXGIOutput6.DuplicateOutput1` (fp16 scRGB) vs Windows.Graphics.Capture; define HDR clipboard strategy (CF_DIBV5 is 8-bit; decide between HDR-capable format on disk and tonemapped clipboard copy)
+- [x] Phase 1: HDR frame acquisition on HDR-capable displays (fp16 scRGB pipeline) + capability detection (`SupportsHDR` reporting, per-monitor)
+- [x] Phase 2: HDR output — save to disk in an HDR-capable container (candidates: JPEG XR / AVIF / 16-bit PNG with color metadata), copy-to-clipboard behavior per design doc
+- [x] Phase 3: HDR-to-SDR conversion (tonemapping with display metadata: BT.2020/PQ -> sRGB), selectable in after-capture
 - [ ] Note: annotation/editor pipeline (`ShareX.ImageEditor`) is 8-bit; HDR content routed into the editor must be tonemapped first until the editor gains wide-gamut support
 
 ### Localization (Planned)
@@ -97,12 +97,12 @@ Goal: localize the desktop UI into the first tranche of languages after HDR land
 
 - [ ] Audit hardcoded UI strings (XAML, view models, tooltips, tray menu, notifications) and extract them into resource files (`resx` or Avalonia `ResourceDictionary`); keep English as the fallback invariant language
 - [ ] Wire culture switching (app-level `CurrentUICulture` + restart or live retheming) and persist the user's language choice in settings
-- [ ] Translate the four target locales — zh-CN, ru, de, es; use **qwen3.8-max** for translation batches (its translation quality is better than deepseek-v4-flash), with a native-speaker review pass per locale
+- [ ] Translate the four target locales — zh-CN, ru, de, es;
 - [ ] Localize date/number formatting where culture-sensitive (history timestamps, file sizes, upload dates)
 - [ ] Add a QA pass for text overflow / layout breakage in RTL-adjacent or long-word locales (de compound words, ru/zh string growth)
 
 ## Known Issues / Notes
 
-- Editor regression suites tied to the legacy in-repo editor API are currently excluded from build (`tests/XerahS.Tests/XerahS.Tests.csproj` removes `Editor/EditorHistoryEffectsTests.cs` and `Editor/EditorRotateAnnotationsTests.cs`).
+- Editor regression suites were restored during the upstream `ShareX.ImageEditor` swap and now exercise the live canvas history contract (`tests/XerahS.Tests/Editor/EditorHistoryEffectsTests.cs`, `tests/XerahS.Tests/Editor/EditorRotateAnnotationsTests.cs`).
 - macOS platform layer still contains MVP stubs and TODOs in capture/window/OCR paths (for example `src/platform/XerahS.Platform.MacOS/Capture/ScreenCaptureKitStrategy.cs` and `src/platform/XerahS.Platform.MacOS/MacOSWindowService.cs`).
-- After-upload URL shortener automation is logged as not implemented in `src/desktop/core/XerahS.Core/Tasks/Processors/UploadJobProcessor.cs`.
+- After-upload URL shortener automation is implemented in `src/desktop/core/XerahS.Core/Tasks/Processors/UploadJobProcessor.cs`.
