@@ -95,10 +95,10 @@ Goal: HDR-aware screenshots on Windows, in two variants: (1) save/copy true HDR 
 
 Goal: localize the desktop UI into the first tranche of languages after HDR lands. Scope: zh-CN (Chinese), ru (Russian), de (German), es (Spanish).
 
-- [ ] Audit hardcoded UI strings (XAML, view models, tooltips, tray menu, notifications) and extract them into resource files (`resx` or Avalonia `ResourceDictionary`); keep English as the fallback invariant language
-- [ ] Wire culture switching (app-level `CurrentUICulture` + restart or live retheming) and persist the user's language choice in settings
-- [ ] Translate the four target locales — zh-CN, ru, de, es;
-- [ ] Localize date/number formatting where culture-sensitive (history timestamps, file sizes, upload dates)
+- [x] Audit hardcoded UI strings (XAML, view models, tooltips, tray menu, notifications) and extract them into resource files (`resx` or Avalonia `ResourceDictionary`); keep English as the fallback invariant language
+- [x] Wire culture switching (app-level `CurrentUICulture` + restart or live retheming) and persist the user's language choice in settings
+- [x] Translate the four target locales — zh-CN, ru, de, es;
+- [x] Localize date/number formatting where culture-sensitive (history timestamps, file sizes, upload dates)
 - [ ] Add a QA pass for text overflow / layout breakage in RTL-adjacent or long-word locales (de compound words, ru/zh string growth)
 
 ## Known Issues / Notes
