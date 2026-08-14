@@ -1,8 +1,9 @@
 <ui:SurfaceWindow xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ui="using:XerahS.UI.Views"
+        xmlns:local="using:XerahS.UI.Markup"
         x:Class="XerahS.UI.Views.PinToScreenStartupDialog"
-        Title="Pin to Screen"
+        Title="{local:Localize PinToScreenStartup_Title}"
         Width="320" Height="240"
         MinWidth="320" MinHeight="240"
         CanResize="False"
@@ -11,33 +12,33 @@
 
   <StackPanel Margin="24" Spacing="12" VerticalAlignment="Center">
 
-    <TextBlock Text="Select image source to pin:"
+    <TextBlock Text="{local:Localize PinToScreenStartup_SelectSource}"
                FontWeight="SemiBold"
                FontSize="14"
                HorizontalAlignment="Center"
                Margin="0,0,0,8" />
 
     <Button x:Name="FromScreenButton"
-            Content="From Screen"
+            Content="{local:Localize PinToScreenStartup_FromScreen}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             Classes="accent"
             AutomationProperties.Name="Capture region from screen" />
 
     <Button x:Name="FromClipboardButton"
-            Content="From Clipboard"
+            Content="{local:Localize PinToScreenStartup_FromClipboard}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             AutomationProperties.Name="Get image from clipboard" />
 
     <Button x:Name="FromFileButton"
-            Content="From File"
+            Content="{local:Localize PinToScreenStartup_FromFile}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             AutomationProperties.Name="Browse for image file" />
 
     <Button x:Name="CancelButton"
-            Content="Cancel"
+            Content="{local:Localize PinToScreenStartup_Cancel}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             AutomationProperties.Name="Cancel" />

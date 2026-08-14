@@ -1972,4 +1972,334 @@
   <data name="AutoCapture_WaitForUploads" xml:space="preserve">
     <value>等待上传完成</value>
   </data>
+  <data name="ImageAnalyzer_Title" xml:space="preserve">
+    <value>图像分析</value>
+  </data>
+  <data name="ImageAnalyzer_PlaceholderSelectImage" xml:space="preserve">
+    <value>选择图像文件...</value>
+  </data>
+  <data name="ImageAnalyzer_Browse" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderCategory" xml:space="preserve">
+    <value>类别</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderProperty" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderValue" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="ImageAnalyzer_CopyAll" xml:space="preserve">
+    <value>全部复制</value>
+  </data>
+  <data name="ImageAnalyzer_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ImageCombiner_Title" xml:space="preserve">
+    <value>图像合并</value>
+  </data>
+  <data name="ImageCombiner_Remove" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="ImageCombiner_Add" xml:space="preserve">
+    <value>添加...</value>
+  </data>
+  <data name="ImageCombiner_MoveUp" xml:space="preserve">
+    <value>上移</value>
+  </data>
+  <data name="ImageCombiner_MoveDown" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="ImageCombiner_Clear" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="ImageCombiner_OrientationLabel" xml:space="preserve">
+    <value>方向：</value>
+  </data>
+  <data name="ImageCombiner_AlignmentLabel" xml:space="preserve">
+    <value>对齐：</value>
+  </data>
+  <data name="ImageCombiner_SpacingLabel" xml:space="preserve">
+    <value>间距：</value>
+  </data>
+  <data name="ImageCombiner_FillBackground" xml:space="preserve">
+    <value>填充背景</value>
+  </data>
+  <data name="ImageCombiner_Combine" xml:space="preserve">
+    <value>合并</value>
+  </data>
+  <data name="ImageCombiner_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ImageEffects_Title" xml:space="preserve">
+    <value>添加图像效果</value>
+  </data>
+  <data name="ImageEffects_SelectEffect" xml:space="preserve">
+    <value>选择要添加的效果</value>
+  </data>
+  <data name="ImageEffects_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ImageSplitter_Title" xml:space="preserve">
+    <value>图像分割</value>
+  </data>
+  <data name="ImageSplitter_PlaceholderSelectImage" xml:space="preserve">
+    <value>选择图像文件...</value>
+  </data>
+  <data name="ImageSplitter_Browse" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="ImageSplitter_ColumnsLabel" xml:space="preserve">
+    <value>列数：</value>
+  </data>
+  <data name="ImageSplitter_RowsLabel" xml:space="preserve">
+    <value>行数：</value>
+  </data>
+  <data name="ImageSplitter_OutputLabel" xml:space="preserve">
+    <value>输出：</value>
+  </data>
+  <data name="ImageSplitter_Split" xml:space="preserve">
+    <value>分割</value>
+  </data>
+  <data name="ImageSplitter_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ImageThumbnailer_Title" xml:space="preserve">
+    <value>图像缩略图</value>
+  </data>
+  <data name="ImageThumbnailer_Add" xml:space="preserve">
+    <value>添加...</value>
+  </data>
+  <data name="ImageThumbnailer_Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="ImageThumbnailer_Clear" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="ImageThumbnailer_WidthLabel" xml:space="preserve">
+    <value>宽度：</value>
+  </data>
+  <data name="ImageThumbnailer_HeightLabel" xml:space="preserve">
+    <value>高度：</value>
+  </data>
+  <data name="ImageThumbnailer_QualityLabel" xml:space="preserve">
+    <value>质量：</value>
+  </data>
+  <data name="ImageThumbnailer_OutputLabel" xml:space="preserve">
+    <value>输出：</value>
+  </data>
+  <data name="ImageThumbnailer_Browse" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="ImageThumbnailer_Generate" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="ImageThumbnailer_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="MonitorTest_Title" xml:space="preserve">
+    <value>显示器测试</value>
+  </data>
+  <data name="MonitorTest_ModeLabel" xml:space="preserve">
+    <value>模式：</value>
+  </data>
+  <data name="MonitorTest_Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="MonitorTest_CopyDiagnostics" xml:space="preserve">
+    <value>复制诊断信息</value>
+  </data>
+  <data name="MonitorTest_Export" xml:space="preserve">
+    <value>导出...</value>
+  </data>
+  <data name="MonitorTest_ConnectedMonitors" xml:space="preserve">
+    <value>已连接的显示器</value>
+  </data>
+  <data name="MonitorTest_Primary" xml:space="preserve">
+    <value>主显示器</value>
+  </data>
+  <data name="MonitorTest_Layout" xml:space="preserve">
+    <value>显示器布局</value>
+  </data>
+  <data name="MonitorTest_Resolution" xml:space="preserve">
+    <value>分辨率：</value>
+  </data>
+  <data name="MonitorTest_Position" xml:space="preserve">
+    <value>位置：(</value>
+  </data>
+  <data name="MonitorTest_Dpi" xml:space="preserve">
+    <value>DPI：</value>
+  </data>
+  <data name="MonitorTest_Scale" xml:space="preserve">
+    <value>× 缩放比例)</value>
+  </data>
+  <data name="Ocr_WindowTitle" xml:space="preserve">
+    <value>OCR - 文字识别</value>
+  </data>
+  <data name="Ocr_LanguageLabel" xml:space="preserve">
+    <value>语言：</value>
+  </data>
+  <data name="Ocr_ScaleLabel" xml:space="preserve">
+    <value>缩放：</value>
+  </data>
+  <data name="Ocr_SingleLine" xml:space="preserve">
+    <value>单行</value>
+  </data>
+  <data name="Ocr_ResultPlaceholder" xml:space="preserve">
+    <value>OCR 结果将显示在这里...</value>
+  </data>
+  <data name="Ocr_Processing" xml:space="preserve">
+    <value>正在处理...</value>
+  </data>
+  <data name="Ocr_SelectRegion" xml:space="preserve">
+    <value>选择区域</value>
+  </data>
+  <data name="Ocr_CopyAll" xml:space="preserve">
+    <value>全部复制</value>
+  </data>
+  <data name="PinnedImage_Title" xml:space="preserve">
+    <value>固定图像</value>
+  </data>
+  <data name="PinnedImage_CopyImage" xml:space="preserve">
+    <value>复制图像</value>
+  </data>
+  <data name="PinnedImage_ResetScale" xml:space="preserve">
+    <value>重置缩放</value>
+  </data>
+  <data name="PinnedImage_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="PinnedImage_CloseAll" xml:space="preserve">
+    <value>全部关闭</value>
+  </data>
+  <data name="IndexFolder_Title" xml:space="preserve">
+    <value>索引文件夹</value>
+  </data>
+  <data name="IndexFolder_Folder" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="IndexFolder_PlaceholderSelectFolder" xml:space="preserve">
+    <value>选择要索引的文件夹...</value>
+  </data>
+  <data name="IndexFolder_Browse" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="IndexFolder_OutputConfiguration" xml:space="preserve">
+    <value>输出配置</value>
+  </data>
+  <data name="IndexFolder_FormatLabel" xml:space="preserve">
+    <value>格式：</value>
+  </data>
+  <data name="IndexFolder_MaxDepthLabel" xml:space="preserve">
+    <value>最大深度：</value>
+  </data>
+  <data name="IndexFolder_FiltersMetadata" xml:space="preserve">
+    <value>过滤器和元数据</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFolders" xml:space="preserve">
+    <value>跳过隐藏文件夹</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFiles" xml:space="preserve">
+    <value>跳过隐藏文件</value>
+  </data>
+  <data name="IndexFolder_SkipFiles" xml:space="preserve">
+    <value>跳过文件（仅文件夹）</value>
+  </data>
+  <data name="IndexFolder_IgnoreEmptyFolders" xml:space="preserve">
+    <value>忽略空文件夹</value>
+  </data>
+  <data name="IndexFolder_IncludeSizeInfo" xml:space="preserve">
+    <value>包含大小信息</value>
+  </data>
+  <data name="IndexFolder_BinaryUnits" xml:space="preserve">
+    <value>使用二进制单位表示大小</value>
+  </data>
+  <data name="IndexFolder_AddFooter" xml:space="preserve">
+    <value>添加生成页脚</value>
+  </data>
+  <data name="IndexFolder_FileExtensionFilters" xml:space="preserve">
+    <value>文件扩展名过滤器</value>
+  </data>
+  <data name="IndexFolder_IncludeOnlyLabel" xml:space="preserve">
+    <value>仅包含（例如 cs、txt、md）：</value>
+  </data>
+  <data name="IndexFolder_IncludePlaceholder" xml:space="preserve">
+    <value>留空以包含所有文件...</value>
+  </data>
+  <data name="IndexFolder_ExcludeLabel" xml:space="preserve">
+    <value>排除（例如 pdb、obj、exe）：</value>
+  </data>
+  <data name="IndexFolder_ExcludePlaceholder" xml:space="preserve">
+    <value>留空以不排除任何内容...</value>
+  </data>
+  <data name="IndexFolder_TextFormatting" xml:space="preserve">
+    <value>文本格式</value>
+  </data>
+  <data name="IndexFolder_IndentationLabel" xml:space="preserve">
+    <value>缩进：</value>
+  </data>
+  <data name="IndexFolder_AddEmptyLineAfterFolders" xml:space="preserve">
+    <value>在文件夹后添加空行</value>
+  </data>
+  <data name="IndexFolder_HtmlOptions" xml:space="preserve">
+    <value>HTML 选项</value>
+  </data>
+  <data name="IndexFolder_UseCustomCss" xml:space="preserve">
+    <value>使用自定义 CSS 文件</value>
+  </data>
+  <data name="IndexFolder_CssPathPlaceholder" xml:space="preserve">
+    <value>CSS 文件路径</value>
+  </data>
+  <data name="IndexFolder_DisplayPath" xml:space="preserve">
+    <value>显示子文件夹的路径</value>
+  </data>
+  <data name="IndexFolder_DisplayPathLimited" xml:space="preserve">
+    <value>将显示路径限制为根目录</value>
+  </data>
+  <data name="IndexFolder_XmlJsonOptions" xml:space="preserve">
+    <value>XML / JSON 选项</value>
+  </data>
+  <data name="IndexFolder_UseAttribute" xml:space="preserve">
+    <value>将信息写为属性（XML）</value>
+  </data>
+  <data name="IndexFolder_ParseableJson" xml:space="preserve">
+    <value>创建可解析的 JSON</value>
+  </data>
+  <data name="IndexFolder_PreviewActions" xml:space="preserve">
+    <value>预览和操作</value>
+  </data>
+  <data name="IndexFolder_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="IndexFolder_OpenInBrowser" xml:space="preserve">
+    <value>在浏览器中打开</value>
+  </data>
+  <data name="IndexFolder_Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="IndexFolder_SaveAs" xml:space="preserve">
+    <value>另存为</value>
+  </data>
+  <data name="IndexFolder_Upload" xml:space="preserve">
+    <value>上传</value>
+  </data>
+  <data name="PinToScreenStartup_Title" xml:space="preserve">
+    <value>固定到屏幕</value>
+  </data>
+  <data name="PinToScreenStartup_SelectSource" xml:space="preserve">
+    <value>选择要固定的图像来源：</value>
+  </data>
+  <data name="PinToScreenStartup_FromScreen" xml:space="preserve">
+    <value>从屏幕</value>
+  </data>
+  <data name="PinToScreenStartup_FromClipboard" xml:space="preserve">
+    <value>从剪贴板</value>
+  </data>
+  <data name="PinToScreenStartup_FromFile" xml:space="preserve">
+    <value>从文件</value>
+  </data>
+  <data name="PinToScreenStartup_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
 </root>

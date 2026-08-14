@@ -1972,4 +1972,334 @@
   <data name="AutoCapture_WaitForUploads" xml:space="preserve">
     <value>Ждать завершения загрузок</value>
   </data>
+  <data name="ImageAnalyzer_Title" xml:space="preserve">
+    <value>Анализ изображения</value>
+  </data>
+  <data name="ImageAnalyzer_PlaceholderSelectImage" xml:space="preserve">
+    <value>Выберите файл изображения...</value>
+  </data>
+  <data name="ImageAnalyzer_Browse" xml:space="preserve">
+    <value>Обзор...</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderCategory" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderProperty" xml:space="preserve">
+    <value>Свойство</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="ImageAnalyzer_CopyAll" xml:space="preserve">
+    <value>Копировать всё</value>
+  </data>
+  <data name="ImageAnalyzer_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ImageCombiner_Title" xml:space="preserve">
+    <value>Объединение изображений</value>
+  </data>
+  <data name="ImageCombiner_Remove" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="ImageCombiner_Add" xml:space="preserve">
+    <value>Добавить...</value>
+  </data>
+  <data name="ImageCombiner_MoveUp" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="ImageCombiner_MoveDown" xml:space="preserve">
+    <value>Вниз</value>
+  </data>
+  <data name="ImageCombiner_Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="ImageCombiner_OrientationLabel" xml:space="preserve">
+    <value>Ориентация:</value>
+  </data>
+  <data name="ImageCombiner_AlignmentLabel" xml:space="preserve">
+    <value>Выравнивание:</value>
+  </data>
+  <data name="ImageCombiner_SpacingLabel" xml:space="preserve">
+    <value>Интервал:</value>
+  </data>
+  <data name="ImageCombiner_FillBackground" xml:space="preserve">
+    <value>Заливка фона</value>
+  </data>
+  <data name="ImageCombiner_Combine" xml:space="preserve">
+    <value>Объединить</value>
+  </data>
+  <data name="ImageCombiner_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ImageEffects_Title" xml:space="preserve">
+    <value>Добавить эффект</value>
+  </data>
+  <data name="ImageEffects_SelectEffect" xml:space="preserve">
+    <value>Выберите эффект для добавления</value>
+  </data>
+  <data name="ImageEffects_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ImageSplitter_Title" xml:space="preserve">
+    <value>Разделение изображения</value>
+  </data>
+  <data name="ImageSplitter_PlaceholderSelectImage" xml:space="preserve">
+    <value>Выберите файл изображения...</value>
+  </data>
+  <data name="ImageSplitter_Browse" xml:space="preserve">
+    <value>Обзор...</value>
+  </data>
+  <data name="ImageSplitter_ColumnsLabel" xml:space="preserve">
+    <value>Столбцы:</value>
+  </data>
+  <data name="ImageSplitter_RowsLabel" xml:space="preserve">
+    <value>Строки:</value>
+  </data>
+  <data name="ImageSplitter_OutputLabel" xml:space="preserve">
+    <value>Вывод:</value>
+  </data>
+  <data name="ImageSplitter_Split" xml:space="preserve">
+    <value>Разделить</value>
+  </data>
+  <data name="ImageSplitter_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ImageThumbnailer_Title" xml:space="preserve">
+    <value>Миниатюры</value>
+  </data>
+  <data name="ImageThumbnailer_Add" xml:space="preserve">
+    <value>Добавить...</value>
+  </data>
+  <data name="ImageThumbnailer_Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ImageThumbnailer_Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="ImageThumbnailer_WidthLabel" xml:space="preserve">
+    <value>Ширина:</value>
+  </data>
+  <data name="ImageThumbnailer_HeightLabel" xml:space="preserve">
+    <value>Высота:</value>
+  </data>
+  <data name="ImageThumbnailer_QualityLabel" xml:space="preserve">
+    <value>Качество:</value>
+  </data>
+  <data name="ImageThumbnailer_OutputLabel" xml:space="preserve">
+    <value>Вывод:</value>
+  </data>
+  <data name="ImageThumbnailer_Browse" xml:space="preserve">
+    <value>Обзор...</value>
+  </data>
+  <data name="ImageThumbnailer_Generate" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="ImageThumbnailer_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="MonitorTest_Title" xml:space="preserve">
+    <value>Тест монитора</value>
+  </data>
+  <data name="MonitorTest_ModeLabel" xml:space="preserve">
+    <value>Режим:</value>
+  </data>
+  <data name="MonitorTest_Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="MonitorTest_CopyDiagnostics" xml:space="preserve">
+    <value>Копировать диагностику</value>
+  </data>
+  <data name="MonitorTest_Export" xml:space="preserve">
+    <value>Экспорт...</value>
+  </data>
+  <data name="MonitorTest_ConnectedMonitors" xml:space="preserve">
+    <value>Подключённые мониторы</value>
+  </data>
+  <data name="MonitorTest_Primary" xml:space="preserve">
+    <value>ОСНОВНОЙ</value>
+  </data>
+  <data name="MonitorTest_Layout" xml:space="preserve">
+    <value>Раскладка мониторов</value>
+  </data>
+  <data name="MonitorTest_Resolution" xml:space="preserve">
+    <value>Разрешение: </value>
+  </data>
+  <data name="MonitorTest_Position" xml:space="preserve">
+    <value>Позиция: (</value>
+  </data>
+  <data name="MonitorTest_Dpi" xml:space="preserve">
+    <value>DPI: </value>
+  </data>
+  <data name="MonitorTest_Scale" xml:space="preserve">
+    <value>× масштаб)</value>
+  </data>
+  <data name="Ocr_WindowTitle" xml:space="preserve">
+    <value>OCR — распознавание текста</value>
+  </data>
+  <data name="Ocr_LanguageLabel" xml:space="preserve">
+    <value>Язык:</value>
+  </data>
+  <data name="Ocr_ScaleLabel" xml:space="preserve">
+    <value>Масштаб:</value>
+  </data>
+  <data name="Ocr_SingleLine" xml:space="preserve">
+    <value>Одна строка</value>
+  </data>
+  <data name="Ocr_ResultPlaceholder" xml:space="preserve">
+    <value>Здесь появится результат распознавания...</value>
+  </data>
+  <data name="Ocr_Processing" xml:space="preserve">
+    <value>Обработка...</value>
+  </data>
+  <data name="Ocr_SelectRegion" xml:space="preserve">
+    <value>Выбрать область</value>
+  </data>
+  <data name="Ocr_CopyAll" xml:space="preserve">
+    <value>Копировать всё</value>
+  </data>
+  <data name="PinnedImage_Title" xml:space="preserve">
+    <value>Закреплённое изображение</value>
+  </data>
+  <data name="PinnedImage_CopyImage" xml:space="preserve">
+    <value>Копировать изображение</value>
+  </data>
+  <data name="PinnedImage_ResetScale" xml:space="preserve">
+    <value>Сбросить масштаб</value>
+  </data>
+  <data name="PinnedImage_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="PinnedImage_CloseAll" xml:space="preserve">
+    <value>Закрыть все</value>
+  </data>
+  <data name="IndexFolder_Title" xml:space="preserve">
+    <value>Индексация папки</value>
+  </data>
+  <data name="IndexFolder_Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="IndexFolder_PlaceholderSelectFolder" xml:space="preserve">
+    <value>Выберите папку для индексации...</value>
+  </data>
+  <data name="IndexFolder_Browse" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="IndexFolder_OutputConfiguration" xml:space="preserve">
+    <value>Настройки вывода</value>
+  </data>
+  <data name="IndexFolder_FormatLabel" xml:space="preserve">
+    <value>Формат:</value>
+  </data>
+  <data name="IndexFolder_MaxDepthLabel" xml:space="preserve">
+    <value>Макс. глубина:</value>
+  </data>
+  <data name="IndexFolder_FiltersMetadata" xml:space="preserve">
+    <value>Фильтры и метаданные</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFolders" xml:space="preserve">
+    <value>Пропускать скрытые папки</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFiles" xml:space="preserve">
+    <value>Пропускать скрытые файлы</value>
+  </data>
+  <data name="IndexFolder_SkipFiles" xml:space="preserve">
+    <value>Пропускать файлы (только папки)</value>
+  </data>
+  <data name="IndexFolder_IgnoreEmptyFolders" xml:space="preserve">
+    <value>Игнорировать пустые папки</value>
+  </data>
+  <data name="IndexFolder_IncludeSizeInfo" xml:space="preserve">
+    <value>Включать информацию о размере</value>
+  </data>
+  <data name="IndexFolder_BinaryUnits" xml:space="preserve">
+    <value>Использовать двоичные единицы размера</value>
+  </data>
+  <data name="IndexFolder_AddFooter" xml:space="preserve">
+    <value>Добавлять нижний колонтитул</value>
+  </data>
+  <data name="IndexFolder_FileExtensionFilters" xml:space="preserve">
+    <value>Фильтры расширений файлов</value>
+  </data>
+  <data name="IndexFolder_IncludeOnlyLabel" xml:space="preserve">
+    <value>Включать только (например, cs, txt, md):</value>
+  </data>
+  <data name="IndexFolder_IncludePlaceholder" xml:space="preserve">
+    <value>Оставьте пустым, чтобы включить все файлы...</value>
+  </data>
+  <data name="IndexFolder_ExcludeLabel" xml:space="preserve">
+    <value>Исключить (например, pdb, obj, exe):</value>
+  </data>
+  <data name="IndexFolder_ExcludePlaceholder" xml:space="preserve">
+    <value>Оставьте пустым, чтобы ничего не исключать...</value>
+  </data>
+  <data name="IndexFolder_TextFormatting" xml:space="preserve">
+    <value>Форматирование текста</value>
+  </data>
+  <data name="IndexFolder_IndentationLabel" xml:space="preserve">
+    <value>Отступ:</value>
+  </data>
+  <data name="IndexFolder_AddEmptyLineAfterFolders" xml:space="preserve">
+    <value>Добавлять пустую строку после папок</value>
+  </data>
+  <data name="IndexFolder_HtmlOptions" xml:space="preserve">
+    <value>Параметры HTML</value>
+  </data>
+  <data name="IndexFolder_UseCustomCss" xml:space="preserve">
+    <value>Использовать свой CSS-файл</value>
+  </data>
+  <data name="IndexFolder_CssPathPlaceholder" xml:space="preserve">
+    <value>Путь к CSS-файлу</value>
+  </data>
+  <data name="IndexFolder_DisplayPath" xml:space="preserve">
+    <value>Показывать путь для подпапок</value>
+  </data>
+  <data name="IndexFolder_DisplayPathLimited" xml:space="preserve">
+    <value>Ограничить отображаемый путь корнем</value>
+  </data>
+  <data name="IndexFolder_XmlJsonOptions" xml:space="preserve">
+    <value>Параметры XML / JSON</value>
+  </data>
+  <data name="IndexFolder_UseAttribute" xml:space="preserve">
+    <value>Записывать сведения как атрибуты (XML)</value>
+  </data>
+  <data name="IndexFolder_ParseableJson" xml:space="preserve">
+    <value>Создавать разбираемый JSON</value>
+  </data>
+  <data name="IndexFolder_PreviewActions" xml:space="preserve">
+    <value>Предпросмотр и действия</value>
+  </data>
+  <data name="IndexFolder_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="IndexFolder_OpenInBrowser" xml:space="preserve">
+    <value>Открыть в браузере</value>
+  </data>
+  <data name="IndexFolder_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="IndexFolder_SaveAs" xml:space="preserve">
+    <value>Сохранить как</value>
+  </data>
+  <data name="IndexFolder_Upload" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="PinToScreenStartup_Title" xml:space="preserve">
+    <value>Закрепить на экране</value>
+  </data>
+  <data name="PinToScreenStartup_SelectSource" xml:space="preserve">
+    <value>Выберите источник изображения для закрепления:</value>
+  </data>
+  <data name="PinToScreenStartup_FromScreen" xml:space="preserve">
+    <value>С экрана</value>
+  </data>
+  <data name="PinToScreenStartup_FromClipboard" xml:space="preserve">
+    <value>Из буфера обмена</value>
+  </data>
+  <data name="PinToScreenStartup_FromFile" xml:space="preserve">
+    <value>Из файла</value>
+  </data>
+  <data name="PinToScreenStartup_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
 </root>

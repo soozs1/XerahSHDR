@@ -1972,4 +1972,334 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="AutoCapture_WaitForUploads" xml:space="preserve">
     <value>Wait for uploads to complete</value>
   </data>
+  <data name="ImageAnalyzer_Title" xml:space="preserve">
+    <value>Image Analyzer</value>
+  </data>
+  <data name="ImageAnalyzer_PlaceholderSelectImage" xml:space="preserve">
+    <value>Select an image file...</value>
+  </data>
+  <data name="ImageAnalyzer_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderProperty" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="ImageAnalyzer_HeaderValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ImageAnalyzer_CopyAll" xml:space="preserve">
+    <value>Copy All</value>
+  </data>
+  <data name="ImageAnalyzer_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ImageCombiner_Title" xml:space="preserve">
+    <value>Image Combiner</value>
+  </data>
+  <data name="ImageCombiner_Remove" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="ImageCombiner_Add" xml:space="preserve">
+    <value>Add...</value>
+  </data>
+  <data name="ImageCombiner_MoveUp" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="ImageCombiner_MoveDown" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="ImageCombiner_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ImageCombiner_OrientationLabel" xml:space="preserve">
+    <value>Orientation:</value>
+  </data>
+  <data name="ImageCombiner_AlignmentLabel" xml:space="preserve">
+    <value>Alignment:</value>
+  </data>
+  <data name="ImageCombiner_SpacingLabel" xml:space="preserve">
+    <value>Spacing:</value>
+  </data>
+  <data name="ImageCombiner_FillBackground" xml:space="preserve">
+    <value>Fill background</value>
+  </data>
+  <data name="ImageCombiner_Combine" xml:space="preserve">
+    <value>Combine</value>
+  </data>
+  <data name="ImageCombiner_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ImageEffects_Title" xml:space="preserve">
+    <value>Add Image Effect</value>
+  </data>
+  <data name="ImageEffects_SelectEffect" xml:space="preserve">
+    <value>Select an effect to add</value>
+  </data>
+  <data name="ImageEffects_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ImageSplitter_Title" xml:space="preserve">
+    <value>Image Splitter</value>
+  </data>
+  <data name="ImageSplitter_PlaceholderSelectImage" xml:space="preserve">
+    <value>Select an image file...</value>
+  </data>
+  <data name="ImageSplitter_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="ImageSplitter_ColumnsLabel" xml:space="preserve">
+    <value>Columns:</value>
+  </data>
+  <data name="ImageSplitter_RowsLabel" xml:space="preserve">
+    <value>Rows:</value>
+  </data>
+  <data name="ImageSplitter_OutputLabel" xml:space="preserve">
+    <value>Output:</value>
+  </data>
+  <data name="ImageSplitter_Split" xml:space="preserve">
+    <value>Split</value>
+  </data>
+  <data name="ImageSplitter_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ImageThumbnailer_Title" xml:space="preserve">
+    <value>Image Thumbnailer</value>
+  </data>
+  <data name="ImageThumbnailer_Add" xml:space="preserve">
+    <value>Add...</value>
+  </data>
+  <data name="ImageThumbnailer_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ImageThumbnailer_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ImageThumbnailer_WidthLabel" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="ImageThumbnailer_HeightLabel" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="ImageThumbnailer_QualityLabel" xml:space="preserve">
+    <value>Quality:</value>
+  </data>
+  <data name="ImageThumbnailer_OutputLabel" xml:space="preserve">
+    <value>Output:</value>
+  </data>
+  <data name="ImageThumbnailer_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="ImageThumbnailer_Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="ImageThumbnailer_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="MonitorTest_Title" xml:space="preserve">
+    <value>Monitor Test</value>
+  </data>
+  <data name="MonitorTest_ModeLabel" xml:space="preserve">
+    <value>Mode:</value>
+  </data>
+  <data name="MonitorTest_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="MonitorTest_CopyDiagnostics" xml:space="preserve">
+    <value>Copy Diagnostics</value>
+  </data>
+  <data name="MonitorTest_Export" xml:space="preserve">
+    <value>Export...</value>
+  </data>
+  <data name="MonitorTest_ConnectedMonitors" xml:space="preserve">
+    <value>Connected Monitors</value>
+  </data>
+  <data name="MonitorTest_Primary" xml:space="preserve">
+    <value>PRIMARY</value>
+  </data>
+  <data name="MonitorTest_Layout" xml:space="preserve">
+    <value>Monitor Layout</value>
+  </data>
+  <data name="MonitorTest_Resolution" xml:space="preserve">
+    <value>Resolution: </value>
+  </data>
+  <data name="MonitorTest_Position" xml:space="preserve">
+    <value>Position: (</value>
+  </data>
+  <data name="MonitorTest_Dpi" xml:space="preserve">
+    <value>DPI: </value>
+  </data>
+  <data name="MonitorTest_Scale" xml:space="preserve">
+    <value>× scale)</value>
+  </data>
+  <data name="Ocr_WindowTitle" xml:space="preserve">
+    <value>OCR - Text Recognition</value>
+  </data>
+  <data name="Ocr_LanguageLabel" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="Ocr_ScaleLabel" xml:space="preserve">
+    <value>Scale:</value>
+  </data>
+  <data name="Ocr_SingleLine" xml:space="preserve">
+    <value>Single line</value>
+  </data>
+  <data name="Ocr_ResultPlaceholder" xml:space="preserve">
+    <value>OCR result will appear here...</value>
+  </data>
+  <data name="Ocr_Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="Ocr_SelectRegion" xml:space="preserve">
+    <value>Select Region</value>
+  </data>
+  <data name="Ocr_CopyAll" xml:space="preserve">
+    <value>Copy All</value>
+  </data>
+  <data name="PinnedImage_Title" xml:space="preserve">
+    <value>Pinned Image</value>
+  </data>
+  <data name="PinnedImage_CopyImage" xml:space="preserve">
+    <value>Copy image</value>
+  </data>
+  <data name="PinnedImage_ResetScale" xml:space="preserve">
+    <value>Reset scale</value>
+  </data>
+  <data name="PinnedImage_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="PinnedImage_CloseAll" xml:space="preserve">
+    <value>Close all</value>
+  </data>
+  <data name="IndexFolder_Title" xml:space="preserve">
+    <value>Index Folder</value>
+  </data>
+  <data name="IndexFolder_Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="IndexFolder_PlaceholderSelectFolder" xml:space="preserve">
+    <value>Select folder to index...</value>
+  </data>
+  <data name="IndexFolder_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="IndexFolder_OutputConfiguration" xml:space="preserve">
+    <value>Output Configuration</value>
+  </data>
+  <data name="IndexFolder_FormatLabel" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="IndexFolder_MaxDepthLabel" xml:space="preserve">
+    <value>Max Depth:</value>
+  </data>
+  <data name="IndexFolder_FiltersMetadata" xml:space="preserve">
+    <value>Filters &amp; Metadata</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFolders" xml:space="preserve">
+    <value>Skip hidden folders</value>
+  </data>
+  <data name="IndexFolder_SkipHiddenFiles" xml:space="preserve">
+    <value>Skip hidden files</value>
+  </data>
+  <data name="IndexFolder_SkipFiles" xml:space="preserve">
+    <value>Skip files (Folders only)</value>
+  </data>
+  <data name="IndexFolder_IgnoreEmptyFolders" xml:space="preserve">
+    <value>Ignore empty folders</value>
+  </data>
+  <data name="IndexFolder_IncludeSizeInfo" xml:space="preserve">
+    <value>Include size information</value>
+  </data>
+  <data name="IndexFolder_BinaryUnits" xml:space="preserve">
+    <value>Use binary units for size</value>
+  </data>
+  <data name="IndexFolder_AddFooter" xml:space="preserve">
+    <value>Add generation footer</value>
+  </data>
+  <data name="IndexFolder_FileExtensionFilters" xml:space="preserve">
+    <value>File Extension Filters</value>
+  </data>
+  <data name="IndexFolder_IncludeOnlyLabel" xml:space="preserve">
+    <value>Include only (e.g., cs, txt, md):</value>
+  </data>
+  <data name="IndexFolder_IncludePlaceholder" xml:space="preserve">
+    <value>Leave empty to include all files...</value>
+  </data>
+  <data name="IndexFolder_ExcludeLabel" xml:space="preserve">
+    <value>Exclude (e.g., pdb, obj, exe):</value>
+  </data>
+  <data name="IndexFolder_ExcludePlaceholder" xml:space="preserve">
+    <value>Leave empty to exclude nothing...</value>
+  </data>
+  <data name="IndexFolder_TextFormatting" xml:space="preserve">
+    <value>Text Formatting</value>
+  </data>
+  <data name="IndexFolder_IndentationLabel" xml:space="preserve">
+    <value>Indentation:</value>
+  </data>
+  <data name="IndexFolder_AddEmptyLineAfterFolders" xml:space="preserve">
+    <value>Add empty line after folders</value>
+  </data>
+  <data name="IndexFolder_HtmlOptions" xml:space="preserve">
+    <value>HTML Options</value>
+  </data>
+  <data name="IndexFolder_UseCustomCss" xml:space="preserve">
+    <value>Use custom CSS file</value>
+  </data>
+  <data name="IndexFolder_CssPathPlaceholder" xml:space="preserve">
+    <value>Path to CSS file</value>
+  </data>
+  <data name="IndexFolder_DisplayPath" xml:space="preserve">
+    <value>Display path for subfolders</value>
+  </data>
+  <data name="IndexFolder_DisplayPathLimited" xml:space="preserve">
+    <value>Limit display path to root</value>
+  </data>
+  <data name="IndexFolder_XmlJsonOptions" xml:space="preserve">
+    <value>XML / JSON Options</value>
+  </data>
+  <data name="IndexFolder_UseAttribute" xml:space="preserve">
+    <value>Write info as attributes (XML)</value>
+  </data>
+  <data name="IndexFolder_ParseableJson" xml:space="preserve">
+    <value>Create parseable JSON</value>
+  </data>
+  <data name="IndexFolder_PreviewActions" xml:space="preserve">
+    <value>Preview &amp; Actions</value>
+  </data>
+  <data name="IndexFolder_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="IndexFolder_OpenInBrowser" xml:space="preserve">
+    <value>Open in Browser</value>
+  </data>
+  <data name="IndexFolder_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="IndexFolder_SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="IndexFolder_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="PinToScreenStartup_Title" xml:space="preserve">
+    <value>Pin to Screen</value>
+  </data>
+  <data name="PinToScreenStartup_SelectSource" xml:space="preserve">
+    <value>Select image source to pin:</value>
+  </data>
+  <data name="PinToScreenStartup_FromScreen" xml:space="preserve">
+    <value>From Screen</value>
+  </data>
+  <data name="PinToScreenStartup_FromClipboard" xml:space="preserve">
+    <value>From Clipboard</value>
+  </data>
+  <data name="PinToScreenStartup_FromFile" xml:space="preserve">
+    <value>From File</value>
+  </data>
+  <data name="PinToScreenStartup_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
