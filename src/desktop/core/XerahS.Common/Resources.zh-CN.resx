@@ -3220,4 +3220,76 @@
   <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
     <value>打开完整设置</value>
   </data>
+  <data name="EditorToolbarItem_File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="EditorToolbarItem_Select" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="EditorToolbarItem_Rectangle" xml:space="preserve">
+    <value>矩形</value>
+  </data>
+  <data name="EditorToolbarItem_Ellipse" xml:space="preserve">
+    <value>椭圆</value>
+  </data>
+  <data name="EditorToolbarItem_Line" xml:space="preserve">
+    <value>线条</value>
+  </data>
+  <data name="EditorToolbarItem_Arrow" xml:space="preserve">
+    <value>箭头</value>
+  </data>
+  <data name="EditorToolbarItem_Freehand" xml:space="preserve">
+    <value>手绘</value>
+  </data>
+  <data name="EditorToolbarItem_Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="EditorToolbarItem_SpeechBalloon" xml:space="preserve">
+    <value>气泡</value>
+  </data>
+  <data name="EditorToolbarItem_Step" xml:space="preserve">
+    <value>步骤</value>
+  </data>
+  <data name="EditorToolbarItem_Image" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="EditorToolbarItem_Emoji" xml:space="preserve">
+    <value>表情</value>
+  </data>
+  <data name="EditorToolbarItem_Cursor" xml:space="preserve">
+    <value>光标</value>
+  </data>
+  <data name="EditorToolbarItem_Highlight" xml:space="preserve">
+    <value>高亮</value>
+  </data>
+  <data name="EditorToolbarItem_SmartEraser" xml:space="preserve">
+    <value>智能橡皮擦</value>
+  </data>
+  <data name="EditorToolbarItem_Blur" xml:space="preserve">
+    <value>模糊</value>
+  </data>
+  <data name="EditorToolbarItem_Pixelate" xml:space="preserve">
+    <value>像素化</value>
+  </data>
+  <data name="EditorToolbarItem_Magnify" xml:space="preserve">
+    <value>放大镜</value>
+  </data>
+  <data name="EditorToolbarItem_Spotlight" xml:space="preserve">
+    <value>聚光灯</value>
+  </data>
+  <data name="EditorToolbarItem_Crop" xml:space="preserve">
+    <value>裁剪</value>
+  </data>
+  <data name="EditorToolbarItem_CutOut" xml:space="preserve">
+    <value>抠图</value>
+  </data>
+  <data name="EditorToolbarItem_Background" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="EditorToolbarItem_ImageEffects" xml:space="preserve">
+    <value>图像特效</value>
+  </data>
+  <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
+    <value>收藏的图像特效（右键）</value>
+  </data>
 </root>

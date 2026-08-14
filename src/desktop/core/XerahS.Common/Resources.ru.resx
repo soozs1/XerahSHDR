@@ -3220,4 +3220,76 @@
   <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
     <value>Открыть полные настройки</value>
   </data>
+  <data name="EditorToolbarItem_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="EditorToolbarItem_Select" xml:space="preserve">
+    <value>Выделение</value>
+  </data>
+  <data name="EditorToolbarItem_Rectangle" xml:space="preserve">
+    <value>Прямоугольник</value>
+  </data>
+  <data name="EditorToolbarItem_Ellipse" xml:space="preserve">
+    <value>Эллипс</value>
+  </data>
+  <data name="EditorToolbarItem_Line" xml:space="preserve">
+    <value>Линия</value>
+  </data>
+  <data name="EditorToolbarItem_Arrow" xml:space="preserve">
+    <value>Стрелка</value>
+  </data>
+  <data name="EditorToolbarItem_Freehand" xml:space="preserve">
+    <value>От руки</value>
+  </data>
+  <data name="EditorToolbarItem_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="EditorToolbarItem_SpeechBalloon" xml:space="preserve">
+    <value>Речевой пузырь</value>
+  </data>
+  <data name="EditorToolbarItem_Step" xml:space="preserve">
+    <value>Шаг</value>
+  </data>
+  <data name="EditorToolbarItem_Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="EditorToolbarItem_Emoji" xml:space="preserve">
+    <value>Эмодзи</value>
+  </data>
+  <data name="EditorToolbarItem_Cursor" xml:space="preserve">
+    <value>Курсор</value>
+  </data>
+  <data name="EditorToolbarItem_Highlight" xml:space="preserve">
+    <value>Подсветка</value>
+  </data>
+  <data name="EditorToolbarItem_SmartEraser" xml:space="preserve">
+    <value>Умный ластик</value>
+  </data>
+  <data name="EditorToolbarItem_Blur" xml:space="preserve">
+    <value>Размытие</value>
+  </data>
+  <data name="EditorToolbarItem_Pixelate" xml:space="preserve">
+    <value>Пикселизация</value>
+  </data>
+  <data name="EditorToolbarItem_Magnify" xml:space="preserve">
+    <value>Лупа</value>
+  </data>
+  <data name="EditorToolbarItem_Spotlight" xml:space="preserve">
+    <value>Прожектор</value>
+  </data>
+  <data name="EditorToolbarItem_Crop" xml:space="preserve">
+    <value>Кадрирование</value>
+  </data>
+  <data name="EditorToolbarItem_CutOut" xml:space="preserve">
+    <value>Вырезать</value>
+  </data>
+  <data name="EditorToolbarItem_Background" xml:space="preserve">
+    <value>Фон</value>
+  </data>
+  <data name="EditorToolbarItem_ImageEffects" xml:space="preserve">
+    <value>Эффекты изображения</value>
+  </data>
+  <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
+    <value>Избранные эффекты изображения (правый клик)</value>
+  </data>
 </root>

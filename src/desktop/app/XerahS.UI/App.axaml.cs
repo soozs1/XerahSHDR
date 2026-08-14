@@ -31,6 +31,7 @@ using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
 using ShareX.ImageEditor.Hosting;
 using ShareX.ImageEditor.Hosting.Diagnostics;
+using ShareX.ImageEditor.Core.Localization;
 using ShareX.ImageEditor.Presentation.ViewModels;
 using ShareX.ImageEditor.Presentation.Views;
 using XerahS.Bootstrap;
@@ -91,6 +92,10 @@ public partial class App : Application
     {
         // Apply the persisted UI language before any views are constructed.
         XerahS.Common.Localization.ApplyCulture(XerahS.Core.SettingsManager.Settings.Language.ToCultureCode());
+
+        // Share the host's localization with the editor library so tool names and editor
+        // hints follow the selected language without coupling the library to XerahS.Common.
+        EditorStrings.SetResolver(key => XerahS.Common.Resources.GetString(key));
 
         // Suppress benign Avalonia desktop-integration exceptions on Linux (DBus tray icon,
         // IME, portal glitches) so they cannot take down the whole app. Avalonia's dispatcher

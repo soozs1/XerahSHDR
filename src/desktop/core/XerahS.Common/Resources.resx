@@ -3220,4 +3220,76 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
     <value>Open full settings</value>
   </data>
+  <data name="EditorToolbarItem_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="EditorToolbarItem_Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="EditorToolbarItem_Rectangle" xml:space="preserve">
+    <value>Rectangle</value>
+  </data>
+  <data name="EditorToolbarItem_Ellipse" xml:space="preserve">
+    <value>Ellipse</value>
+  </data>
+  <data name="EditorToolbarItem_Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="EditorToolbarItem_Arrow" xml:space="preserve">
+    <value>Arrow</value>
+  </data>
+  <data name="EditorToolbarItem_Freehand" xml:space="preserve">
+    <value>Freehand</value>
+  </data>
+  <data name="EditorToolbarItem_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="EditorToolbarItem_SpeechBalloon" xml:space="preserve">
+    <value>Speech Balloon</value>
+  </data>
+  <data name="EditorToolbarItem_Step" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="EditorToolbarItem_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="EditorToolbarItem_Emoji" xml:space="preserve">
+    <value>Emoji</value>
+  </data>
+  <data name="EditorToolbarItem_Cursor" xml:space="preserve">
+    <value>Cursor</value>
+  </data>
+  <data name="EditorToolbarItem_Highlight" xml:space="preserve">
+    <value>Highlight</value>
+  </data>
+  <data name="EditorToolbarItem_SmartEraser" xml:space="preserve">
+    <value>Smart Eraser</value>
+  </data>
+  <data name="EditorToolbarItem_Blur" xml:space="preserve">
+    <value>Blur</value>
+  </data>
+  <data name="EditorToolbarItem_Pixelate" xml:space="preserve">
+    <value>Pixelate</value>
+  </data>
+  <data name="EditorToolbarItem_Magnify" xml:space="preserve">
+    <value>Magnify</value>
+  </data>
+  <data name="EditorToolbarItem_Spotlight" xml:space="preserve">
+    <value>Spotlight</value>
+  </data>
+  <data name="EditorToolbarItem_Crop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="EditorToolbarItem_CutOut" xml:space="preserve">
+    <value>Cut Out</value>
+  </data>
+  <data name="EditorToolbarItem_Background" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="EditorToolbarItem_ImageEffects" xml:space="preserve">
+    <value>Image Effects</value>
+  </data>
+  <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
+    <value>Favorite image effects (Right click)</value>
+  </data>
 </root>
