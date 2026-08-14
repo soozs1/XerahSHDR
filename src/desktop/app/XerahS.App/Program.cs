@@ -759,8 +759,8 @@ namespace XerahS.App
                         {
                             XerahS.Platform.Abstractions.PlatformServices.Toast?.ShowToast(new XerahS.Platform.Abstractions.ToastConfig
                             {
-                                Title = "Initialization Warning",
-                                Text = "Background services initialization failed. Check logs for details.",
+                                Title = Resources.GetString("Toast_InitializationWarning_Title"),
+                                Text = Resources.GetString("Toast_InitializationWarning_Text"),
                                 Duration = 6f
                             });
                         });

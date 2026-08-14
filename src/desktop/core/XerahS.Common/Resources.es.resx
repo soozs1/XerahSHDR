@@ -159,4 +159,46 @@
   <data name="SendToPrompt_MixedSummary" xml:space="preserve">
     <value>{0} y {1}</value>
   </data>
+  <data name="Tray_OpenMainWindow" xml:space="preserve">
+    <value>Abrir ventana principal</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="Tray_ResumeRecording" xml:space="preserve">
+    <value>Reanudar grabación</value>
+  </data>
+  <data name="Tray_PauseRecording" xml:space="preserve">
+    <value>Pausar grabación</value>
+  </data>
+  <data name="Tray_StopRecording" xml:space="preserve">
+    <value>Detener grabación</value>
+  </data>
+  <data name="Tray_AbortRecording" xml:space="preserve">
+    <value>Abortar grabación</value>
+  </data>
+  <data name="Tray_UnknownWorkflow" xml:space="preserve">
+    <value>Flujo de trabajo desconocido</value>
+  </data>
+  <data name="Tray_ToolTipRecording" xml:space="preserve">
+    <value>{0} - Grabando (haz clic en el icono de la bandeja para detener)</value>
+  </data>
+  <data name="Tray_ToolTipPaused" xml:space="preserve">
+    <value>{0} - En pausa (haz clic en el icono de la bandeja para reanudar)</value>
+  </data>
+  <data name="Tray_ToolTipStarting" xml:space="preserve">
+    <value>{0} - Iniciando grabación...</value>
+  </data>
+  <data name="Tray_ToolTipFinalizing" xml:space="preserve">
+    <value>{0} - Finalizando...</value>
+  </data>
+  <data name="Toast_InitializationWarning_Title" xml:space="preserve">
+    <value>Advertencia de inicialización</value>
+  </data>
+  <data name="Toast_InitializationWarning_Text" xml:space="preserve">
+    <value>Falló la inicialización de los servicios en segundo plano. Revisa los registros para obtener detalles.</value>
+  </data>
 </root>

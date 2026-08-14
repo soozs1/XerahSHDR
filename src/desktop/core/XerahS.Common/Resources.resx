@@ -159,4 +159,46 @@
   <data name="SendToPrompt_MixedSummary" xml:space="preserve">
     <value>{0} and {1}</value>
   </data>
+  <data name="Tray_OpenMainWindow" xml:space="preserve">
+    <value>Open Main Window</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Tray_ResumeRecording" xml:space="preserve">
+    <value>Resume Recording</value>
+  </data>
+  <data name="Tray_PauseRecording" xml:space="preserve">
+    <value>Pause Recording</value>
+  </data>
+  <data name="Tray_StopRecording" xml:space="preserve">
+    <value>Stop Recording</value>
+  </data>
+  <data name="Tray_AbortRecording" xml:space="preserve">
+    <value>Abort Recording</value>
+  </data>
+  <data name="Tray_UnknownWorkflow" xml:space="preserve">
+    <value>Unknown Workflow</value>
+  </data>
+  <data name="Tray_ToolTipRecording" xml:space="preserve">
+    <value>{0} - Recording (click tray to stop)</value>
+  </data>
+  <data name="Tray_ToolTipPaused" xml:space="preserve">
+    <value>{0} - Paused (click tray to resume)</value>
+  </data>
+  <data name="Tray_ToolTipStarting" xml:space="preserve">
+    <value>{0} - Starting recording...</value>
+  </data>
+  <data name="Tray_ToolTipFinalizing" xml:space="preserve">
+    <value>{0} - Finalizing...</value>
+  </data>
+  <data name="Toast_InitializationWarning_Title" xml:space="preserve">
+    <value>Initialization Warning</value>
+  </data>
+  <data name="Toast_InitializationWarning_Text" xml:space="preserve">
+    <value>Background services initialization failed. Check logs for details.</value>
+  </data>
 </root>

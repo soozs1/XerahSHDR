@@ -159,4 +159,46 @@
   <data name="SendToPrompt_MixedSummary" xml:space="preserve">
     <value>{0} 和 {1}</value>
   </data>
+  <data name="Tray_OpenMainWindow" xml:space="preserve">
+    <value>打开主窗口</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Tray_ResumeRecording" xml:space="preserve">
+    <value>继续录制</value>
+  </data>
+  <data name="Tray_PauseRecording" xml:space="preserve">
+    <value>暂停录制</value>
+  </data>
+  <data name="Tray_StopRecording" xml:space="preserve">
+    <value>停止录制</value>
+  </data>
+  <data name="Tray_AbortRecording" xml:space="preserve">
+    <value>中止录制</value>
+  </data>
+  <data name="Tray_UnknownWorkflow" xml:space="preserve">
+    <value>未知工作流</value>
+  </data>
+  <data name="Tray_ToolTipRecording" xml:space="preserve">
+    <value>{0} - 正在录制（点击托盘图标停止）</value>
+  </data>
+  <data name="Tray_ToolTipPaused" xml:space="preserve">
+    <value>{0} - 已暂停（点击托盘图标继续）</value>
+  </data>
+  <data name="Tray_ToolTipStarting" xml:space="preserve">
+    <value>{0} - 正在开始录制...</value>
+  </data>
+  <data name="Tray_ToolTipFinalizing" xml:space="preserve">
+    <value>{0} - 正在完成...</value>
+  </data>
+  <data name="Toast_InitializationWarning_Title" xml:space="preserve">
+    <value>初始化警告</value>
+  </data>
+  <data name="Toast_InitializationWarning_Text" xml:space="preserve">
+    <value>后台服务初始化失败。请查看日志了解详情。</value>
+  </data>
 </root>

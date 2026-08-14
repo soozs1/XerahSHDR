@@ -159,4 +159,46 @@
   <data name="SendToPrompt_MixedSummary" xml:space="preserve">
     <value>{0} и {1}</value>
   </data>
+  <data name="Tray_OpenMainWindow" xml:space="preserve">
+    <value>Открыть главное окно</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="Tray_ResumeRecording" xml:space="preserve">
+    <value>Возобновить запись</value>
+  </data>
+  <data name="Tray_PauseRecording" xml:space="preserve">
+    <value>Приостановить запись</value>
+  </data>
+  <data name="Tray_StopRecording" xml:space="preserve">
+    <value>Остановить запись</value>
+  </data>
+  <data name="Tray_AbortRecording" xml:space="preserve">
+    <value>Отменить запись</value>
+  </data>
+  <data name="Tray_UnknownWorkflow" xml:space="preserve">
+    <value>Неизвестный рабочий процесс</value>
+  </data>
+  <data name="Tray_ToolTipRecording" xml:space="preserve">
+    <value>{0} — запись (нажмите на значок в трее, чтобы остановить)</value>
+  </data>
+  <data name="Tray_ToolTipPaused" xml:space="preserve">
+    <value>{0} — пауза (нажмите на значок в трее, чтобы возобновить)</value>
+  </data>
+  <data name="Tray_ToolTipStarting" xml:space="preserve">
+    <value>{0} — запуск записи...</value>
+  </data>
+  <data name="Tray_ToolTipFinalizing" xml:space="preserve">
+    <value>{0} — завершение...</value>
+  </data>
+  <data name="Toast_InitializationWarning_Title" xml:space="preserve">
+    <value>Предупреждение инициализации</value>
+  </data>
+  <data name="Toast_InitializationWarning_Text" xml:space="preserve">
+    <value>Не удалось инициализировать фоновые службы. Подробности в журналах.</value>
+  </data>
 </root>

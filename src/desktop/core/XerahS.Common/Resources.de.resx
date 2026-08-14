@@ -159,4 +159,46 @@
   <data name="SendToPrompt_MixedSummary" xml:space="preserve">
     <value>{0} und {1}</value>
   </data>
+  <data name="Tray_OpenMainWindow" xml:space="preserve">
+    <value>Hauptfenster öffnen</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="Tray_ResumeRecording" xml:space="preserve">
+    <value>Aufnahme fortsetzen</value>
+  </data>
+  <data name="Tray_PauseRecording" xml:space="preserve">
+    <value>Aufnahme pausieren</value>
+  </data>
+  <data name="Tray_StopRecording" xml:space="preserve">
+    <value>Aufnahme stoppen</value>
+  </data>
+  <data name="Tray_AbortRecording" xml:space="preserve">
+    <value>Aufnahme abbrechen</value>
+  </data>
+  <data name="Tray_UnknownWorkflow" xml:space="preserve">
+    <value>Unbekannter Workflow</value>
+  </data>
+  <data name="Tray_ToolTipRecording" xml:space="preserve">
+    <value>{0} – Aufnahme läuft (auf das Tray-Symbol klicken, um zu stoppen)</value>
+  </data>
+  <data name="Tray_ToolTipPaused" xml:space="preserve">
+    <value>{0} – Pausiert (auf das Tray-Symbol klicken, um fortzusetzen)</value>
+  </data>
+  <data name="Tray_ToolTipStarting" xml:space="preserve">
+    <value>{0} – Aufnahme wird gestartet...</value>
+  </data>
+  <data name="Tray_ToolTipFinalizing" xml:space="preserve">
+    <value>{0} – Wird abgeschlossen...</value>
+  </data>
+  <data name="Toast_InitializationWarning_Title" xml:space="preserve">
+    <value>Initialisierungswarnung</value>
+  </data>
+  <data name="Toast_InitializationWarning_Text" xml:space="preserve">
+    <value>Die Initialisierung der Hintergrunddienste ist fehlgeschlagen. Details in den Protokollen.</value>
+  </data>
 </root>

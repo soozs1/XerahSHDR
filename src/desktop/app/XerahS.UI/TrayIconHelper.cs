@@ -153,10 +153,10 @@ public class TrayIconHelper : INotifyPropertyChanged
         {
             return _currentRecordingStatus switch
             {
-                RecordingStatus.Recording => $"{AppResources.AppName} - Recording (click tray to stop)",
-                RecordingStatus.Paused => $"{AppResources.AppName} - Paused (click tray to resume)",
-                RecordingStatus.Initializing => $"{AppResources.AppName} - Starting recording...",
-                RecordingStatus.Finalizing => $"{AppResources.AppName} - Finalizing...",
+                RecordingStatus.Recording => Resources.GetString("Tray_ToolTipRecording", AppResources.AppName),
+                RecordingStatus.Paused => Resources.GetString("Tray_ToolTipPaused", AppResources.AppName),
+                RecordingStatus.Initializing => Resources.GetString("Tray_ToolTipStarting", AppResources.AppName),
+                RecordingStatus.Finalizing => Resources.GetString("Tray_ToolTipFinalizing", AppResources.AppName),
                 _ => AppResources.AppName
             };
         }
@@ -519,10 +519,10 @@ public class TrayIconHelper : INotifyPropertyChanged
             TrayMenu.Items.Add(new NativeMenuItemSeparator());
         }
 
-        TrayMenu.Items.Add(new NativeMenuItem { Header = "Open Main Window", Command = OpenMainWindowCommand });
-        TrayMenu.Items.Add(new NativeMenuItem { Header = "Settings", Command = OpenSettingsCommand });
+        TrayMenu.Items.Add(new NativeMenuItem { Header = Resources.GetString("Tray_OpenMainWindow"), Command = OpenMainWindowCommand });
+        TrayMenu.Items.Add(new NativeMenuItem { Header = Resources.GetString("Tray_Settings"), Command = OpenSettingsCommand });
         TrayMenu.Items.Add(new NativeMenuItemSeparator());
-        TrayMenu.Items.Add(new NativeMenuItem { Header = "Exit", Command = ExitCommand });
+        TrayMenu.Items.Add(new NativeMenuItem { Header = Resources.GetString("Tray_Exit"), Command = ExitCommand });
 
         OnPropertyChanged(nameof(TrayMenu));
     }
@@ -547,8 +547,8 @@ public class TrayIconHelper : INotifyPropertyChanged
         {
             // Toggle between Pause/Resume based on current state
             string pauseResumeText = _currentRecordingStatus == RecordingStatus.Paused
-                ? "Resume Recording"
-                : "Pause Recording";
+                ? Resources.GetString("Tray_ResumeRecording")
+                : Resources.GetString("Tray_PauseRecording");
 
             TrayMenu.Items.Add(new NativeMenuItem
             {
@@ -561,7 +561,7 @@ public class TrayIconHelper : INotifyPropertyChanged
         {
             TrayMenu.Items.Add(new NativeMenuItem
             {
-                Header = "Stop Recording",
+                Header = Resources.GetString("Tray_StopRecording"),
                 Command = StopRecordingCommand
             });
         }
@@ -570,7 +570,7 @@ public class TrayIconHelper : INotifyPropertyChanged
         {
             TrayMenu.Items.Add(new NativeMenuItem
             {
-                Header = "Abort Recording",
+                Header = Resources.GetString("Tray_AbortRecording"),
                 Command = AbortRecordingCommand
             });
         }
@@ -586,7 +586,7 @@ public class TrayIconHelper : INotifyPropertyChanged
     /// </summary>
     private static string GetWorkflowName(WorkflowSettings workflow)
     {
-        if (workflow == null) return "Unknown Workflow";
+        if (workflow == null) return Resources.GetString("Tray_UnknownWorkflow");
 
         // Priority 1: Custom description from TaskSettings (same as Navigation Bar)
         if (!string.IsNullOrEmpty(workflow.TaskSettings?.Description))
