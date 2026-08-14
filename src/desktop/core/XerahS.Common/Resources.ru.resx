@@ -2302,4 +2302,757 @@
   <data name="PinToScreenStartup_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Assistant_OverlayTitle" xml:space="preserve">
+    <value>Ассистент</value>
+  </data>
+  <data name="Assistant_OverlayCaption" xml:space="preserve">
+    <value>Попросите XerahS найти, открыть, распознать (OCR), загрузить или скопировать пути к снимкам.</value>
+  </data>
+  <data name="Assistant_OverlayDescription" xml:space="preserve">
+    <value>Используйте естественный язык. Enter запускает запрос, а Esc очищает или закрывает.</value>
+  </data>
+  <data name="Assistant_OverlaySecondaryDescription" xml:space="preserve">
+    <value>Команды, выдающие текстовый результат, показывают его сразу под строкой состояния.</value>
+  </data>
+  <data name="Assistant_EscToClose" xml:space="preserve">
+    <value>Esc — закрыть</value>
+  </data>
+  <data name="Assistant_PromptPlaceholder" xml:space="preserve">
+    <value>Скопировать пути к последним 5 снимкам через ;</value>
+  </data>
+  <data name="Assistant_Submit" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Assistant_ProcessedOutput" xml:space="preserve">
+    <value>Обработанный результат</value>
+  </data>
+  <data name="Assistant_Results" xml:space="preserve">
+    <value>Результаты</value>
+  </data>
+  <data name="Assistant_ConfirmationRequired" xml:space="preserve">
+    <value>Требуется подтверждение</value>
+  </data>
+  <data name="Assistant_Confirm" xml:space="preserve">
+    <value>Подтвердить</value>
+  </data>
+  <data name="Assistant_Suggestions" xml:space="preserve">
+    <value>Подсказки</value>
+  </data>
+  <data name="Palette_Capture" xml:space="preserve">
+    <value>Захват</value>
+  </data>
+  <data name="Palette_SearchCaption" xml:space="preserve">
+    <value>Поиск настроенных рабочих процессов захвата. Enter запускает выбранный элемент.</value>
+  </data>
+  <data name="Palette_SearchPlaceholder" xml:space="preserve">
+    <value>Поиск рабочих процессов захвата</value>
+  </data>
+  <data name="ColorPicker_Subtitle" xml:space="preserve">
+    <value>Выберите цвет, отредактируйте значения или возьмите любой пиксель с экрана.</value>
+  </data>
+  <data name="ColorPicker_RecentColors" xml:space="preserve">
+    <value>Недавние цвета</value>
+  </data>
+  <data name="ColorPicker_NoRecentColors" xml:space="preserve">
+    <value>Недавних цветов пока нет.</value>
+  </data>
+  <data name="ColorPicker_Palette" xml:space="preserve">
+    <value>Палитра</value>
+  </data>
+  <data name="ColorPicker_Preview" xml:space="preserve">
+    <value>Предпросмотр</value>
+  </data>
+  <data name="ColorPicker_Previous" xml:space="preserve">
+    <value>Предыдущий</value>
+  </data>
+  <data name="ColorPicker_Current" xml:space="preserve">
+    <value>Текущий</value>
+  </data>
+  <data name="ColorPicker_PickFromScreen" xml:space="preserve">
+    <value>Взять с экрана</value>
+  </data>
+  <data name="ColorPicker_Values" xml:space="preserve">
+    <value>Значения</value>
+  </data>
+  <data name="ColorPicker_Red" xml:space="preserve">
+    <value>R</value>
+  </data>
+  <data name="ColorPicker_Green" xml:space="preserve">
+    <value>G</value>
+  </data>
+  <data name="ColorPicker_Blue" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="ColorPicker_Hue" xml:space="preserve">
+    <value>H</value>
+  </data>
+  <data name="ColorPicker_Saturation" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="ColorPicker_Brightness" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="ColorPicker_Cyan" xml:space="preserve">
+    <value>C</value>
+  </data>
+  <data name="ColorPicker_Magenta" xml:space="preserve">
+    <value>M</value>
+  </data>
+  <data name="ColorPicker_Yellow" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="ColorPicker_Black" xml:space="preserve">
+    <value>K</value>
+  </data>
+  <data name="ColorPicker_Hex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="ColorPicker_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="ColorPicker_CopyHex" xml:space="preserve">
+    <value>Копировать Hex</value>
+  </data>
+  <data name="ColorPicker_CopyRgb" xml:space="preserve">
+    <value>Копировать RGB</value>
+  </data>
+  <data name="ColorPicker_CopyHsb" xml:space="preserve">
+    <value>Копировать HSB</value>
+  </data>
+  <data name="ColorPicker_CopyCmyk" xml:space="preserve">
+    <value>Копировать CMYK</value>
+  </data>
+  <data name="CustomUploader_EditorDescription" xml:space="preserve">
+    <value>Настройте HTTP-загрузчик для изображений, файлов, текста или сокращения URL.</value>
+  </data>
+  <data name="CustomUploader_Import" xml:space="preserve">
+    <value>Импорт...</value>
+  </data>
+  <data name="CustomUploader_Export" xml:space="preserve">
+    <value>Экспорт...</value>
+  </data>
+  <data name="CustomUploader_Test" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="CustomUploader_SaveToPlugins" xml:space="preserve">
+    <value>Сохранить в плагины</value>
+  </data>
+  <data name="CustomUploader_BasicInformation" xml:space="preserve">
+    <value>Основная информация</value>
+  </data>
+  <data name="CustomUploader_NameLabel" xml:space="preserve">
+    <value>Имя *</value>
+  </data>
+  <data name="CustomUploader_NamePlaceholder" xml:space="preserve">
+    <value>Мой загрузчик</value>
+  </data>
+  <data name="CustomUploader_DestinationTypes" xml:space="preserve">
+    <value>Типы назначений *</value>
+  </data>
+  <data name="CustomUploader_ImageUploader" xml:space="preserve">
+    <value>Загрузчик изображений</value>
+  </data>
+  <data name="CustomUploader_TextUploader" xml:space="preserve">
+    <value>Загрузчик текста</value>
+  </data>
+  <data name="CustomUploader_FileUploader" xml:space="preserve">
+    <value>Загрузчик файлов</value>
+  </data>
+  <data name="CustomUploader_UrlShortener" xml:space="preserve">
+    <value>Сокращатель URL</value>
+  </data>
+  <data name="CustomUploader_UrlSharing" xml:space="preserve">
+    <value>Обмен URL</value>
+  </data>
+  <data name="CustomUploader_HttpRequest" xml:space="preserve">
+    <value>HTTP-запрос</value>
+  </data>
+  <data name="CustomUploader_Method" xml:space="preserve">
+    <value>Метод</value>
+  </data>
+  <data name="CustomUploader_RequestUrl" xml:space="preserve">
+    <value>URL запроса *</value>
+  </data>
+  <data name="CustomUploader_Headers" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+  <data name="CustomUploader_Add" xml:space="preserve">
+    <value>+ Добавить</value>
+  </data>
+  <data name="CustomUploader_Key" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="CustomUploader_Value" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="CustomUploader_Remove" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CustomUploader_UrlParameters" xml:space="preserve">
+    <value>Параметры URL</value>
+  </data>
+  <data name="CustomUploader_RequestBody" xml:space="preserve">
+    <value>Тело запроса</value>
+  </data>
+  <data name="CustomUploader_BodyType" xml:space="preserve">
+    <value>Тип тела</value>
+  </data>
+  <data name="CustomUploader_FileFormName" xml:space="preserve">
+    <value>Имя поля файла</value>
+  </data>
+  <data name="CustomUploader_FileFormNamePlaceholder" xml:space="preserve">
+    <value>file</value>
+  </data>
+  <data name="CustomUploader_FormArguments" xml:space="preserve">
+    <value>Аргументы формы</value>
+  </data>
+  <data name="CustomUploader_BodyData" xml:space="preserve">
+    <value>Данные тела (JSON/XML)</value>
+  </data>
+  <data name="CustomUploader_BodyDataPlaceholder" xml:space="preserve">
+    <value>Пример: тело JSON с содержимым файла</value>
+  </data>
+  <data name="CustomUploader_ResponseParsing" xml:space="preserve">
+    <value>Разбор ответа</value>
+  </data>
+  <data name="CustomUploader_UrlPattern" xml:space="preserve">
+    <value>Шаблон URL</value>
+  </data>
+  <data name="CustomUploader_ThumbnailUrl" xml:space="preserve">
+    <value>URL миниатюры</value>
+  </data>
+  <data name="CustomUploader_DeletionUrl" xml:space="preserve">
+    <value>URL удаления</value>
+  </data>
+  <data name="CustomUploader_ErrorMessage" xml:space="preserve">
+    <value>Сообщение об ошибке</value>
+  </data>
+  <data name="Debug_OpenLogsFolder" xml:space="preserve">
+    <value>Открыть папку журналов</value>
+  </data>
+  <data name="Debug_OpenSettingsFolder" xml:space="preserve">
+    <value>Открыть папку настроек</value>
+  </data>
+  <data name="Debug_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="Debug_Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="Debug_Upload" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="Debug_SecretStoreDiagnostics" xml:space="preserve">
+    <value>Диагностика хранилища секретов</value>
+  </data>
+  <data name="OpenImageChoice_AlreadyOpen" xml:space="preserve">
+    <value>Изображение уже открыто</value>
+  </data>
+  <data name="OpenImageChoice_Prompt" xml:space="preserve">
+    <value>Заменить текущее изображение или добавить новое изображение как фигуру?</value>
+  </data>
+  <data name="OpenImageChoice_AddAsShape" xml:space="preserve">
+    <value>Добавить как фигуру</value>
+  </data>
+  <data name="OpenImageChoice_ReplaceImage" xml:space="preserve">
+    <value>Заменить изображение</value>
+  </data>
+  <data name="FFmpeg_OptionsTitle" xml:space="preserve">
+    <value>Параметры записи FFmpeg</value>
+  </data>
+  <data name="FFmpeg_OptionsDescription" xml:space="preserve">
+    <value>Настройте поведение FFmpeg для каждого рабочего процесса, включая путь переопределения исполняемого файла, используемый для записи на основе FFmpeg и преобразования в GIF.</value>
+  </data>
+  <data name="FFmpeg_OverridePath" xml:space="preserve">
+    <value>Переопределить путь к исполняемому файлу FFmpeg</value>
+  </data>
+  <data name="FFmpeg_ExecutablePath" xml:space="preserve">
+    <value>Путь к исполняемому файлу:</value>
+  </data>
+  <data name="FFmpeg_VideoSource" xml:space="preserve">
+    <value>Источник видео:</value>
+  </data>
+  <data name="FFmpeg_AudioSource" xml:space="preserve">
+    <value>Источник аудио:</value>
+  </data>
+  <data name="FFmpeg_VideoCodec" xml:space="preserve">
+    <value>Видеокодек:</value>
+  </data>
+  <data name="FFmpeg_AudioCodec" xml:space="preserve">
+    <value>Аудиокодек:</value>
+  </data>
+  <data name="FFmpeg_ExtraArgs" xml:space="preserve">
+    <value>Доп. аргументы:</value>
+  </data>
+  <data name="FFmpeg_ExtraArgsPlaceholder" xml:space="preserve">
+    <value>Дополнительные аргументы ffmpeg</value>
+  </data>
+  <data name="FFmpeg_UseCustomFullCommand" xml:space="preserve">
+    <value>Использовать собственную полную команду</value>
+  </data>
+  <data name="FFmpeg_CustomCommandPlaceholder" xml:space="preserve">
+    <value>Полная команда ffmpeg при переопределении</value>
+  </data>
+  <data name="FFmpeg_Video" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="FFmpeg_X264Preset" xml:space="preserve">
+    <value>Пресет x264:</value>
+  </data>
+  <data name="FFmpeg_X264Crf" xml:space="preserve">
+    <value>CRF x264:</value>
+  </data>
+  <data name="FFmpeg_X264Bitrate" xml:space="preserve">
+    <value>Битрейт x264 (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_UseBitrateInsteadOfCrf" xml:space="preserve">
+    <value>Использовать битрейт вместо CRF</value>
+  </data>
+  <data name="FFmpeg_VPxBitrate" xml:space="preserve">
+    <value>Битрейт VPx (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_XvidQScale" xml:space="preserve">
+    <value>QScale XviD:</value>
+  </data>
+  <data name="FFmpeg_NvencPreset" xml:space="preserve">
+    <value>Пресет NVENC:</value>
+  </data>
+  <data name="FFmpeg_NvencTune" xml:space="preserve">
+    <value>Настройка NVENC:</value>
+  </data>
+  <data name="FFmpeg_NvencBitrate" xml:space="preserve">
+    <value>Битрейт NVENC (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_GifPaletteStats" xml:space="preserve">
+    <value>Статистика палитры GIF:</value>
+  </data>
+  <data name="FFmpeg_GifDither" xml:space="preserve">
+    <value>Дизеринг GIF:</value>
+  </data>
+  <data name="FFmpeg_GifBayerScale" xml:space="preserve">
+    <value>Шкала Байера GIF:</value>
+  </data>
+  <data name="FFmpeg_AmfUsage" xml:space="preserve">
+    <value>Использование AMF:</value>
+  </data>
+  <data name="FFmpeg_AmfQuality" xml:space="preserve">
+    <value>Качество AMF:</value>
+  </data>
+  <data name="FFmpeg_AmfBitrate" xml:space="preserve">
+    <value>Битрейт AMF (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_QsvPreset" xml:space="preserve">
+    <value>Пресет QSV:</value>
+  </data>
+  <data name="FFmpeg_QsvBitrate" xml:space="preserve">
+    <value>Битрейт QSV (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_Audio" xml:space="preserve">
+    <value>Аудио</value>
+  </data>
+  <data name="FFmpeg_AacBitrate" xml:space="preserve">
+    <value>Битрейт AAC (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_OpusBitrate" xml:space="preserve">
+    <value>Битрейт Opus (кбит/с):</value>
+  </data>
+  <data name="FFmpeg_VorbisQScale" xml:space="preserve">
+    <value>QScale Vorbis:</value>
+  </data>
+  <data name="FFmpeg_Mp3QScale" xml:space="preserve">
+    <value>QScale MP3:</value>
+  </data>
+  <data name="HashCheck_Title" xml:space="preserve">
+    <value>Проверка хеша</value>
+  </data>
+  <data name="HashCheck_SelectFilePlaceholder" xml:space="preserve">
+    <value>Выберите файл или перетащите его...</value>
+  </data>
+  <data name="HashCheck_CompareTwoFiles" xml:space="preserve">
+    <value>Сравнить два файла</value>
+  </data>
+  <data name="HashCheck_SelectSecondFilePlaceholder" xml:space="preserve">
+    <value>Выберите второй файл...</value>
+  </data>
+  <data name="HashCheck_HashType" xml:space="preserve">
+    <value>Тип хеша:</value>
+  </data>
+  <data name="HashCheck_Result" xml:space="preserve">
+    <value>Результат:</value>
+  </data>
+  <data name="HashCheck_Target" xml:space="preserve">
+    <value>Цель:</value>
+  </data>
+  <data name="HashCheck_TargetPlaceholder" xml:space="preserve">
+    <value>Вставьте ожидаемый хеш сюда для проверки...</value>
+  </data>
+  <data name="HashCheck_Check" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="HashCheck_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="HotkeySettings_Title" xml:space="preserve">
+    <value>Настройки горячих клавиш</value>
+  </data>
+  <data name="HotkeySettings_GlobalHotkeyDelivery" xml:space="preserve">
+    <value>Доставка глобальных горячих клавиш</value>
+  </data>
+  <data name="HotkeySettings_Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="HotkeySettings_Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="HotkeySettings_Duplicate" xml:space="preserve">
+    <value>Дублировать</value>
+  </data>
+  <data name="HotkeySettings_MoveUp" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="HotkeySettings_MoveDown" xml:space="preserve">
+    <value>Вниз</value>
+  </data>
+  <data name="HotkeySettings_Reset" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="HotkeySettings_ViewDebugInfo" xml:space="preserve">
+    <value>Показать отладочную информацию</value>
+  </data>
+  <data name="HotkeySettings_DebugLog" xml:space="preserve">
+    <value>ЖУРНАЛ ОТЛАДКИ</value>
+  </data>
+  <data name="TaskSettings_Capture" xml:space="preserve">
+    <value>Захват</value>
+  </data>
+  <data name="TaskSettings_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TaskSettings_Upload" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="TaskSettings_Notifications" xml:space="preserve">
+    <value>Уведомления</value>
+  </data>
+  <data name="TaskSettings_UseModernCapture" xml:space="preserve">
+    <value>Использовать современный захват экрана (Direct3D11)</value>
+  </data>
+  <data name="TaskSettings_PreferredLinuxRegionSelector" xml:space="preserve">
+    <value>Предпочитаемый выбор области Linux:</value>
+  </data>
+  <data name="TaskSettings_LinuxRegionSelectorNote" xml:space="preserve">
+    <value>Автоматически сохраняет текущее безопасное резервное поведение Linux и предпочитает конкретный нативный выбор области только по запросу.</value>
+  </data>
+  <data name="TaskSettings_PreferredMacOSRegionSelector" xml:space="preserve">
+    <value>Предпочитаемый выбор области macOS:</value>
+  </data>
+  <data name="TaskSettings_MacOSRegionSelectorNote" xml:space="preserve">
+    <value>Автоматически следует настройкам приложения. Выберите здесь оверлей XerahS или нативное перекрестие macOS, чтобы переопределить только этот рабочий процесс.</value>
+  </data>
+  <data name="TaskSettings_ShowCursor" xml:space="preserve">
+    <value>Показывать курсор на снимках</value>
+  </data>
+  <data name="TaskSettings_ScreenshotDelay" xml:space="preserve">
+    <value>Задержка снимка:</value>
+  </data>
+  <data name="TaskSettings_WindowTitle" xml:space="preserve">
+    <value>Заголовок окна:</value>
+  </data>
+  <data name="TaskSettings_WindowTitlePlaceholder" xml:space="preserve">
+    <value>Заголовок окна для захвата (задание CustomWindow)</value>
+  </data>
+  <data name="TaskSettings_CaptureTransparency" xml:space="preserve">
+    <value>Захватывать прозрачность</value>
+  </data>
+  <data name="TaskSettings_CaptureShadow" xml:space="preserve">
+    <value>Захватывать тень окна</value>
+  </data>
+  <data name="TaskSettings_CaptureClientArea" xml:space="preserve">
+    <value>Захватывать клиентскую область (без рамки окна)</value>
+  </data>
+  <data name="TaskSettings_AutoHideTaskbar" xml:space="preserve">
+    <value>Автоматически скрывать панель задач при захвате</value>
+  </data>
+  <data name="TaskSettings_AfterCaptureDescription" xml:space="preserve">
+    <value>Выберите действия, выполняемые автоматически после захвата</value>
+  </data>
+  <data name="TaskSettings_ApplyImageEffects" xml:space="preserve">
+    <value>Применить эффекты изображения</value>
+  </data>
+  <data name="TaskSettings_ShowAfterCaptureWindow" xml:space="preserve">
+    <value>Показывать окно после захвата</value>
+  </data>
+  <data name="TaskSettings_OcrTextRecognition" xml:space="preserve">
+    <value>Распознавание текста OCR</value>
+  </data>
+  <data name="TaskSettings_IndexFolder" xml:space="preserve">
+    <value>Индексировать папку</value>
+  </data>
+  <data name="TaskSettings_Folder" xml:space="preserve">
+    <value>Папка:</value>
+  </data>
+  <data name="TaskSettings_FolderToIndex" xml:space="preserve">
+    <value>Папка для индексации</value>
+  </data>
+  <data name="TaskSettings_Output" xml:space="preserve">
+    <value>Вывод:</value>
+  </data>
+  <data name="TaskSettings_MaxDepth" xml:space="preserve">
+    <value>Макс. глубина:</value>
+  </data>
+  <data name="TaskSettings_SkipFiles" xml:space="preserve">
+    <value>Пропускать файлы</value>
+  </data>
+  <data name="TaskSettings_ShowSizeInfo" xml:space="preserve">
+    <value>Показывать размер</value>
+  </data>
+  <data name="TaskSettings_AddFooter" xml:space="preserve">
+    <value>Добавлять подвал</value>
+  </data>
+  <data name="TaskSettings_Indentation" xml:space="preserve">
+    <value>Отступ:</value>
+  </data>
+  <data name="TaskSettings_HtmlOptions" xml:space="preserve">
+    <value>Параметры HTML</value>
+  </data>
+  <data name="TaskSettings_CssPath" xml:space="preserve">
+    <value>Путь к CSS:</value>
+  </data>
+  <data name="TaskSettings_LimitDisplayPath" xml:space="preserve">
+    <value>Ограничить отображаемый путь корневой папкой</value>
+  </data>
+  <data name="TaskSettings_XmlJsonOptions" xml:space="preserve">
+    <value>Параметры XML / JSON</value>
+  </data>
+  <data name="TaskSettings_WriteFileInfoAsAttribute" xml:space="preserve">
+    <value>Записывать информацию о файле как атрибут (XML)</value>
+  </data>
+  <data name="TaskSettings_FileNaming" xml:space="preserve">
+    <value>Именование файлов</value>
+  </data>
+  <data name="TaskSettings_NamePattern" xml:space="preserve">
+    <value>Шаблон имени:</value>
+  </data>
+  <data name="TaskSettings_ActiveWindowNamePattern" xml:space="preserve">
+    <value>Шаблон имени активного окна:</value>
+  </data>
+  <data name="TaskSettings_UseNamePatternForFileUploaders" xml:space="preserve">
+    <value>Использовать шаблон имени для файловых загрузчиков</value>
+  </data>
+  <data name="TaskSettings_ReplaceProblematicCharacters" xml:space="preserve">
+    <value>Заменять потенциально проблемные символы</value>
+  </data>
+  <data name="TaskSettings_PerformRegexReplace" xml:space="preserve">
+    <value>Выполнять замену по регулярному выражению в URL</value>
+  </data>
+  <data name="TaskSettings_RegexPattern" xml:space="preserve">
+    <value>Регулярное выражение:</value>
+  </data>
+  <data name="TaskSettings_Replacement" xml:space="preserve">
+    <value>Замена:</value>
+  </data>
+  <data name="TaskSettings_Destinations" xml:space="preserve">
+    <value>Назначения</value>
+  </data>
+  <data name="TaskSettings_SelectDestination" xml:space="preserve">
+    <value>Выберите назначение для этой задачи:</value>
+  </data>
+  <data name="TaskSettings_DestinationToolTip" xml:space="preserve">
+    <value>Авто пробует ваши настроенные загрузчики по порядку, пока один не сработает. Любое другое назначение загружает только в этот загрузчик (настройте его в настройках назначений). См. документацию для подробностей о загрузке изображений и резервном поведении.</value>
+  </data>
+  <data name="TaskSettings_ClipboardUpload" xml:space="preserve">
+    <value>Загрузка из буфера обмена</value>
+  </data>
+  <data name="TaskSettings_UploadUrlContents" xml:space="preserve">
+    <value>Загружать содержимое URL</value>
+  </data>
+  <data name="TaskSettings_ShortenUrl" xml:space="preserve">
+    <value>Сокращать URL</value>
+  </data>
+  <data name="TaskSettings_AfterUploadDescription" xml:space="preserve">
+    <value>Выберите действия, выполняемые автоматически после загрузки</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterCapture" xml:space="preserve">
+    <value>Проигрывать звук после захвата</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterUpload" xml:space="preserve">
+    <value>Проигрывать звук после загрузки</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterAction" xml:space="preserve">
+    <value>Проигрывать звук после действия</value>
+  </data>
+  <data name="TaskSettings_IncludeToastNotification" xml:space="preserve">
+    <value>Показывать всплывающее уведомление</value>
+  </data>
+  <data name="TaskSettings_Duration" xml:space="preserve">
+    <value>Длительность:</value>
+  </data>
+  <data name="TaskSettings_FadeDuration" xml:space="preserve">
+    <value>Длительность затухания:</value>
+  </data>
+  <data name="TaskSettings_Placement" xml:space="preserve">
+    <value>Расположение:</value>
+  </data>
+  <data name="TaskSettings_Size" xml:space="preserve">
+    <value>Размер:</value>
+  </data>
+  <data name="TaskSettings_DimensionSeparator" xml:space="preserve">
+    <value>×</value>
+  </data>
+  <data name="TaskSettings_AutoHideToast" xml:space="preserve">
+    <value>Автоматически скрывать всплывающее уведомление</value>
+  </data>
+  <data name="TaskSettings_LeftClick" xml:space="preserve">
+    <value>Левый клик:</value>
+  </data>
+  <data name="TaskSettings_MiddleClick" xml:space="preserve">
+    <value>Средний клик:</value>
+  </data>
+  <data name="TaskSettings_RightClick" xml:space="preserve">
+    <value>Правый клик:</value>
+  </data>
+  <data name="TaskSettings_Sound" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="TaskSettings_UseCustomCaptureSound" xml:space="preserve">
+    <value>Использовать свой звук захвата</value>
+  </data>
+  <data name="TaskSettings_Path" xml:space="preserve">
+    <value>Путь:</value>
+  </data>
+  <data name="TaskSettings_AdvancedProperties" xml:space="preserve">
+    <value>Дополнительные свойства</value>
+  </data>
+  <data name="TaskSettings_ScreenRecorder" xml:space="preserve">
+    <value>Запись экрана</value>
+  </data>
+  <data name="TaskSettings_Fps" xml:space="preserve">
+    <value>FPS:</value>
+  </data>
+  <data name="TaskSettings_SecondsDisable" xml:space="preserve">
+    <value>секунд (0 — отключить)</value>
+  </data>
+  <data name="TaskSettings_StartDelay" xml:space="preserve">
+    <value>Начальная задержка:</value>
+  </data>
+  <data name="TaskSettings_RecordingIntent" xml:space="preserve">
+    <value>Цель записи:</value>
+  </data>
+  <data name="TaskSettings_VideoCodec" xml:space="preserve">
+    <value>Видеокодек:</value>
+  </data>
+  <data name="TaskSettings_PreferredLinuxRecordingBackend" xml:space="preserve">
+    <value>Предпочитаемый бэкенд записи Linux:</value>
+  </data>
+  <data name="TaskSettings_FfmpegTools" xml:space="preserve">
+    <value>Инструменты FFmpeg</value>
+  </data>
+  <data name="TaskSettings_FfmpegToolsDescription" xml:space="preserve">
+    <value>Настройте параметры FFmpeg для записи и преобразования в GIF для каждого рабочего процесса, включая путь переопределения к собственному исполняемому файлу FFmpeg.</value>
+  </data>
+  <data name="TaskSettings_DownloadFfmpeg" xml:space="preserve">
+    <value>Скачать FFmpeg...</value>
+  </data>
+  <data name="TaskSettings_ConfigureFfmpeg" xml:space="preserve">
+    <value>Настроить FFmpeg / путь переопределения...</value>
+  </data>
+  <data name="TaskSettings_LinuxRecordingDiagnostics" xml:space="preserve">
+    <value>Диагностика записи Linux</value>
+  </data>
+  <data name="TaskSettings_LinuxDiagnosticsDescription" xml:space="preserve">
+    <value>Выполните проверку совместимости для бэкендов записи Wayland/X11, портальных интерфейсов и необходимых нативных инструментов.</value>
+  </data>
+  <data name="TaskSettings_RunLinuxDiagnostics" xml:space="preserve">
+    <value>Запустить диагностику записи Linux</value>
+  </data>
+  <data name="SendToPrompt_Title" xml:space="preserve">
+    <value>Как XerahS должен обработать отправленные файлы?</value>
+  </data>
+  <data name="SendToPrompt_Description" xml:space="preserve">
+    <value>Выберите действие до того, как XerahS начнёт обработку этого пакета «Отправить в».</value>
+  </data>
+  <data name="SendToPrompt_Selection" xml:space="preserve">
+    <value>Выбор</value>
+  </data>
+  <data name="SendToPrompt_Classification" xml:space="preserve">
+    <value>Классификация</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy" xml:space="preserve">
+    <value>Политика папок</value>
+  </data>
+  <data name="SendToPrompt_ImageBatchPolicy" xml:space="preserve">
+    <value>Политика пакета изображений</value>
+  </data>
+  <data name="SendToPrompt_Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="SendToPrompt_ActionsDescription" xml:space="preserve">
+    <value>Основные действия всегда доступны. Контекстные действия появляются только если отправленные элементы их поддерживают.</value>
+  </data>
+  <data name="SendToPrompt_CancelHint" xml:space="preserve">
+    <value>Закрытие диалога отменяет этот запрос «Отправить в».</value>
+  </data>
+  <data name="FileTypeSelector_HandleAllFileTypes" xml:space="preserve">
+    <value>Обрабатывать все типы файлов для этой категории</value>
+  </data>
+  <data name="FileTypeSelector_SpecificFileTypes" xml:space="preserve">
+    <value>Конкретные типы файлов:</value>
+  </data>
+  <data name="FileTypeSelector_SelectFileTypes" xml:space="preserve">
+    <value>Выберите, какие типы файлов должен обрабатывать этот экземпляр</value>
+  </data>
+  <data name="FileTypeSelector_SelectedFileTypes" xml:space="preserve">
+    <value>Выбранные типы файлов:</value>
+  </data>
+  <data name="FileTypeSelector_CurrentScope" xml:space="preserve">
+    <value>Текущая область типов файлов:</value>
+  </data>
+  <data name="HotkeySelection_Nav" xml:space="preserve">
+    <value>Навигация</value>
+  </data>
+  <data name="HotkeySelection_Tray" xml:space="preserve">
+    <value>Трей</value>
+  </data>
+  <data name="App_AboutXerahS" xml:space="preserve">
+    <value>О XerahS</value>
+  </data>
+  <data name="App_Preferences" xml:space="preserve">
+    <value>Настройки...</value>
+  </data>
+  <data name="App_Edit" xml:space="preserve">
+    <value>Изменить...</value>
+  </data>
+  <data name="App_EditAnnotations" xml:space="preserve">
+    <value>Изменить аннотации</value>
+  </data>
+  <data name="App_OpenFile" xml:space="preserve">
+    <value>Открыть файл</value>
+  </data>
+  <data name="App_Upload" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="App_ShowInExplorer" xml:space="preserve">
+    <value>Показать в проводнике</value>
+  </data>
+  <data name="App_CopyPath" xml:space="preserve">
+    <value>Копировать путь</value>
+  </data>
+  <data name="App_CopyUrl" xml:space="preserve">
+    <value>Копировать URL</value>
+  </data>
+  <data name="App_CopyMarkdownImage" xml:space="preserve">
+    <value>Копировать изображение в Markdown</value>
+  </data>
+  <data name="App_CopyImageToClipboard" xml:space="preserve">
+    <value>Копировать изображение в буфер обмена</value>
+  </data>
+  <data name="App_CopyErrors" xml:space="preserve">
+    <value>Копировать ошибки</value>
+  </data>
+  <data name="App_OpenUrl" xml:space="preserve">
+    <value>Открыть URL</value>
+  </data>
+  <data name="App_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
 </root>

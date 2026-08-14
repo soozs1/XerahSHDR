@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XerahS.UI.ViewModels"
+             xmlns:local="using:XerahS.UI.Markup"
              xmlns:views="using:XerahS.UI.Views.Controls"
              xmlns:audit="clr-namespace:XerahS.UI.Auditing;assembly=XerahS.UI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
@@ -15,7 +16,7 @@
 
     <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="24">
         <!-- Header -->
-        <TextBlock Grid.Row="0" Text="Hotkey Settings" Theme="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,24"/>
+        <TextBlock Grid.Row="0" Text="{local:Localize HotkeySettings_Title}" Theme="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,24"/>
 
         <!-- XIP0079 P1: portal / fallback delivery state banner -->
         <Border Grid.Row="1"
@@ -27,7 +28,7 @@
                 BorderBrush="{DynamicResource SystemFillColorCautionBrush}"
                 BorderThickness="1">
             <StackPanel Spacing="4">
-                <TextBlock Text="Global hotkey delivery"
+                <TextBlock Text="{local:Localize HotkeySettings_GlobalHotkeyDelivery}"
                            Theme="{StaticResource BodyStrongTextBlockStyle}"/>
                 <TextBlock Text="{Binding HotkeyBackendName}"
                            Opacity="0.8"/>
@@ -42,20 +43,20 @@
             <Border Grid.Row="0" Padding="16" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" 
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Margin="0,0,0,16">
                 <StackPanel Spacing="8" Orientation="Horizontal">
-                    <Button Classes="hotkeyToolbarButton" Content="Add" Command="{Binding AddCommand}" AutomationProperties.Name="Add Hotkey"/>
-                    <Button Classes="hotkeyToolbarButton" Content="Remove" Command="{Binding RemoveCommand}" AutomationProperties.Name="Remove Hotkey"/>
-                    <Button Classes="hotkeyToolbarButton" Content="Duplicate" Command="{Binding DuplicateCommand}" AutomationProperties.Name="Duplicate Hotkey"/>
+                    <Button Classes="hotkeyToolbarButton" Content="{local:Localize HotkeySettings_Add}" Command="{Binding AddCommand}" AutomationProperties.Name="Add Hotkey"/>
+                    <Button Classes="hotkeyToolbarButton" Content="{local:Localize HotkeySettings_Remove}" Command="{Binding RemoveCommand}" AutomationProperties.Name="Remove Hotkey"/>
+                    <Button Classes="hotkeyToolbarButton" Content="{local:Localize HotkeySettings_Duplicate}" Command="{Binding DuplicateCommand}" AutomationProperties.Name="Duplicate Hotkey"/>
                     <Separator Classes="vertical" Height="20"/>
                     <Button Classes="hotkeyToolbarButton" Command="{Binding MoveUpCommand}" AutomationProperties.Name="Move Hotkey Up">
-                        <TextBlock Text="Move Up"
+                        <TextBlock Text="{local:Localize HotkeySettings_MoveUp}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                     </Button>
                     <Button Classes="hotkeyToolbarButton" Command="{Binding MoveDownCommand}" AutomationProperties.Name="Move Hotkey Down">
-                        <TextBlock Text="Move Down"
+                        <TextBlock Text="{local:Localize HotkeySettings_MoveDown}"
                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                     </Button>
                     <Separator Classes="vertical" Height="20"/>
-                    <Button Classes="hotkeyToolbarButton" Content="Reset" Command="{Binding ResetCommand}" AutomationProperties.Name="Reset Hotkeys"/>
+                    <Button Classes="hotkeyToolbarButton" Content="{local:Localize HotkeySettings_Reset}" Command="{Binding ResetCommand}" AutomationProperties.Name="Reset Hotkeys"/>
                 </StackPanel>
             </Border>
 
@@ -83,7 +84,7 @@
         <!-- Debug Section -->
         <StackPanel Grid.Row="3" Margin="0,16,0,0">
              <CheckBox x:Name="ShowDebugCheckBox"
-                       Content="View Debug Info" 
+                       Content="{local:Localize HotkeySettings_ViewDebugInfo}" 
                        Margin="0,0,0,8"
                        audit:UiAudit.IsWiredManual="True"
                        AutomationProperties.Name="Show Debug Info"/>
@@ -96,7 +97,7 @@
                      Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
                 <Grid RowDefinitions="Auto,*">
                     <TextBlock Grid.Row="0" 
-                               Text="DEBUG LOG" 
+                               Text="{local:Localize HotkeySettings_DebugLog}" 
                                Foreground="{DynamicResource SystemFillColorCautionBrush}" 
                                FontWeight="SemiBold" 
                                Margin="8"/>

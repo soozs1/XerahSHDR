@@ -2302,4 +2302,757 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="PinToScreenStartup_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Assistant_OverlayTitle" xml:space="preserve">
+    <value>Assistant</value>
+  </data>
+  <data name="Assistant_OverlayCaption" xml:space="preserve">
+    <value>Ask XerahS to find, open, OCR, upload, or copy capture paths.</value>
+  </data>
+  <data name="Assistant_OverlayDescription" xml:space="preserve">
+    <value>Use natural language. Enter runs the request, and Esc clears or closes.</value>
+  </data>
+  <data name="Assistant_OverlaySecondaryDescription" xml:space="preserve">
+    <value>Commands that produce text output show it directly below the status line.</value>
+  </data>
+  <data name="Assistant_EscToClose" xml:space="preserve">
+    <value>Esc to close</value>
+  </data>
+  <data name="Assistant_PromptPlaceholder" xml:space="preserve">
+    <value>Copy the last 5 screenshot paths separated by ;</value>
+  </data>
+  <data name="Assistant_Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Assistant_ProcessedOutput" xml:space="preserve">
+    <value>Processed output</value>
+  </data>
+  <data name="Assistant_Results" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Assistant_ConfirmationRequired" xml:space="preserve">
+    <value>Confirmation required</value>
+  </data>
+  <data name="Assistant_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Assistant_Suggestions" xml:space="preserve">
+    <value>Suggestions</value>
+  </data>
+  <data name="Palette_Capture" xml:space="preserve">
+    <value>Capture</value>
+  </data>
+  <data name="Palette_SearchCaption" xml:space="preserve">
+    <value>Search configured capture workflows. Enter runs the selected item.</value>
+  </data>
+  <data name="Palette_SearchPlaceholder" xml:space="preserve">
+    <value>Search capture workflows</value>
+  </data>
+  <data name="ColorPicker_Subtitle" xml:space="preserve">
+    <value>Pick a color, edit values, or sample any pixel on screen.</value>
+  </data>
+  <data name="ColorPicker_RecentColors" xml:space="preserve">
+    <value>Recent colors</value>
+  </data>
+  <data name="ColorPicker_NoRecentColors" xml:space="preserve">
+    <value>No recent colors yet.</value>
+  </data>
+  <data name="ColorPicker_Palette" xml:space="preserve">
+    <value>Palette</value>
+  </data>
+  <data name="ColorPicker_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ColorPicker_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="ColorPicker_Current" xml:space="preserve">
+    <value>Current</value>
+  </data>
+  <data name="ColorPicker_PickFromScreen" xml:space="preserve">
+    <value>Pick from screen</value>
+  </data>
+  <data name="ColorPicker_Values" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="ColorPicker_Red" xml:space="preserve">
+    <value>R</value>
+  </data>
+  <data name="ColorPicker_Green" xml:space="preserve">
+    <value>G</value>
+  </data>
+  <data name="ColorPicker_Blue" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="ColorPicker_Hue" xml:space="preserve">
+    <value>H</value>
+  </data>
+  <data name="ColorPicker_Saturation" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="ColorPicker_Brightness" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="ColorPicker_Cyan" xml:space="preserve">
+    <value>C</value>
+  </data>
+  <data name="ColorPicker_Magenta" xml:space="preserve">
+    <value>M</value>
+  </data>
+  <data name="ColorPicker_Yellow" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="ColorPicker_Black" xml:space="preserve">
+    <value>K</value>
+  </data>
+  <data name="ColorPicker_Hex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="ColorPicker_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="ColorPicker_CopyHex" xml:space="preserve">
+    <value>Copy Hex</value>
+  </data>
+  <data name="ColorPicker_CopyRgb" xml:space="preserve">
+    <value>Copy RGB</value>
+  </data>
+  <data name="ColorPicker_CopyHsb" xml:space="preserve">
+    <value>Copy HSB</value>
+  </data>
+  <data name="ColorPicker_CopyCmyk" xml:space="preserve">
+    <value>Copy CMYK</value>
+  </data>
+  <data name="CustomUploader_EditorDescription" xml:space="preserve">
+    <value>Configure HTTP-based custom uploader for images, files, text, or URL shortening.</value>
+  </data>
+  <data name="CustomUploader_Import" xml:space="preserve">
+    <value>Import...</value>
+  </data>
+  <data name="CustomUploader_Export" xml:space="preserve">
+    <value>Export...</value>
+  </data>
+  <data name="CustomUploader_Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="CustomUploader_SaveToPlugins" xml:space="preserve">
+    <value>Save to Plugins</value>
+  </data>
+  <data name="CustomUploader_BasicInformation" xml:space="preserve">
+    <value>Basic Information</value>
+  </data>
+  <data name="CustomUploader_NameLabel" xml:space="preserve">
+    <value>Name *</value>
+  </data>
+  <data name="CustomUploader_NamePlaceholder" xml:space="preserve">
+    <value>My Custom Uploader</value>
+  </data>
+  <data name="CustomUploader_DestinationTypes" xml:space="preserve">
+    <value>Destination Types *</value>
+  </data>
+  <data name="CustomUploader_ImageUploader" xml:space="preserve">
+    <value>Image Uploader</value>
+  </data>
+  <data name="CustomUploader_TextUploader" xml:space="preserve">
+    <value>Text Uploader</value>
+  </data>
+  <data name="CustomUploader_FileUploader" xml:space="preserve">
+    <value>File Uploader</value>
+  </data>
+  <data name="CustomUploader_UrlShortener" xml:space="preserve">
+    <value>URL Shortener</value>
+  </data>
+  <data name="CustomUploader_UrlSharing" xml:space="preserve">
+    <value>URL Sharing</value>
+  </data>
+  <data name="CustomUploader_HttpRequest" xml:space="preserve">
+    <value>HTTP Request</value>
+  </data>
+  <data name="CustomUploader_Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="CustomUploader_RequestUrl" xml:space="preserve">
+    <value>Request URL *</value>
+  </data>
+  <data name="CustomUploader_Headers" xml:space="preserve">
+    <value>Headers</value>
+  </data>
+  <data name="CustomUploader_Add" xml:space="preserve">
+    <value>+ Add</value>
+  </data>
+  <data name="CustomUploader_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="CustomUploader_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="CustomUploader_Remove" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CustomUploader_UrlParameters" xml:space="preserve">
+    <value>URL Parameters</value>
+  </data>
+  <data name="CustomUploader_RequestBody" xml:space="preserve">
+    <value>Request Body</value>
+  </data>
+  <data name="CustomUploader_BodyType" xml:space="preserve">
+    <value>Body Type</value>
+  </data>
+  <data name="CustomUploader_FileFormName" xml:space="preserve">
+    <value>File Form Name</value>
+  </data>
+  <data name="CustomUploader_FileFormNamePlaceholder" xml:space="preserve">
+    <value>file</value>
+  </data>
+  <data name="CustomUploader_FormArguments" xml:space="preserve">
+    <value>Form Arguments</value>
+  </data>
+  <data name="CustomUploader_BodyData" xml:space="preserve">
+    <value>Body Data (JSON/XML)</value>
+  </data>
+  <data name="CustomUploader_BodyDataPlaceholder" xml:space="preserve">
+    <value>Example: JSON body with file content</value>
+  </data>
+  <data name="CustomUploader_ResponseParsing" xml:space="preserve">
+    <value>Response Parsing</value>
+  </data>
+  <data name="CustomUploader_UrlPattern" xml:space="preserve">
+    <value>URL Pattern</value>
+  </data>
+  <data name="CustomUploader_ThumbnailUrl" xml:space="preserve">
+    <value>Thumbnail URL</value>
+  </data>
+  <data name="CustomUploader_DeletionUrl" xml:space="preserve">
+    <value>Deletion URL</value>
+  </data>
+  <data name="CustomUploader_ErrorMessage" xml:space="preserve">
+    <value>Error Message</value>
+  </data>
+  <data name="Debug_OpenLogsFolder" xml:space="preserve">
+    <value>Open Logs Folder</value>
+  </data>
+  <data name="Debug_OpenSettingsFolder" xml:space="preserve">
+    <value>Open Settings Folder</value>
+  </data>
+  <data name="Debug_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Debug_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Debug_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="Debug_SecretStoreDiagnostics" xml:space="preserve">
+    <value>Secret Store Diagnostics</value>
+  </data>
+  <data name="OpenImageChoice_AlreadyOpen" xml:space="preserve">
+    <value>An image is already open</value>
+  </data>
+  <data name="OpenImageChoice_Prompt" xml:space="preserve">
+    <value>Do you want to replace the current image or add the new image as a shape?</value>
+  </data>
+  <data name="OpenImageChoice_AddAsShape" xml:space="preserve">
+    <value>Add as Shape</value>
+  </data>
+  <data name="OpenImageChoice_ReplaceImage" xml:space="preserve">
+    <value>Replace Image</value>
+  </data>
+  <data name="FFmpeg_OptionsTitle" xml:space="preserve">
+    <value>FFmpeg Recording Options</value>
+  </data>
+  <data name="FFmpeg_OptionsDescription" xml:space="preserve">
+    <value>Configure per-workflow FFmpeg behavior, including the executable override path used by FFmpeg-based recording and GIF conversion.</value>
+  </data>
+  <data name="FFmpeg_OverridePath" xml:space="preserve">
+    <value>Override FFmpeg executable path</value>
+  </data>
+  <data name="FFmpeg_ExecutablePath" xml:space="preserve">
+    <value>Executable path:</value>
+  </data>
+  <data name="FFmpeg_VideoSource" xml:space="preserve">
+    <value>Video source:</value>
+  </data>
+  <data name="FFmpeg_AudioSource" xml:space="preserve">
+    <value>Audio source:</value>
+  </data>
+  <data name="FFmpeg_VideoCodec" xml:space="preserve">
+    <value>Video codec:</value>
+  </data>
+  <data name="FFmpeg_AudioCodec" xml:space="preserve">
+    <value>Audio codec:</value>
+  </data>
+  <data name="FFmpeg_ExtraArgs" xml:space="preserve">
+    <value>Extra args:</value>
+  </data>
+  <data name="FFmpeg_ExtraArgsPlaceholder" xml:space="preserve">
+    <value>Additional ffmpeg arguments</value>
+  </data>
+  <data name="FFmpeg_UseCustomFullCommand" xml:space="preserve">
+    <value>Use custom full command</value>
+  </data>
+  <data name="FFmpeg_CustomCommandPlaceholder" xml:space="preserve">
+    <value>Full ffmpeg command when overriding</value>
+  </data>
+  <data name="FFmpeg_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="FFmpeg_X264Preset" xml:space="preserve">
+    <value>x264 preset:</value>
+  </data>
+  <data name="FFmpeg_X264Crf" xml:space="preserve">
+    <value>x264 CRF:</value>
+  </data>
+  <data name="FFmpeg_X264Bitrate" xml:space="preserve">
+    <value>x264 Bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_UseBitrateInsteadOfCrf" xml:space="preserve">
+    <value>Use bitrate instead of CRF</value>
+  </data>
+  <data name="FFmpeg_VPxBitrate" xml:space="preserve">
+    <value>VPx Bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_XvidQScale" xml:space="preserve">
+    <value>XviD QScale:</value>
+  </data>
+  <data name="FFmpeg_NvencPreset" xml:space="preserve">
+    <value>NVENC preset:</value>
+  </data>
+  <data name="FFmpeg_NvencTune" xml:space="preserve">
+    <value>NVENC tune:</value>
+  </data>
+  <data name="FFmpeg_NvencBitrate" xml:space="preserve">
+    <value>NVENC Bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_GifPaletteStats" xml:space="preserve">
+    <value>GIF palette stats:</value>
+  </data>
+  <data name="FFmpeg_GifDither" xml:space="preserve">
+    <value>GIF dither:</value>
+  </data>
+  <data name="FFmpeg_GifBayerScale" xml:space="preserve">
+    <value>GIF Bayer scale:</value>
+  </data>
+  <data name="FFmpeg_AmfUsage" xml:space="preserve">
+    <value>AMF usage:</value>
+  </data>
+  <data name="FFmpeg_AmfQuality" xml:space="preserve">
+    <value>AMF quality:</value>
+  </data>
+  <data name="FFmpeg_AmfBitrate" xml:space="preserve">
+    <value>AMF Bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_QsvPreset" xml:space="preserve">
+    <value>QSV preset:</value>
+  </data>
+  <data name="FFmpeg_QsvBitrate" xml:space="preserve">
+    <value>QSV Bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="FFmpeg_AacBitrate" xml:space="preserve">
+    <value>AAC bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_OpusBitrate" xml:space="preserve">
+    <value>Opus bitrate (kbps):</value>
+  </data>
+  <data name="FFmpeg_VorbisQScale" xml:space="preserve">
+    <value>Vorbis QScale:</value>
+  </data>
+  <data name="FFmpeg_Mp3QScale" xml:space="preserve">
+    <value>MP3 QScale:</value>
+  </data>
+  <data name="HashCheck_Title" xml:space="preserve">
+    <value>Hash Check</value>
+  </data>
+  <data name="HashCheck_SelectFilePlaceholder" xml:space="preserve">
+    <value>Select a file or drag and drop...</value>
+  </data>
+  <data name="HashCheck_CompareTwoFiles" xml:space="preserve">
+    <value>Compare two files</value>
+  </data>
+  <data name="HashCheck_SelectSecondFilePlaceholder" xml:space="preserve">
+    <value>Select second file...</value>
+  </data>
+  <data name="HashCheck_HashType" xml:space="preserve">
+    <value>Hash type:</value>
+  </data>
+  <data name="HashCheck_Result" xml:space="preserve">
+    <value>Result:</value>
+  </data>
+  <data name="HashCheck_Target" xml:space="preserve">
+    <value>Target:</value>
+  </data>
+  <data name="HashCheck_TargetPlaceholder" xml:space="preserve">
+    <value>Paste expected hash here to verify...</value>
+  </data>
+  <data name="HashCheck_Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="HashCheck_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="HotkeySettings_Title" xml:space="preserve">
+    <value>Hotkey Settings</value>
+  </data>
+  <data name="HotkeySettings_GlobalHotkeyDelivery" xml:space="preserve">
+    <value>Global hotkey delivery</value>
+  </data>
+  <data name="HotkeySettings_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="HotkeySettings_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="HotkeySettings_Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="HotkeySettings_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="HotkeySettings_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="HotkeySettings_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="HotkeySettings_ViewDebugInfo" xml:space="preserve">
+    <value>View Debug Info</value>
+  </data>
+  <data name="HotkeySettings_DebugLog" xml:space="preserve">
+    <value>DEBUG LOG</value>
+  </data>
+  <data name="TaskSettings_Capture" xml:space="preserve">
+    <value>Capture</value>
+  </data>
+  <data name="TaskSettings_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="TaskSettings_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="TaskSettings_Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="TaskSettings_UseModernCapture" xml:space="preserve">
+    <value>Use modern screen capture (Direct3D11)</value>
+  </data>
+  <data name="TaskSettings_PreferredLinuxRegionSelector" xml:space="preserve">
+    <value>Preferred Linux region selector:</value>
+  </data>
+  <data name="TaskSettings_LinuxRegionSelectorNote" xml:space="preserve">
+    <value>Automatic keeps the current safe Linux fallback behavior and only prefers a specific native selector when requested.</value>
+  </data>
+  <data name="TaskSettings_PreferredMacOSRegionSelector" xml:space="preserve">
+    <value>Preferred macOS region selector:</value>
+  </data>
+  <data name="TaskSettings_MacOSRegionSelectorNote" xml:space="preserve">
+    <value>Automatic follows Application Settings. Choose XerahS overlay or macOS native crosshair here to override this workflow only.</value>
+  </data>
+  <data name="TaskSettings_ShowCursor" xml:space="preserve">
+    <value>Show cursor in screenshots</value>
+  </data>
+  <data name="TaskSettings_ScreenshotDelay" xml:space="preserve">
+    <value>Screenshot delay:</value>
+  </data>
+  <data name="TaskSettings_WindowTitle" xml:space="preserve">
+    <value>Window title:</value>
+  </data>
+  <data name="TaskSettings_WindowTitlePlaceholder" xml:space="preserve">
+    <value>Window title to capture (CustomWindow job)</value>
+  </data>
+  <data name="TaskSettings_CaptureTransparency" xml:space="preserve">
+    <value>Capture transparency</value>
+  </data>
+  <data name="TaskSettings_CaptureShadow" xml:space="preserve">
+    <value>Capture window shadow</value>
+  </data>
+  <data name="TaskSettings_CaptureClientArea" xml:space="preserve">
+    <value>Capture client area (remove window chrome)</value>
+  </data>
+  <data name="TaskSettings_AutoHideTaskbar" xml:space="preserve">
+    <value>Auto hide taskbar during capture</value>
+  </data>
+  <data name="TaskSettings_AfterCaptureDescription" xml:space="preserve">
+    <value>Choose actions to perform automatically after capturing</value>
+  </data>
+  <data name="TaskSettings_ApplyImageEffects" xml:space="preserve">
+    <value>Apply image effects</value>
+  </data>
+  <data name="TaskSettings_ShowAfterCaptureWindow" xml:space="preserve">
+    <value>Show after capture window</value>
+  </data>
+  <data name="TaskSettings_OcrTextRecognition" xml:space="preserve">
+    <value>OCR text recognition</value>
+  </data>
+  <data name="TaskSettings_IndexFolder" xml:space="preserve">
+    <value>Index folder</value>
+  </data>
+  <data name="TaskSettings_Folder" xml:space="preserve">
+    <value>Folder:</value>
+  </data>
+  <data name="TaskSettings_FolderToIndex" xml:space="preserve">
+    <value>Folder to index</value>
+  </data>
+  <data name="TaskSettings_Output" xml:space="preserve">
+    <value>Output:</value>
+  </data>
+  <data name="TaskSettings_MaxDepth" xml:space="preserve">
+    <value>Max depth:</value>
+  </data>
+  <data name="TaskSettings_SkipFiles" xml:space="preserve">
+    <value>Skip files</value>
+  </data>
+  <data name="TaskSettings_ShowSizeInfo" xml:space="preserve">
+    <value>Show size info</value>
+  </data>
+  <data name="TaskSettings_AddFooter" xml:space="preserve">
+    <value>Add footer</value>
+  </data>
+  <data name="TaskSettings_Indentation" xml:space="preserve">
+    <value>Indentation:</value>
+  </data>
+  <data name="TaskSettings_HtmlOptions" xml:space="preserve">
+    <value>HTML options</value>
+  </data>
+  <data name="TaskSettings_CssPath" xml:space="preserve">
+    <value>CSS path:</value>
+  </data>
+  <data name="TaskSettings_LimitDisplayPath" xml:space="preserve">
+    <value>Limit display path to root folder</value>
+  </data>
+  <data name="TaskSettings_XmlJsonOptions" xml:space="preserve">
+    <value>XML / JSON options</value>
+  </data>
+  <data name="TaskSettings_WriteFileInfoAsAttribute" xml:space="preserve">
+    <value>Write file info as attribute (XML)</value>
+  </data>
+  <data name="TaskSettings_FileNaming" xml:space="preserve">
+    <value>File naming</value>
+  </data>
+  <data name="TaskSettings_NamePattern" xml:space="preserve">
+    <value>Name pattern:</value>
+  </data>
+  <data name="TaskSettings_ActiveWindowNamePattern" xml:space="preserve">
+    <value>Active window name pattern:</value>
+  </data>
+  <data name="TaskSettings_UseNamePatternForFileUploaders" xml:space="preserve">
+    <value>Use name pattern for file uploaders</value>
+  </data>
+  <data name="TaskSettings_ReplaceProblematicCharacters" xml:space="preserve">
+    <value>Replace potentially problematic characters</value>
+  </data>
+  <data name="TaskSettings_PerformRegexReplace" xml:space="preserve">
+    <value>Perform regex replace on URL</value>
+  </data>
+  <data name="TaskSettings_RegexPattern" xml:space="preserve">
+    <value>Regex pattern:</value>
+  </data>
+  <data name="TaskSettings_Replacement" xml:space="preserve">
+    <value>Replacement:</value>
+  </data>
+  <data name="TaskSettings_Destinations" xml:space="preserve">
+    <value>Destinations</value>
+  </data>
+  <data name="TaskSettings_SelectDestination" xml:space="preserve">
+    <value>Select the destination for this task:</value>
+  </data>
+  <data name="TaskSettings_DestinationToolTip" xml:space="preserve">
+    <value>Auto tries your configured uploaders in order until one succeeds. Any other destination uploads only to that uploader (configure it under Destination Settings). See documentation for details on image uploads and fallback behavior.</value>
+  </data>
+  <data name="TaskSettings_ClipboardUpload" xml:space="preserve">
+    <value>Clipboard upload</value>
+  </data>
+  <data name="TaskSettings_UploadUrlContents" xml:space="preserve">
+    <value>Upload URL contents</value>
+  </data>
+  <data name="TaskSettings_ShortenUrl" xml:space="preserve">
+    <value>Shorten URL</value>
+  </data>
+  <data name="TaskSettings_AfterUploadDescription" xml:space="preserve">
+    <value>Choose actions to perform automatically after upload</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterCapture" xml:space="preserve">
+    <value>Play sound after capture</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterUpload" xml:space="preserve">
+    <value>Play sound after upload</value>
+  </data>
+  <data name="TaskSettings_PlaySoundAfterAction" xml:space="preserve">
+    <value>Play sound after action</value>
+  </data>
+  <data name="TaskSettings_IncludeToastNotification" xml:space="preserve">
+    <value>Include toast notification</value>
+  </data>
+  <data name="TaskSettings_Duration" xml:space="preserve">
+    <value>Duration:</value>
+  </data>
+  <data name="TaskSettings_FadeDuration" xml:space="preserve">
+    <value>Fade duration:</value>
+  </data>
+  <data name="TaskSettings_Placement" xml:space="preserve">
+    <value>Placement:</value>
+  </data>
+  <data name="TaskSettings_Size" xml:space="preserve">
+    <value>Size:</value>
+  </data>
+  <data name="TaskSettings_DimensionSeparator" xml:space="preserve">
+    <value>x</value>
+  </data>
+  <data name="TaskSettings_AutoHideToast" xml:space="preserve">
+    <value>Auto hide toast notification</value>
+  </data>
+  <data name="TaskSettings_LeftClick" xml:space="preserve">
+    <value>Left click:</value>
+  </data>
+  <data name="TaskSettings_MiddleClick" xml:space="preserve">
+    <value>Middle click:</value>
+  </data>
+  <data name="TaskSettings_RightClick" xml:space="preserve">
+    <value>Right click:</value>
+  </data>
+  <data name="TaskSettings_Sound" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="TaskSettings_UseCustomCaptureSound" xml:space="preserve">
+    <value>Use custom capture sound</value>
+  </data>
+  <data name="TaskSettings_Path" xml:space="preserve">
+    <value>Path:</value>
+  </data>
+  <data name="TaskSettings_AdvancedProperties" xml:space="preserve">
+    <value>Advanced Properties</value>
+  </data>
+  <data name="TaskSettings_ScreenRecorder" xml:space="preserve">
+    <value>Screen recorder</value>
+  </data>
+  <data name="TaskSettings_Fps" xml:space="preserve">
+    <value>FPS:</value>
+  </data>
+  <data name="TaskSettings_SecondsDisable" xml:space="preserve">
+    <value>seconds (0 to disable)</value>
+  </data>
+  <data name="TaskSettings_StartDelay" xml:space="preserve">
+    <value>Start delay:</value>
+  </data>
+  <data name="TaskSettings_RecordingIntent" xml:space="preserve">
+    <value>Recording intent:</value>
+  </data>
+  <data name="TaskSettings_VideoCodec" xml:space="preserve">
+    <value>Video Codec:</value>
+  </data>
+  <data name="TaskSettings_PreferredLinuxRecordingBackend" xml:space="preserve">
+    <value>Preferred Linux recording backend:</value>
+  </data>
+  <data name="TaskSettings_FfmpegTools" xml:space="preserve">
+    <value>FFmpeg Tools</value>
+  </data>
+  <data name="TaskSettings_FfmpegToolsDescription" xml:space="preserve">
+    <value>Configure per-workflow FFmpeg options for recording and GIF conversion, including an override path for a custom FFmpeg binary.</value>
+  </data>
+  <data name="TaskSettings_DownloadFfmpeg" xml:space="preserve">
+    <value>Download FFmpeg...</value>
+  </data>
+  <data name="TaskSettings_ConfigureFfmpeg" xml:space="preserve">
+    <value>Configure FFmpeg / Override Path...</value>
+  </data>
+  <data name="TaskSettings_LinuxRecordingDiagnostics" xml:space="preserve">
+    <value>Linux Recording Diagnostics</value>
+  </data>
+  <data name="TaskSettings_LinuxDiagnosticsDescription" xml:space="preserve">
+    <value>Run a compatibility check for Wayland/X11 recording backends, portal interfaces, and required native tools.</value>
+  </data>
+  <data name="TaskSettings_RunLinuxDiagnostics" xml:space="preserve">
+    <value>Run Linux Recording Diagnostics</value>
+  </data>
+  <data name="SendToPrompt_Title" xml:space="preserve">
+    <value>How should XerahS handle sent files?</value>
+  </data>
+  <data name="SendToPrompt_Description" xml:space="preserve">
+    <value>Choose the action before XerahS starts processing this Send-to batch.</value>
+  </data>
+  <data name="SendToPrompt_Selection" xml:space="preserve">
+    <value>Selection</value>
+  </data>
+  <data name="SendToPrompt_Classification" xml:space="preserve">
+    <value>Classification</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy" xml:space="preserve">
+    <value>Folder policy</value>
+  </data>
+  <data name="SendToPrompt_ImageBatchPolicy" xml:space="preserve">
+    <value>Image batch policy</value>
+  </data>
+  <data name="SendToPrompt_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="SendToPrompt_ActionsDescription" xml:space="preserve">
+    <value>Primary actions are always available. Context-specific actions appear only when the sent items support them.</value>
+  </data>
+  <data name="SendToPrompt_CancelHint" xml:space="preserve">
+    <value>Closing the dialog cancels this Send-to request.</value>
+  </data>
+  <data name="FileTypeSelector_HandleAllFileTypes" xml:space="preserve">
+    <value>Handle all file types for this category</value>
+  </data>
+  <data name="FileTypeSelector_SpecificFileTypes" xml:space="preserve">
+    <value>Specific File Types:</value>
+  </data>
+  <data name="FileTypeSelector_SelectFileTypes" xml:space="preserve">
+    <value>Select which file types this instance should handle</value>
+  </data>
+  <data name="FileTypeSelector_SelectedFileTypes" xml:space="preserve">
+    <value>Selected file types:</value>
+  </data>
+  <data name="FileTypeSelector_CurrentScope" xml:space="preserve">
+    <value>Current file type scope:</value>
+  </data>
+  <data name="HotkeySelection_Nav" xml:space="preserve">
+    <value>Nav</value>
+  </data>
+  <data name="HotkeySelection_Tray" xml:space="preserve">
+    <value>Tray</value>
+  </data>
+  <data name="App_AboutXerahS" xml:space="preserve">
+    <value>About XerahS</value>
+  </data>
+  <data name="App_Preferences" xml:space="preserve">
+    <value>Preferences...</value>
+  </data>
+  <data name="App_Edit" xml:space="preserve">
+    <value>Edit...</value>
+  </data>
+  <data name="App_EditAnnotations" xml:space="preserve">
+    <value>Edit Annotations</value>
+  </data>
+  <data name="App_OpenFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="App_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="App_ShowInExplorer" xml:space="preserve">
+    <value>Show in Explorer</value>
+  </data>
+  <data name="App_CopyPath" xml:space="preserve">
+    <value>Copy Path</value>
+  </data>
+  <data name="App_CopyUrl" xml:space="preserve">
+    <value>Copy URL</value>
+  </data>
+  <data name="App_CopyMarkdownImage" xml:space="preserve">
+    <value>Copy markdown image</value>
+  </data>
+  <data name="App_CopyImageToClipboard" xml:space="preserve">
+    <value>Copy image to clipboard</value>
+  </data>
+  <data name="App_CopyErrors" xml:space="preserve">
+    <value>Copy Errors</value>
+  </data>
+  <data name="App_OpenUrl" xml:space="preserve">
+    <value>Open URL</value>
+  </data>
+  <data name="App_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
 </root>

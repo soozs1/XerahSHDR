@@ -1,19 +1,20 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:XerahS.UI.ViewModels"
+             xmlns:local="using:XerahS.UI.Markup"
              x:Class="XerahS.UI.Controls.FileTypeSelectorControl"
              x:DataType="vm:UploaderInstanceViewModel">
     
     <StackPanel Spacing="10">
         <!-- All File Types Checkbox -->
-        <CheckBox Content="Handle all file types for this category"
+        <CheckBox Content="{local:Localize FileTypeSelector_HandleAllFileTypes}"
                   IsChecked="{Binding IsAllFileTypes}"
                   FontWeight="SemiBold"/>
 
         <!-- File Type Selector (disabled when All File Types is checked) -->
         <StackPanel Spacing="5" IsEnabled="{Binding !IsAllFileTypes}">
-            <TextBlock Text="Specific File Types:" FontWeight="SemiBold"/>
-            <TextBlock Text="Select which file types this instance should handle"
+            <TextBlock Text="{local:Localize FileTypeSelector_SpecificFileTypes}" FontWeight="SemiBold"/>
+            <TextBlock Text="{local:Localize FileTypeSelector_SelectFileTypes}"
                        FontSize="11"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        Margin="0,0,0,5"/>
@@ -63,7 +64,7 @@
                     Padding="8"
                     IsVisible="{Binding SelectedFileExtensions.Count}">
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Selected file types:"
+                    <TextBlock Text="{local:Localize FileTypeSelector_SelectedFileTypes}"
                                FontSize="11"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -108,7 +109,7 @@
                 Padding="10"
                 CornerRadius="4">
             <StackPanel Spacing="4">
-                <TextBlock Text="Current file type scope:"
+                <TextBlock Text="{local:Localize FileTypeSelector_CurrentScope}"
                            FontSize="11"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding FileTypeScopeDisplay}"

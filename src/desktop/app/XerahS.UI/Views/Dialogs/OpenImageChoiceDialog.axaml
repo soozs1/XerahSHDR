@@ -1,8 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:XerahS.UI.Markup"
         x:Class="XerahS.UI.Views.Dialogs.OpenImageChoiceDialog"
         Classes="xerahs-surface"
-        Title="Open Image"
+        Title="{local:Localize MainWindow_OpenImageTitle}"
         Width="460"
         Height="200"
         MinWidth="460"
@@ -15,17 +16,17 @@
             BorderThickness="1"
             Padding="16">
         <StackPanel Spacing="12">
-            <TextBlock Text="An image is already open"
+            <TextBlock Text="{local:Localize OpenImageChoice_AlreadyOpen}"
                        FontSize="16"
                        FontWeight="SemiBold"/>
-            <TextBlock Text="Do you want to replace the current image or add the new image as a shape?"
+            <TextBlock Text="{local:Localize OpenImageChoice_Prompt}"
                        TextWrapping="Wrap"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-                <Button Content="Add as Shape"
+                <Button Content="{local:Localize OpenImageChoice_AddAsShape}"
                         Click="OnAddClick"/>
-                <Button Content="Replace Image"
+                <Button Content="{local:Localize OpenImageChoice_ReplaceImage}"
                         Click="OnReplaceClick"/>
-                <Button Content="Cancel"
+                <Button Content="{local:Localize SendToAction_Cancel}"
                         Click="OnCancelClick"/>
             </StackPanel>
         </StackPanel>
