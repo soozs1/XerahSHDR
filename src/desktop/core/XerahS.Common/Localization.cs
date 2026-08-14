@@ -50,31 +50,5 @@ namespace XerahS.Common
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentCulture = culture;
         }
-
-        /// <summary>
-        /// Formats a byte count using the current culture's number formatting.
-        /// </summary>
-        public static string FormatFileSize(long bytes)
-        {
-            if (bytes < 1024)
-            {
-                return $"{bytes} B";
-            }
-
-            double kb = bytes / 1024d;
-            if (kb < 1024)
-            {
-                return $"{kb.ToString("0.##", CultureInfo.CurrentCulture)} KB";
-            }
-
-            double mb = kb / 1024d;
-            if (mb < 1024)
-            {
-                return $"{mb.ToString("0.##", CultureInfo.CurrentCulture)} MB";
-            }
-
-            double gb = mb / 1024d;
-            return $"{gb.ToString("0.##", CultureInfo.CurrentCulture)} GB";
-        }
     }
 }
