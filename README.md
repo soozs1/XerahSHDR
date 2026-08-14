@@ -107,6 +107,14 @@ git submodule update --init --recursive
 On Windows, the fastest verified first-run path is:
 ```powershell
 .\init-submodules.ps1
+dotnet build src/desktop/app/XerahS.App/XerahS.App.csproj -r win-x64 -m:1 -p:nodeReuse=false -p:UseSharedCompilation=false
+```
+
+Build the app **project** (not the solution) with `-r win-x64`: the .NET SDK rejects a
+RuntimeIdentifier on a solution (`NETSDK1134`), and a single RID prunes SkiaSharp's
+~16 native RIDs to one, keeping `bin/` small. To build the whole solution (portable,
+all platforms), omit `-r` and the project path:
+```powershell
 dotnet build src/desktop/XerahS.sln -m:1 -p:nodeReuse=false -p:UseSharedCompilation=false
 ```
 
