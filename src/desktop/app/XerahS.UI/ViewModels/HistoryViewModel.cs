@@ -116,8 +116,8 @@ namespace XerahS.UI.ViewModels
         public bool IsSearchActive => !string.IsNullOrWhiteSpace(SearchText);
 
         public string CombineSelectionSummary => SelectedImageCount == 1
-            ? "1 image selected"
-            : $"{SelectedImageCount} images selected";
+            ? Resources.GetString("History_OneImageSelected")
+            : Resources.GetString("History_ImagesSelected", SelectedImageCount);
 
 
 
@@ -143,7 +143,7 @@ namespace XerahS.UI.ViewModels
         public bool CanGoNext => CurrentPage < TotalPages;
         public bool CanGoPrevious => CurrentPage > 1;
 
-        public string PageInfo => $"Page {CurrentPage} of {Math.Max(1, TotalPages)} ({TotalItems} items)"; // Prevent "Page 1 of 0" looking weird
+        public string PageInfo => Resources.GetString("History_PageInfo", CurrentPage, Math.Max(1, TotalPages), TotalItems); // Prevent "Page 1 of 0" looking weird
 
         private readonly HistoryManagerSQLite _historyManager;
         private readonly IDesktopTaskManager _taskManager;
@@ -889,8 +889,8 @@ namespace XerahS.UI.ViewModels
         private Task<bool> ShowDeleteConfirmationDialog(string fileName)
         {
             return _coreDialogService.ShowConfirmationAsync(
-                "Confirm Delete",
-                $"Are you sure you want to delete '{fileName}' from history?\n\nThis action cannot be undone.");
+                Resources.GetString("History_DeleteConfirmation_Title"),
+                Resources.GetString("History_DeleteConfirmation_Message", fileName));
         }
 
         private TaskSettings GetUploadTaskSettings()
@@ -1104,7 +1104,7 @@ namespace XerahS.UI.ViewModels
             {
                 PlatformServices.Toast?.ShowToast(new ToastConfig
                 {
-                    Title = "History Backup Failed",
+                    Title = Resources.GetString("History_BackupFailedToast_Title"),
                     Text = reason,
                     Duration = 6f,
                     Size = new SizeI(420, 140),

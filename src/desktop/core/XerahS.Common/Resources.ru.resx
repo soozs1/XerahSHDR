@@ -201,4 +201,88 @@
   <data name="Toast_InitializationWarning_Text" xml:space="preserve">
     <value>Не удалось инициализировать фоновые службы. Подробности в журналах.</value>
   </data>
+  <data name="History_OneImageSelected" xml:space="preserve">
+    <value>Выбрано 1 изображение</value>
+  </data>
+  <data name="History_ImagesSelected" xml:space="preserve">
+    <value>Выбрано изображений: {0}</value>
+  </data>
+  <data name="History_PageInfo" xml:space="preserve">
+    <value>Страница {0} из {1} (элементов: {2})</value>
+  </data>
+  <data name="History_DeleteConfirmation_Title" xml:space="preserve">
+    <value>Подтверждение удаления</value>
+  </data>
+  <data name="History_DeleteConfirmation_Message" xml:space="preserve">
+    <value>Вы действительно хотите удалить «{0}» из истории?
+
+Это действие нельзя отменить.</value>
+  </data>
+  <data name="History_BackupFailedToast_Title" xml:space="preserve">
+    <value>Не удалось создать резервную копию истории</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Title" xml:space="preserve">
+    <value>Сброс рабочих процессов</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Message" xml:space="preserve">
+    <value>Вы уверены, что хотите сбросить все рабочие процессы к настройкам по умолчанию? Это действие нельзя отменить.</value>
+  </data>
+  <data name="Workflows_PinButtonText_Pin" xml:space="preserve">
+    <value>Закрепить в трее</value>
+  </data>
+  <data name="Workflows_PinButtonText_Unpin" xml:space="preserve">
+    <value>Открепить от трея</value>
+  </data>
+  <data name="UploadContent_NoItems" xml:space="preserve">
+    <value>Нет элементов</value>
+  </data>
+  <data name="UploadContent_NoFileSelected" xml:space="preserve">
+    <value>Файл не выбран.</value>
+  </data>
+  <data name="UploadContent_TypeLabel" xml:space="preserve">
+    <value>Тип: {0}</value>
+  </data>
+  <data name="UploadContent_ClipboardImage" xml:space="preserve">
+    <value>Изображение из буфера обмена</value>
+  </data>
+  <data name="UploadContent_ClipboardText" xml:space="preserve">
+    <value>Текст из буфера обмена</value>
+  </data>
+  <data name="UploadContent_Characters" xml:space="preserve">
+    <value>Символов: {0}</value>
+  </data>
+  <data name="UploadContent_NoContentToUpload" xml:space="preserve">
+    <value>Нет содержимого для загрузки</value>
+  </data>
+  <data name="UploadContent_UploadFailed" xml:space="preserve">
+    <value>Не удалось загрузить</value>
+  </data>
+  <data name="UploadContent_StatusSummary" xml:space="preserve">
+    <value>Элементов: {0} | завершено: {1} | ошибок: {2}</value>
+  </data>
+  <data name="UploadContent_FileMetadata" xml:space="preserve">
+    <value>Имя: {0}
+Расширение: {1}
+Размер: {2}
+Изменён: {3}
+Путь: {4}</value>
+  </data>
+  <data name="UploadContent_FileNotFound" xml:space="preserve">
+    <value>Файл не найден: {0}</value>
+  </data>
+  <data name="UploadContent_Type_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="UploadContent_Type_Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="UploadContent_Type_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="UploadContent_Type_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="UploadContent_Type_URL" xml:space="preserve">
+    <value>URL</value>
+  </data>
 </root>

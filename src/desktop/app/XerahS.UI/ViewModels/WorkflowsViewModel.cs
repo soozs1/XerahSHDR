@@ -336,7 +336,9 @@ public partial class WorkflowsViewModel : ViewModelBase
     [RelayCommand]
     private async Task Reset()
     {
-        var confirmed = await _coreDialogService.ShowConfirmationAsync("Reset Workflows", "Are you sure you want to reset all workflows to default settings? This cannot be undone.");
+        var confirmed = await _coreDialogService.ShowConfirmationAsync(
+            Resources.GetString("Workflows_ResetConfirmation_Title"),
+            Resources.GetString("Workflows_ResetConfirmation_Message"));
         if (!confirmed)
         {
             return;
@@ -368,7 +370,9 @@ public partial class WorkflowsViewModel : ViewModelBase
         return SelectedWorkflow != null && !SelectedWorkflow.IsNavWorkflow;
     }
 
-    public string PinButtonText => SelectedWorkflow?.PinnedToTray == true ? "Unpin from Tray" : "Pin to Tray";
+    public string PinButtonText => SelectedWorkflow?.PinnedToTray == true
+        ? Resources.GetString("Workflows_PinButtonText_Unpin")
+        : Resources.GetString("Workflows_PinButtonText_Pin");
 
     private async Task<bool> ShowWorkflowEditorAsync(WorkflowSettings settings)
     {

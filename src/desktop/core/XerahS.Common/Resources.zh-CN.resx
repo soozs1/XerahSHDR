@@ -201,4 +201,88 @@
   <data name="Toast_InitializationWarning_Text" xml:space="preserve">
     <value>后台服务初始化失败。请查看日志了解详情。</value>
   </data>
+  <data name="History_OneImageSelected" xml:space="preserve">
+    <value>已选择 1 张图像</value>
+  </data>
+  <data name="History_ImagesSelected" xml:space="preserve">
+    <value>已选择 {0} 张图像</value>
+  </data>
+  <data name="History_PageInfo" xml:space="preserve">
+    <value>第 {0} 页，共 {1} 页（{2} 个项目）</value>
+  </data>
+  <data name="History_DeleteConfirmation_Title" xml:space="preserve">
+    <value>确认删除</value>
+  </data>
+  <data name="History_DeleteConfirmation_Message" xml:space="preserve">
+    <value>确定要从历史记录中删除“{0}”吗？
+
+此操作无法撤销。</value>
+  </data>
+  <data name="History_BackupFailedToast_Title" xml:space="preserve">
+    <value>历史记录备份失败</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Title" xml:space="preserve">
+    <value>重置工作流</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Message" xml:space="preserve">
+    <value>确定要将所有工作流重置为默认设置吗？此操作无法撤销。</value>
+  </data>
+  <data name="Workflows_PinButtonText_Pin" xml:space="preserve">
+    <value>固定到托盘</value>
+  </data>
+  <data name="Workflows_PinButtonText_Unpin" xml:space="preserve">
+    <value>从托盘取消固定</value>
+  </data>
+  <data name="UploadContent_NoItems" xml:space="preserve">
+    <value>无项目</value>
+  </data>
+  <data name="UploadContent_NoFileSelected" xml:space="preserve">
+    <value>未选择文件。</value>
+  </data>
+  <data name="UploadContent_TypeLabel" xml:space="preserve">
+    <value>类型：{0}</value>
+  </data>
+  <data name="UploadContent_ClipboardImage" xml:space="preserve">
+    <value>剪贴板图像</value>
+  </data>
+  <data name="UploadContent_ClipboardText" xml:space="preserve">
+    <value>剪贴板文本</value>
+  </data>
+  <data name="UploadContent_Characters" xml:space="preserve">
+    <value>{0} 个字符</value>
+  </data>
+  <data name="UploadContent_NoContentToUpload" xml:space="preserve">
+    <value>没有可上传的内容</value>
+  </data>
+  <data name="UploadContent_UploadFailed" xml:space="preserve">
+    <value>上传失败</value>
+  </data>
+  <data name="UploadContent_StatusSummary" xml:space="preserve">
+    <value>{0} 个项目 | {1} 个已完成 | {2} 个失败</value>
+  </data>
+  <data name="UploadContent_FileMetadata" xml:space="preserve">
+    <value>名称：{0}
+扩展名：{1}
+大小：{2}
+修改时间：{3}
+路径：{4}</value>
+  </data>
+  <data name="UploadContent_FileNotFound" xml:space="preserve">
+    <value>未找到文件：{0}</value>
+  </data>
+  <data name="UploadContent_Type_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="UploadContent_Type_Image" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="UploadContent_Type_Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="UploadContent_Type_File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="UploadContent_Type_URL" xml:space="preserve">
+    <value>URL</value>
+  </data>
 </root>

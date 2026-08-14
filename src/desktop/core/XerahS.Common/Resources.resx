@@ -201,4 +201,88 @@
   <data name="Toast_InitializationWarning_Text" xml:space="preserve">
     <value>Background services initialization failed. Check logs for details.</value>
   </data>
+  <data name="History_OneImageSelected" xml:space="preserve">
+    <value>1 image selected</value>
+  </data>
+  <data name="History_ImagesSelected" xml:space="preserve">
+    <value>{0} images selected</value>
+  </data>
+  <data name="History_PageInfo" xml:space="preserve">
+    <value>Page {0} of {1} ({2} items)</value>
+  </data>
+  <data name="History_DeleteConfirmation_Title" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="History_DeleteConfirmation_Message" xml:space="preserve">
+    <value>Are you sure you want to delete '{0}' from history?
+
+This action cannot be undone.</value>
+  </data>
+  <data name="History_BackupFailedToast_Title" xml:space="preserve">
+    <value>History Backup Failed</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Title" xml:space="preserve">
+    <value>Reset Workflows</value>
+  </data>
+  <data name="Workflows_ResetConfirmation_Message" xml:space="preserve">
+    <value>Are you sure you want to reset all workflows to default settings? This cannot be undone.</value>
+  </data>
+  <data name="Workflows_PinButtonText_Pin" xml:space="preserve">
+    <value>Pin to Tray</value>
+  </data>
+  <data name="Workflows_PinButtonText_Unpin" xml:space="preserve">
+    <value>Unpin from Tray</value>
+  </data>
+  <data name="UploadContent_NoItems" xml:space="preserve">
+    <value>No items</value>
+  </data>
+  <data name="UploadContent_NoFileSelected" xml:space="preserve">
+    <value>No file selected.</value>
+  </data>
+  <data name="UploadContent_TypeLabel" xml:space="preserve">
+    <value>Type: {0}</value>
+  </data>
+  <data name="UploadContent_ClipboardImage" xml:space="preserve">
+    <value>Clipboard Image</value>
+  </data>
+  <data name="UploadContent_ClipboardText" xml:space="preserve">
+    <value>Clipboard Text</value>
+  </data>
+  <data name="UploadContent_Characters" xml:space="preserve">
+    <value>{0} characters</value>
+  </data>
+  <data name="UploadContent_NoContentToUpload" xml:space="preserve">
+    <value>No content to upload</value>
+  </data>
+  <data name="UploadContent_UploadFailed" xml:space="preserve">
+    <value>Upload failed</value>
+  </data>
+  <data name="UploadContent_StatusSummary" xml:space="preserve">
+    <value>{0} items | {1} completed | {2} failed</value>
+  </data>
+  <data name="UploadContent_FileMetadata" xml:space="preserve">
+    <value>Name: {0}
+Extension: {1}
+Size: {2}
+Modified: {3}
+Path: {4}</value>
+  </data>
+  <data name="UploadContent_FileNotFound" xml:space="preserve">
+    <value>File not found: {0}</value>
+  </data>
+  <data name="UploadContent_Type_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="UploadContent_Type_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="UploadContent_Type_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="UploadContent_Type_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="UploadContent_Type_URL" xml:space="preserve">
+    <value>URL</value>
+  </data>
 </root>
