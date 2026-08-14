@@ -45,4 +45,25 @@
   <data name="SendToRememberScope_Default" xml:space="preserve">
     <value>diese Auswahl</value>
   </data>
+  <data name="SendToAction_UploadNow" xml:space="preserve">
+    <value>Jetzt hochladen</value>
+  </data>
+  <data name="SendToAction_OpenUploadContent" xml:space="preserve">
+    <value>In Upload Content öffnen</value>
+  </data>
+  <data name="SendToAction_OpenImageEditor" xml:space="preserve">
+    <value>Im Bildeditor öffnen</value>
+  </data>
+  <data name="SendToAction_PinToScreen" xml:space="preserve">
+    <value>An Bildschirm anheften</value>
+  </data>
+  <data name="SendToAction_IndexFolders" xml:space="preserve">
+    <value>Ordner indizieren</value>
+  </data>
+  <data name="SendToAction_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
+    <value>Vor dem Öffnen von mehr als dem Schwellenwert bestätigen</value>
+  </data>
 </root>

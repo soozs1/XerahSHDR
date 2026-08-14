@@ -420,12 +420,12 @@ namespace XerahS.UI.ViewModels
 
         private static string FormatSendToAction(SendToAction action) => action switch
         {
-            SendToAction.UploadNow => "Upload now",
-            SendToAction.OpenUploadContent => "Open in Upload Content",
-            SendToAction.OpenImageEditor => "Open in Image Editor",
-            SendToAction.PinToScreen => "Pin to Screen",
-            SendToAction.IndexFolders => "Index folders",
-            SendToAction.Cancel => "Cancel",
+            SendToAction.UploadNow => Resources.GetString("SendToAction_UploadNow"),
+            SendToAction.OpenUploadContent => Resources.GetString("SendToAction_OpenUploadContent"),
+            SendToAction.OpenImageEditor => Resources.GetString("SendToAction_OpenImageEditor"),
+            SendToAction.PinToScreen => Resources.GetString("SendToAction_PinToScreen"),
+            SendToAction.IndexFolders => Resources.GetString("SendToAction_IndexFolders"),
+            SendToAction.Cancel => Resources.GetString("SendToAction_Cancel"),
             _ => action.ToString()
         };
 

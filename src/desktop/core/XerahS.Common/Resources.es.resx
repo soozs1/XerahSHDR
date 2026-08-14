@@ -45,4 +45,25 @@
   <data name="SendToRememberScope_Default" xml:space="preserve">
     <value>esta selección</value>
   </data>
+  <data name="SendToAction_UploadNow" xml:space="preserve">
+    <value>Subir ahora</value>
+  </data>
+  <data name="SendToAction_OpenUploadContent" xml:space="preserve">
+    <value>Abrir en Upload Content</value>
+  </data>
+  <data name="SendToAction_OpenImageEditor" xml:space="preserve">
+    <value>Abrir en el editor de imágenes</value>
+  </data>
+  <data name="SendToAction_PinToScreen" xml:space="preserve">
+    <value>Fijar a la pantalla</value>
+  </data>
+  <data name="SendToAction_IndexFolders" xml:space="preserve">
+    <value>Indexar carpetas</value>
+  </data>
+  <data name="SendToAction_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
+    <value>Confirmar antes de abrir más del umbral</value>
+  </data>
 </root>

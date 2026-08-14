@@ -45,4 +45,25 @@
   <data name="SendToRememberScope_Default" xml:space="preserve">
     <value>этот выбор</value>
   </data>
+  <data name="SendToAction_UploadNow" xml:space="preserve">
+    <value>Загрузить сейчас</value>
+  </data>
+  <data name="SendToAction_OpenUploadContent" xml:space="preserve">
+    <value>Открыть в Upload Content</value>
+  </data>
+  <data name="SendToAction_OpenImageEditor" xml:space="preserve">
+    <value>Открыть в редакторе изображений</value>
+  </data>
+  <data name="SendToAction_PinToScreen" xml:space="preserve">
+    <value>Закрепить на экране</value>
+  </data>
+  <data name="SendToAction_IndexFolders" xml:space="preserve">
+    <value>Индексировать папки</value>
+  </data>
+  <data name="SendToAction_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
+    <value>Подтверждать перед открытием более порога</value>
+  </data>
 </root>

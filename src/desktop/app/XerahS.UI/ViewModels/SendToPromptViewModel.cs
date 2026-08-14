@@ -62,16 +62,16 @@ public partial class SendToPromptViewModel : ViewModelBase
 
     public string[] FolderPolicyOptions { get; } =
     [
-        "Do not expand folders",
-        "Include top-level files",
-        "Include files recursively"
+        SendToPolicyResolver.FormatFolderPolicy(SendToFolderPolicy.DoNotExpandFolders),
+        SendToPolicyResolver.FormatFolderPolicy(SendToFolderPolicy.IncludeTopLevelFiles),
+        SendToPolicyResolver.FormatFolderPolicy(SendToFolderPolicy.IncludeFilesRecursively)
     ];
 
     public string[] BatchPolicyOptions { get; } =
     [
-        "Open all immediately",
-        "Open sequentially",
-        "Confirm before opening more than the threshold"
+        SendToPolicyResolver.FormatBatchPolicy(SendToBatchExecutionPolicy.OpenAllImmediately, 0),
+        SendToPolicyResolver.FormatBatchPolicy(SendToBatchExecutionPolicy.OpenSequentially, 0),
+        XerahS.Common.Resources.GetString("SendToBatchPolicy_ConfirmLabel")
     ];
 
     public bool RememberChoice

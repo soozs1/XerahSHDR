@@ -45,4 +45,25 @@
   <data name="SendToRememberScope_Default" xml:space="preserve">
     <value>this selection</value>
   </data>
+  <data name="SendToAction_UploadNow" xml:space="preserve">
+    <value>Upload now</value>
+  </data>
+  <data name="SendToAction_OpenUploadContent" xml:space="preserve">
+    <value>Open in Upload Content</value>
+  </data>
+  <data name="SendToAction_OpenImageEditor" xml:space="preserve">
+    <value>Open in Image Editor</value>
+  </data>
+  <data name="SendToAction_PinToScreen" xml:space="preserve">
+    <value>Pin to Screen</value>
+  </data>
+  <data name="SendToAction_IndexFolders" xml:space="preserve">
+    <value>Index folders</value>
+  </data>
+  <data name="SendToAction_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
+    <value>Confirm before opening more than the threshold</value>
+  </data>
 </root>

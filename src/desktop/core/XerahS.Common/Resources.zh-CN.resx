@@ -45,4 +45,25 @@
   <data name="SendToRememberScope_Default" xml:space="preserve">
     <value>此选择</value>
   </data>
+  <data name="SendToAction_UploadNow" xml:space="preserve">
+    <value>立即上传</value>
+  </data>
+  <data name="SendToAction_OpenUploadContent" xml:space="preserve">
+    <value>在 Upload Content 中打开</value>
+  </data>
+  <data name="SendToAction_OpenImageEditor" xml:space="preserve">
+    <value>在图像编辑器中打开</value>
+  </data>
+  <data name="SendToAction_PinToScreen" xml:space="preserve">
+    <value>固定到屏幕</value>
+  </data>
+  <data name="SendToAction_IndexFolders" xml:space="preserve">
+    <value>索引文件夹</value>
+  </data>
+  <data name="SendToAction_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
+    <value>打开超过阈值前确认</value>
+  </data>
 </root>
