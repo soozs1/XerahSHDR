@@ -36,8 +36,8 @@ This roadmap has been reconciled against the current codebase, including the `Im
 - [x] Quick save and save-as flows
 - [x] Upload-to-host integration with provider selection/fallback pipeline
 - [x] Distribution baseline (icons/assets, tray, release workflows)
-- [ ] End-to-end verification matrix for annotation tools across desktop platforms
-- [ ] End-to-end verification matrix for image effects across desktop platforms
+- [x] End-to-end verification matrix for annotation tools across desktop platforms
+- [x] End-to-end verification matrix for image effects across desktop platforms
 - [ ] Native app interoperability validation (copy/paste in external apps)
 - [x] Linux packaging and Linux capture/hotkey orchestration test coverage
 - [ ] macOS on-device validation for capture/hotkeys/clipboard/permissions
