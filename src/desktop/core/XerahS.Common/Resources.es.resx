@@ -75,4 +75,73 @@
   <data name="SendToPrompt_RememberChoiceText" xml:space="preserve">
     <value>Recordar esta elección para {0}</value>
   </data>
+  <data name="SendToPrompt_FolderPolicy_DoNotExpand" xml:space="preserve">
+    <value>Los elementos de carpeta se ignorarán para Subir ahora y Upload Content.</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_Recursive" xml:space="preserve">
+    <value>Las acciones de subida incluirán archivos directos y todos los archivos de las carpetas enviadas.</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_TopLevel" xml:space="preserve">
+    <value>Las acciones de subida incluirán archivos directos y archivos de nivel superior de las carpetas enviadas.</value>
+  </data>
+  <data name="SendToPrompt_NoFolders" xml:space="preserve">
+    <value>No se enviaron carpetas.</value>
+  </data>
+  <data name="SendToPrompt_BatchPolicyFallback" xml:space="preserve">
+    <value>La política de lotes de imágenes se aplica cuando todos los archivos enviados son imágenes.</value>
+  </data>
+  <data name="SendToPrompt_Kind_ImageFilesOnly" xml:space="preserve">
+    <value>Solo archivos de imagen</value>
+  </data>
+  <data name="SendToPrompt_Kind_FilesOnly" xml:space="preserve">
+    <value>Solo archivos</value>
+  </data>
+  <data name="SendToPrompt_Kind_FoldersOnly" xml:space="preserve">
+    <value>Solo carpetas</value>
+  </data>
+  <data name="SendToPrompt_Kind_Mixed" xml:space="preserve">
+    <value>Archivos y carpetas</value>
+  </data>
+  <data name="SendToPrompt_Details_ImageCompatible" xml:space="preserve">
+    <value>Todos los archivos seleccionados son compatibles con imágenes, por lo que están disponibles las acciones de subida, editor, fijar y cola.</value>
+  </data>
+  <data name="SendToPrompt_Details_FilesOnly" xml:space="preserve">
+    <value>Solo se enviaron archivos. Subir ahora y Upload Content usarán esos archivos directamente.</value>
+  </data>
+  <data name="SendToPrompt_Details_FoldersOnly" xml:space="preserve">
+    <value>Solo se enviaron carpetas. La subida y Upload Content usan la política de carpetas seleccionada; Indexar carpeta conserva la intención de la carpeta.</value>
+  </data>
+  <data name="SendToPrompt_Details_Mixed" xml:space="preserve">
+    <value>Los lotes mixtos de Send-to mantienen separado el comportamiento de archivos y carpetas. Indexar carpetas solo se aplica a elementos de carpeta.</value>
+  </data>
+  <data name="SendToPrompt_Scope_ImageCompatible" xml:space="preserve">
+    <value>Este lote admite acciones de subida, cola, editor y fijar.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FilesOnly" xml:space="preserve">
+    <value>Este lote admite acciones de subida y cola.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FoldersOnly" xml:space="preserve">
+    <value>Las acciones de subida usan la política de carpetas seleccionada. Indexar conserva la intención de la carpeta.</value>
+  </data>
+  <data name="SendToPrompt_Scope_Mixed" xml:space="preserve">
+    <value>Las acciones de subida usan archivos directos más archivos permitidos por la política de carpetas. Indexar solo se aplica a carpetas.</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_WithFolders" xml:space="preserve">
+    <value>Ejecutar el flujo de subida con la política de carpetas seleccionada. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_NoFolders" xml:space="preserve">
+    <value>Ejecutar el flujo de subida de archivos actual de inmediato.</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_WithFolders" xml:space="preserve">
+    <value>Abrir Upload Content con la política de carpetas seleccionada. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_NoFolders" xml:space="preserve">
+    <value>Abrir Upload Content y revisar los elementos enviados antes de subir.</value>
+  </data>
+  <data name="SendToPrompt_Index_Mixed" xml:space="preserve">
+    <value>Ejecutar la indexación de carpetas solo para los elementos de carpeta enviados.</value>
+  </data>
+  <data name="SendToPrompt_Index_Folders" xml:space="preserve">
+    <value>Ejecutar el flujo de indexación de carpetas para las carpetas enviadas.</value>
+  </data>
 </root>

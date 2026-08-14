@@ -75,4 +75,73 @@
   <data name="SendToPrompt_RememberChoiceText" xml:space="preserve">
     <value>Запомнить этот выбор для {0}</value>
   </data>
+  <data name="SendToPrompt_FolderPolicy_DoNotExpand" xml:space="preserve">
+    <value>Элементы папок будут игнорироваться для «Загрузить сейчас» и «Upload Content».</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_Recursive" xml:space="preserve">
+    <value>Действия загрузки включат прямые файлы и все файлы внутри отправленных папок.</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_TopLevel" xml:space="preserve">
+    <value>Действия загрузки включат прямые файлы и файлы верхнего уровня из отправленных папок.</value>
+  </data>
+  <data name="SendToPrompt_NoFolders" xml:space="preserve">
+    <value>Папки не были отправлены.</value>
+  </data>
+  <data name="SendToPrompt_BatchPolicyFallback" xml:space="preserve">
+    <value>Политика пакетной обработки изображений применяется, когда все отправленные файлы — изображения.</value>
+  </data>
+  <data name="SendToPrompt_Kind_ImageFilesOnly" xml:space="preserve">
+    <value>Только файлы изображений</value>
+  </data>
+  <data name="SendToPrompt_Kind_FilesOnly" xml:space="preserve">
+    <value>Только файлы</value>
+  </data>
+  <data name="SendToPrompt_Kind_FoldersOnly" xml:space="preserve">
+    <value>Только папки</value>
+  </data>
+  <data name="SendToPrompt_Kind_Mixed" xml:space="preserve">
+    <value>Файлы и папки</value>
+  </data>
+  <data name="SendToPrompt_Details_ImageCompatible" xml:space="preserve">
+    <value>Все выбранные файлы совместимы с изображениями, поэтому доступны действия загрузки, редактора, закрепления и очереди.</value>
+  </data>
+  <data name="SendToPrompt_Details_FilesOnly" xml:space="preserve">
+    <value>Были отправлены только файлы. «Загрузить сейчас» и «Upload Content» будут использовать их напрямую.</value>
+  </data>
+  <data name="SendToPrompt_Details_FoldersOnly" xml:space="preserve">
+    <value>Были отправлены только папки. Загрузка и Upload Content используют выбранную политику папок; индексация сохраняет назначение папок.</value>
+  </data>
+  <data name="SendToPrompt_Details_Mixed" xml:space="preserve">
+    <value>Смешанные Send-to наборы обрабатывают файлы и папки отдельно. Индексация применяется только к папкам.</value>
+  </data>
+  <data name="SendToPrompt_Scope_ImageCompatible" xml:space="preserve">
+    <value>Этот набор поддерживает загрузку, очередь, редактор и закрепление.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FilesOnly" xml:space="preserve">
+    <value>Этот набор поддерживает загрузку и очередь.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FoldersOnly" xml:space="preserve">
+    <value>Загрузка использует выбранную политику папок. Индексация сохраняет назначение папок.</value>
+  </data>
+  <data name="SendToPrompt_Scope_Mixed" xml:space="preserve">
+    <value>Загрузка использует прямые файлы плюс файлы, разрешённые политикой папок. Индексация применяется только к папкам.</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_WithFolders" xml:space="preserve">
+    <value>Запустить загрузку с выбранной политикой папок. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_NoFolders" xml:space="preserve">
+    <value>Немедленно запустить текущую загрузку файлов.</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_WithFolders" xml:space="preserve">
+    <value>Открыть Upload Content с выбранной политикой папок. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_NoFolders" xml:space="preserve">
+    <value>Открыть Upload Content и просмотреть отправленные элементы перед загрузкой.</value>
+  </data>
+  <data name="SendToPrompt_Index_Mixed" xml:space="preserve">
+    <value>Выполнить индексацию только для отправленных элементов папок.</value>
+  </data>
+  <data name="SendToPrompt_Index_Folders" xml:space="preserve">
+    <value>Выполнить индексацию отправленных папок.</value>
+  </data>
 </root>

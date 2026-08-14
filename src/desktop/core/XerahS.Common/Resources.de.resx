@@ -75,4 +75,73 @@
   <data name="SendToPrompt_RememberChoiceText" xml:space="preserve">
     <value>Diese Auswahl für {0} merken</value>
   </data>
+  <data name="SendToPrompt_FolderPolicy_DoNotExpand" xml:space="preserve">
+    <value>Ordnerelemente werden für „Jetzt hochladen“ und „Upload Content“ ignoriert.</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_Recursive" xml:space="preserve">
+    <value>Upload-Aktionen schließen direkte Dateien und alle Dateien in gesendeten Ordnern ein.</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_TopLevel" xml:space="preserve">
+    <value>Upload-Aktionen schließen direkte Dateien und Dateien der obersten Ebene aus gesendeten Ordnern ein.</value>
+  </data>
+  <data name="SendToPrompt_NoFolders" xml:space="preserve">
+    <value>Es wurden keine Ordner gesendet.</value>
+  </data>
+  <data name="SendToPrompt_BatchPolicyFallback" xml:space="preserve">
+    <value>Die Stapelbild-Richtlinie gilt, wenn jede gesendete Datei ein Bild ist.</value>
+  </data>
+  <data name="SendToPrompt_Kind_ImageFilesOnly" xml:space="preserve">
+    <value>Nur Bilddateien</value>
+  </data>
+  <data name="SendToPrompt_Kind_FilesOnly" xml:space="preserve">
+    <value>Nur Dateien</value>
+  </data>
+  <data name="SendToPrompt_Kind_FoldersOnly" xml:space="preserve">
+    <value>Nur Ordner</value>
+  </data>
+  <data name="SendToPrompt_Kind_Mixed" xml:space="preserve">
+    <value>Dateien und Ordner</value>
+  </data>
+  <data name="SendToPrompt_Details_ImageCompatible" xml:space="preserve">
+    <value>Alle ausgewählten Dateien sind bildkompatibel, daher stehen Upload-, Editor-, Anheft- und Warteschlangen-Aktionen zur Verfügung.</value>
+  </data>
+  <data name="SendToPrompt_Details_FilesOnly" xml:space="preserve">
+    <value>Es wurden nur Dateien gesendet. „Jetzt hochladen“ und „Upload Content“ verwenden diese Dateien direkt.</value>
+  </data>
+  <data name="SendToPrompt_Details_FoldersOnly" xml:space="preserve">
+    <value>Es wurden nur Ordner gesendet. Upload und Upload Content verwenden die gewählte Ordnerrichtlinie; die Indizierung behält die Ordnerabsicht bei.</value>
+  </data>
+  <data name="SendToPrompt_Details_Mixed" xml:space="preserve">
+    <value>Gemischte Send-to-Stapel behandeln Dateien und Ordner getrennt. Die Indizierung gilt nur für Ordner.</value>
+  </data>
+  <data name="SendToPrompt_Scope_ImageCompatible" xml:space="preserve">
+    <value>Dieser Stapel unterstützt Upload-, Warteschlangen-, Editor- und Anheft-Aktionen.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FilesOnly" xml:space="preserve">
+    <value>Dieser Stapel unterstützt Upload- und Warteschlangen-Aktionen.</value>
+  </data>
+  <data name="SendToPrompt_Scope_FoldersOnly" xml:space="preserve">
+    <value>Upload-Aktionen verwenden die gewählte Ordnerrichtlinie. Die Indizierung behält die Ordnerabsicht bei.</value>
+  </data>
+  <data name="SendToPrompt_Scope_Mixed" xml:space="preserve">
+    <value>Upload-Aktionen verwenden direkte Dateien plus durch die Ordnerrichtlinie erlaubte Dateien. Die Indizierung gilt nur für Ordner.</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_WithFolders" xml:space="preserve">
+    <value>Upload-Workflow mit der gewählten Ordnerrichtlinie ausführen. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_NoFolders" xml:space="preserve">
+    <value>Den aktuellen Datei-Upload-Workflow sofort ausführen.</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_WithFolders" xml:space="preserve">
+    <value>Upload Content mit der gewählten Ordnerrichtlinie öffnen. {0}</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_NoFolders" xml:space="preserve">
+    <value>Upload Content öffnen und die gesendeten Elemente vor dem Hochladen überprüfen.</value>
+  </data>
+  <data name="SendToPrompt_Index_Mixed" xml:space="preserve">
+    <value>Ordnerindizierung nur für die gesendeten Ordnerelemente ausführen.</value>
+  </data>
+  <data name="SendToPrompt_Index_Folders" xml:space="preserve">
+    <value>Ordnerindizierungs-Workflow für die gesendeten Ordner ausführen.</value>
+  </data>
 </root>

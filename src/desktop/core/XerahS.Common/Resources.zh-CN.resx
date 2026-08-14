@@ -75,4 +75,73 @@
   <data name="SendToPrompt_RememberChoiceText" xml:space="preserve">
     <value>为 {0} 记住此选择</value>
   </data>
+  <data name="SendToPrompt_FolderPolicy_DoNotExpand" xml:space="preserve">
+    <value>文件夹项目在「立即上传」和「Upload Content」中将被忽略。</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_Recursive" xml:space="preserve">
+    <value>上传操作将包括直接文件和已发送文件夹下的所有文件。</value>
+  </data>
+  <data name="SendToPrompt_FolderPolicy_TopLevel" xml:space="preserve">
+    <value>上传操作将包括直接文件和已发送文件夹中的顶层文件。</value>
+  </data>
+  <data name="SendToPrompt_NoFolders" xml:space="preserve">
+    <value>未发送文件夹。</value>
+  </data>
+  <data name="SendToPrompt_BatchPolicyFallback" xml:space="preserve">
+    <value>当每个发送的文件都是图像时，将应用图像批处理策略。</value>
+  </data>
+  <data name="SendToPrompt_Kind_ImageFilesOnly" xml:space="preserve">
+    <value>仅图像文件</value>
+  </data>
+  <data name="SendToPrompt_Kind_FilesOnly" xml:space="preserve">
+    <value>仅文件</value>
+  </data>
+  <data name="SendToPrompt_Kind_FoldersOnly" xml:space="preserve">
+    <value>仅文件夹</value>
+  </data>
+  <data name="SendToPrompt_Kind_Mixed" xml:space="preserve">
+    <value>文件和文件夹</value>
+  </data>
+  <data name="SendToPrompt_Details_ImageCompatible" xml:space="preserve">
+    <value>所有选定的文件都与图像兼容，因此上传、编辑器、固定和队列操作均可用。</value>
+  </data>
+  <data name="SendToPrompt_Details_FilesOnly" xml:space="preserve">
+    <value>仅发送了文件。「立即上传」和「Upload Content」将直接使用这些文件。</value>
+  </data>
+  <data name="SendToPrompt_Details_FoldersOnly" xml:space="preserve">
+    <value>仅发送了文件夹。上传和 Upload Content 使用所选文件夹策略；索引文件夹保留文件夹意图。</value>
+  </data>
+  <data name="SendToPrompt_Details_Mixed" xml:space="preserve">
+    <value>混合的 Send-to 批次将文件和文件夹行为分开处理。索引文件夹仅适用于文件夹项目。</value>
+  </data>
+  <data name="SendToPrompt_Scope_ImageCompatible" xml:space="preserve">
+    <value>此批次支持上传、队列、编辑器和固定操作。</value>
+  </data>
+  <data name="SendToPrompt_Scope_FilesOnly" xml:space="preserve">
+    <value>此批次支持上传和队列操作。</value>
+  </data>
+  <data name="SendToPrompt_Scope_FoldersOnly" xml:space="preserve">
+    <value>上传操作使用所选文件夹策略。索引保留文件夹意图。</value>
+  </data>
+  <data name="SendToPrompt_Scope_Mixed" xml:space="preserve">
+    <value>上传操作使用直接文件以及文件夹策略允许的文件。索引仅适用于文件夹。</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_WithFolders" xml:space="preserve">
+    <value>使用所选文件夹策略运行上传工作流。{0}</value>
+  </data>
+  <data name="SendToPrompt_UploadNow_NoFolders" xml:space="preserve">
+    <value>立即运行当前文件上传工作流。</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_WithFolders" xml:space="preserve">
+    <value>使用所选文件夹策略打开 Upload Content。{0}</value>
+  </data>
+  <data name="SendToPrompt_UploadContent_NoFolders" xml:space="preserve">
+    <value>打开 Upload Content 并在上传前查看已发送项目。</value>
+  </data>
+  <data name="SendToPrompt_Index_Mixed" xml:space="preserve">
+    <value>仅对已发送的文件夹项目运行文件夹索引。</value>
+  </data>
+  <data name="SendToPrompt_Index_Folders" xml:space="preserve">
+    <value>对已发送的文件夹运行文件夹索引工作流。</value>
+  </data>
 </root>
