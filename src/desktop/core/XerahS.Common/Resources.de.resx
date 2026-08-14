@@ -285,4 +285,64 @@ Pfad: {4}</value>
   <data name="UploadContent_Type_URL" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="Common_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Die Plattformdienste sind nicht initialisiert.</value>
+  </data>
+  <data name="Ocr_Title" xml:space="preserve">
+    <value>OCR</value>
+  </data>
+  <data name="Ocr_NotSupported" xml:space="preserve">
+    <value>OCR wird auf dieser Plattform nicht unterstützt.</value>
+  </data>
+  <data name="Pin_ImageFilesFilter" xml:space="preserve">
+    <value>Bilddateien</value>
+  </data>
+  <data name="Pin_NoCompatibleImages" xml:space="preserve">
+    <value>Es waren keine kompatiblen Bilddateien zum Anheften verfügbar.</value>
+  </data>
+  <data name="Pin_PinnedSummary" xml:space="preserve">
+    <value>{0} Bild(er) angeheftet; {1} Element(e) übersprungen.</value>
+  </data>
+  <data name="Pin_ClipboardNoImage" xml:space="preserve">
+    <value>Die Zwischenablage enthält kein Bild.</value>
+  </data>
+  <data name="Pin_LoadImageFailed" xml:space="preserve">
+    <value>Bilddatei konnte nicht geladen werden.</value>
+  </data>
+  <data name="Pin_SelectImageTitle" xml:space="preserve">
+    <value>Bild zum Anheften auswählen</value>
+  </data>
+  <data name="Qr_Title" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="Qr_ScreenCaptureCancelled" xml:space="preserve">
+    <value>Die Bildschirmaufnahme wurde abgebrochen.</value>
+  </data>
+  <data name="Qr_RegionCaptureCancelled" xml:space="preserve">
+    <value>Die Bereichsaufnahme wurde abgebrochen.</value>
+  </data>
+  <data name="Qr_NoCodeDetected" xml:space="preserve">
+    <value>Es wurde kein QR-Code erkannt.</value>
+  </data>
+  <data name="Qr_DecodedSummary" xml:space="preserve">
+    <value>{0} QR-Code(s) decodiert.</value>
+  </data>
+  <data name="Ruler_Title" xml:space="preserve">
+    <value>Lineal</value>
+  </data>
+  <data name="Ruler_WindowsOnly" xml:space="preserve">
+    <value>Das Lineal-Werkzeug ist derzeit nur in Windows-Builds verfügbar.</value>
+  </data>
+  <data name="Scrolling_SelectWindowTitle" xml:space="preserve">
+    <value>Fenster zum Erfassen auswählen</value>
+  </data>
+  <data name="ColorPicker_Title" xml:space="preserve">
+    <value>Farbwähler</value>
+  </data>
+  <data name="ColorPicker_ScreenPickCancelled" xml:space="preserve">
+    <value>Die Bildschirm-Farbauswahl wurde abgebrochen.</value>
+  </data>
+  <data name="ColorPicker_CopyFailed" xml:space="preserve">
+    <value>Farbe konnte nicht in die Zwischenablage kopiert werden.</value>
+  </data>
 </root>

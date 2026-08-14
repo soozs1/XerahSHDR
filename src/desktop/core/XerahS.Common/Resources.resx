@@ -285,4 +285,64 @@ Path: {4}</value>
   <data name="UploadContent_Type_URL" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="Common_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Platform services are not initialized.</value>
+  </data>
+  <data name="Ocr_Title" xml:space="preserve">
+    <value>OCR</value>
+  </data>
+  <data name="Ocr_NotSupported" xml:space="preserve">
+    <value>OCR is not supported on this platform.</value>
+  </data>
+  <data name="Pin_ImageFilesFilter" xml:space="preserve">
+    <value>Image files</value>
+  </data>
+  <data name="Pin_NoCompatibleImages" xml:space="preserve">
+    <value>No compatible image files were available to pin.</value>
+  </data>
+  <data name="Pin_PinnedSummary" xml:space="preserve">
+    <value>Pinned {0} image(s); skipped {1} item(s).</value>
+  </data>
+  <data name="Pin_ClipboardNoImage" xml:space="preserve">
+    <value>Clipboard does not contain an image.</value>
+  </data>
+  <data name="Pin_LoadImageFailed" xml:space="preserve">
+    <value>Failed to load image file.</value>
+  </data>
+  <data name="Pin_SelectImageTitle" xml:space="preserve">
+    <value>Select Image to Pin</value>
+  </data>
+  <data name="Qr_Title" xml:space="preserve">
+    <value>QR Code</value>
+  </data>
+  <data name="Qr_ScreenCaptureCancelled" xml:space="preserve">
+    <value>Screen capture was cancelled.</value>
+  </data>
+  <data name="Qr_RegionCaptureCancelled" xml:space="preserve">
+    <value>Region capture was cancelled.</value>
+  </data>
+  <data name="Qr_NoCodeDetected" xml:space="preserve">
+    <value>No QR code was detected.</value>
+  </data>
+  <data name="Qr_DecodedSummary" xml:space="preserve">
+    <value>Decoded {0} QR code(s).</value>
+  </data>
+  <data name="Ruler_Title" xml:space="preserve">
+    <value>Ruler</value>
+  </data>
+  <data name="Ruler_WindowsOnly" xml:space="preserve">
+    <value>Ruler tool is currently available on Windows builds.</value>
+  </data>
+  <data name="Scrolling_SelectWindowTitle" xml:space="preserve">
+    <value>Select Window to Capture</value>
+  </data>
+  <data name="ColorPicker_Title" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="ColorPicker_ScreenPickCancelled" xml:space="preserve">
+    <value>Screen color picking was cancelled.</value>
+  </data>
+  <data name="ColorPicker_CopyFailed" xml:space="preserve">
+    <value>Failed to copy color to clipboard.</value>
+  </data>
 </root>

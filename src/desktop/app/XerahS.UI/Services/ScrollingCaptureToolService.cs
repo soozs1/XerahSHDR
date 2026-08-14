@@ -150,7 +150,7 @@ public static class ScrollingCaptureToolService
 
                 var selectorWindow = new SurfaceWindow
                 {
-                    Title = "Select Window to Capture",
+                    Title = Resources.GetString("Scrolling_SelectWindowTitle"),
                     Width = 400,
                     Height = 500,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,

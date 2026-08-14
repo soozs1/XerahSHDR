@@ -285,4 +285,64 @@
   <data name="UploadContent_Type_URL" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="Common_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Платформенные службы не инициализированы.</value>
+  </data>
+  <data name="Ocr_Title" xml:space="preserve">
+    <value>OCR</value>
+  </data>
+  <data name="Ocr_NotSupported" xml:space="preserve">
+    <value>Распознавание текста (OCR) не поддерживается на этой платформе.</value>
+  </data>
+  <data name="Pin_ImageFilesFilter" xml:space="preserve">
+    <value>Файлы изображений</value>
+  </data>
+  <data name="Pin_NoCompatibleImages" xml:space="preserve">
+    <value>Не найдено совместимых файлов изображений для закрепления.</value>
+  </data>
+  <data name="Pin_PinnedSummary" xml:space="preserve">
+    <value>Закреплено изображений: {0}; пропущено элементов: {1}.</value>
+  </data>
+  <data name="Pin_ClipboardNoImage" xml:space="preserve">
+    <value>Буфер обмена не содержит изображение.</value>
+  </data>
+  <data name="Pin_LoadImageFailed" xml:space="preserve">
+    <value>Не удалось загрузить файл изображения.</value>
+  </data>
+  <data name="Pin_SelectImageTitle" xml:space="preserve">
+    <value>Выберите изображение для закрепления</value>
+  </data>
+  <data name="Qr_Title" xml:space="preserve">
+    <value>QR-код</value>
+  </data>
+  <data name="Qr_ScreenCaptureCancelled" xml:space="preserve">
+    <value>Захват экрана был отменён.</value>
+  </data>
+  <data name="Qr_RegionCaptureCancelled" xml:space="preserve">
+    <value>Захват области был отменён.</value>
+  </data>
+  <data name="Qr_NoCodeDetected" xml:space="preserve">
+    <value>QR-код не обнаружен.</value>
+  </data>
+  <data name="Qr_DecodedSummary" xml:space="preserve">
+    <value>Распознано QR-кодов: {0}.</value>
+  </data>
+  <data name="Ruler_Title" xml:space="preserve">
+    <value>Линейка</value>
+  </data>
+  <data name="Ruler_WindowsOnly" xml:space="preserve">
+    <value>Инструмент «Линейка» в настоящее время доступен только в сборках для Windows.</value>
+  </data>
+  <data name="Scrolling_SelectWindowTitle" xml:space="preserve">
+    <value>Выберите окно для захвата</value>
+  </data>
+  <data name="ColorPicker_Title" xml:space="preserve">
+    <value>Пипетка</value>
+  </data>
+  <data name="ColorPicker_ScreenPickCancelled" xml:space="preserve">
+    <value>Выбор цвета с экрана был отменён.</value>
+  </data>
+  <data name="ColorPicker_CopyFailed" xml:space="preserve">
+    <value>Не удалось скопировать цвет в буфер обмена.</value>
+  </data>
 </root>

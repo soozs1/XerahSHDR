@@ -285,4 +285,64 @@ Ruta: {4}</value>
   <data name="UploadContent_Type_URL" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="Common_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Los servicios de la plataforma no están inicializados.</value>
+  </data>
+  <data name="Ocr_Title" xml:space="preserve">
+    <value>OCR</value>
+  </data>
+  <data name="Ocr_NotSupported" xml:space="preserve">
+    <value>OCR no es compatible con esta plataforma.</value>
+  </data>
+  <data name="Pin_ImageFilesFilter" xml:space="preserve">
+    <value>Archivos de imagen</value>
+  </data>
+  <data name="Pin_NoCompatibleImages" xml:space="preserve">
+    <value>No había archivos de imagen compatibles disponibles para fijar.</value>
+  </data>
+  <data name="Pin_PinnedSummary" xml:space="preserve">
+    <value>Fijadas {0} imagen(es); omitidos {1} elemento(s).</value>
+  </data>
+  <data name="Pin_ClipboardNoImage" xml:space="preserve">
+    <value>El portapapeles no contiene una imagen.</value>
+  </data>
+  <data name="Pin_LoadImageFailed" xml:space="preserve">
+    <value>No se pudo cargar el archivo de imagen.</value>
+  </data>
+  <data name="Pin_SelectImageTitle" xml:space="preserve">
+    <value>Seleccionar imagen para fijar</value>
+  </data>
+  <data name="Qr_Title" xml:space="preserve">
+    <value>Código QR</value>
+  </data>
+  <data name="Qr_ScreenCaptureCancelled" xml:space="preserve">
+    <value>Se canceló la captura de pantalla.</value>
+  </data>
+  <data name="Qr_RegionCaptureCancelled" xml:space="preserve">
+    <value>Se canceló la captura de región.</value>
+  </data>
+  <data name="Qr_NoCodeDetected" xml:space="preserve">
+    <value>No se detectó ningún código QR.</value>
+  </data>
+  <data name="Qr_DecodedSummary" xml:space="preserve">
+    <value>Se decodificaron {0} código(s) QR.</value>
+  </data>
+  <data name="Ruler_Title" xml:space="preserve">
+    <value>Regla</value>
+  </data>
+  <data name="Ruler_WindowsOnly" xml:space="preserve">
+    <value>La herramienta Regla solo está disponible actualmente en las compilaciones de Windows.</value>
+  </data>
+  <data name="Scrolling_SelectWindowTitle" xml:space="preserve">
+    <value>Seleccionar ventana para capturar</value>
+  </data>
+  <data name="ColorPicker_Title" xml:space="preserve">
+    <value>Selector de color</value>
+  </data>
+  <data name="ColorPicker_ScreenPickCancelled" xml:space="preserve">
+    <value>Se canceló la selección de color de pantalla.</value>
+  </data>
+  <data name="ColorPicker_CopyFailed" xml:space="preserve">
+    <value>No se pudo copiar el color al portapapeles.</value>
+  </data>
 </root>
