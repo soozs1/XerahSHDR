@@ -345,4 +345,500 @@ Ruta: {4}</value>
   <data name="ColorPicker_CopyFailed" xml:space="preserve">
     <value>No se pudo copiar el color al portapapeles.</value>
   </data>
+  <data name="Recording_StatusReady" xml:space="preserve">
+    <value>Listo</value>
+  </data>
+  <data name="Recording_StatusInitializing" xml:space="preserve">
+    <value>Inicializando...</value>
+  </data>
+  <data name="Recording_StatusRecording" xml:space="preserve">
+    <value>Grabando</value>
+  </data>
+  <data name="Recording_StatusPaused" xml:space="preserve">
+    <value>En pausa</value>
+  </data>
+  <data name="Recording_StatusFinalizing" xml:space="preserve">
+    <value>Finalizando...</value>
+  </data>
+  <data name="Recording_StatusError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Recording_FailedToStart" xml:space="preserve">
+    <value>No se pudo iniciar</value>
+  </data>
+  <data name="Recording_ErrorWithMessage" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="Recording_EncoderWindowsNativeFfmpeg" xml:space="preserve">
+    <value>Windows usa la captura nativa con Media Foundation para H.264. HEVC, VP9 y AV1 cambian automáticamente al backend FFmpeg en esta compilación.</value>
+  </data>
+  <data name="Recording_EncoderWindowsNativeNoFfmpeg" xml:space="preserve">
+    <value>Windows usa la captura nativa con Media Foundation para H.264. Instala FFmpeg para habilitar la grabación HEVC, VP9 y AV1.</value>
+  </data>
+  <data name="Recording_EncoderWindowsFallback" xml:space="preserve">
+    <value>Usando el respaldo de FFmpeg para la grabación (requiere Windows 10 1803+ para la grabación nativa).</value>
+  </data>
+  <data name="Recording_EncoderMacosFfmpeg" xml:space="preserve">
+    <value>macOS usa la grabación nativa para H.264. HEVC, VP9 y AV1 cambian automáticamente a FFmpeg en esta compilación.</value>
+  </data>
+  <data name="Recording_EncoderMacosNoFfmpeg" xml:space="preserve">
+    <value>La grabación nativa de macOS solo cubre H.264 actualmente. Instala FFmpeg para habilitar la grabación HEVC, VP9 y AV1.</value>
+  </data>
+  <data name="Recording_EncoderOther" xml:space="preserve">
+    <value>La compatibilidad de grabación específica de la plataforma aún no está implementada. Se usará el respaldo de FFmpeg.</value>
+  </data>
+  <data name="Recording_FeatureWindows" xml:space="preserve">
+    <value>Graba tu pantalla en video MP4 usando Windows.Graphics.Capture nativo</value>
+  </data>
+  <data name="Recording_FeatureFfmpeg" xml:space="preserve">
+    <value>Graba tu pantalla en video MP4 usando FFmpeg</value>
+  </data>
+  <data name="Recording_FeatureGeneric" xml:space="preserve">
+    <value>Graba tu pantalla en video MP4</value>
+  </data>
+  <data name="Recording_UsageWindowsFfmpeg" xml:space="preserve">
+    <value>Nota: H.264 se graba a través de Windows.Graphics.Capture + Media Foundation. HEVC, VP9 y AV1 se enrutan automáticamente a través de FFmpeg.</value>
+  </data>
+  <data name="Recording_UsageWindowsNoFfmpeg" xml:space="preserve">
+    <value>Nota: H.264 se graba a través de Windows.Graphics.Capture + Media Foundation. Instala FFmpeg para desbloquear HEVC, VP9 y AV1.</value>
+  </data>
+  <data name="Recording_UsageWindowsFallback" xml:space="preserve">
+    <value>Nota: la grabación usa FFmpeg para la codificación de video. Requiere Windows 10 1803+ para la compatibilidad nativa con Windows.Graphics.Capture.</value>
+  </data>
+  <data name="Recording_UsageMacosFfmpeg" xml:space="preserve">
+    <value>Nota: H.264 se graba de forma nativa. HEVC, VP9 y AV1 usan FFmpeg en macOS en esta compilación.</value>
+  </data>
+  <data name="Recording_UsageMacosNoFfmpeg" xml:space="preserve">
+    <value>Nota: instala FFmpeg si quieres HEVC, VP9 o AV1 en macOS.</value>
+  </data>
+  <data name="Recording_UsageLinuxGeneric" xml:space="preserve">
+    <value>Nota: la grabación usa FFmpeg para la codificación de video. Asegúrate de que FFmpeg esté instalado y accesible en tu PATH.</value>
+  </data>
+  <data name="Recording_CodecFfmpegUnavailable" xml:space="preserve">
+    <value>FFmpeg no está disponible, por lo que los códecs avanzados están ocultos y el códec de grabación se restableció a H.264.</value>
+  </data>
+  <data name="Recording_CodecInstallFfmpeg" xml:space="preserve">
+    <value>Instala FFmpeg para habilitar HEVC, VP9 y AV1 en esta plataforma.</value>
+  </data>
+  <data name="Recording_DiagnosticsRunning" xml:space="preserve">
+    <value>Ejecutando diagnóstico de grabación de Linux...</value>
+  </data>
+  <data name="Recording_DiagnosticsSaved" xml:space="preserve">
+    <value>Informe de diagnóstico guardado: {0}</value>
+  </data>
+  <data name="Recording_DiagnosticsFailed" xml:space="preserve">
+    <value>El diagnóstico falló. No se pudo escribir el informe.</value>
+  </data>
+  <data name="Recording_DiagnosticsFailedLogs" xml:space="preserve">
+    <value>El diagnóstico falló. Revisa los registros para obtener detalles.</value>
+  </data>
+  <data name="AutoCapture_Start" xml:space="preserve">
+    <value>Iniciar</value>
+  </data>
+  <data name="AutoCapture_Stop" xml:space="preserve">
+    <value>Detener</value>
+  </data>
+  <data name="AutoCapture_StoppedSummary" xml:space="preserve">
+    <value>Detenido. Capturas totales: {0}</value>
+  </data>
+  <data name="AutoCapture_RegionFullScreen" xml:space="preserve">
+    <value>Pantalla completa</value>
+  </data>
+  <data name="AutoCapture_RegionCoordinates" xml:space="preserve">
+    <value>X: {0}, Y: {1}, Ancho: {2}, Alto: {3}</value>
+  </data>
+  <data name="AutoCapture_RegionNone" xml:space="preserve">
+    <value>No se seleccionó ninguna región</value>
+  </data>
+  <data name="AutoCapture_StatusTimeLeft" xml:space="preserve">
+    <value>Tiempo restante: {0}s  {1}%  Total: {2}</value>
+  </data>
+  <data name="ProviderExplorer_SortDescending" xml:space="preserve">
+    <value>↓ Desc</value>
+  </data>
+  <data name="ProviderExplorer_SortAscending" xml:space="preserve">
+    <value>↑ Asc</value>
+  </data>
+  <data name="ProviderExplorer_Downloaded" xml:space="preserve">
+    <value>Descargado: {0}</value>
+  </data>
+  <data name="ProviderExplorer_DownloadFailed" xml:space="preserve">
+    <value>Error al descargar: {0}</value>
+  </data>
+  <data name="ProviderExplorer_DeleteFailed" xml:space="preserve">
+    <value>Error al eliminar: {0}</value>
+  </data>
+  <data name="ProviderExplorer_DeleteFailedWithError" xml:space="preserve">
+    <value>Error al eliminar: {0}</value>
+  </data>
+  <data name="ProviderExplorer_ErrorWithMessage" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="ProviderExplorer_StatusItemCount" xml:space="preserve">
+    <value>{0} elementos</value>
+  </data>
+  <data name="ProviderExplorer_StatusTotalSize" xml:space="preserve">
+    <value> | {0} en total</value>
+  </data>
+  <data name="ProviderExplorer_BreadcrumbRoot" xml:space="preserve">
+    <value>Raíz</value>
+  </data>
+  <data name="ProviderExplorer_DeleteConfirmationTitle" xml:space="preserve">
+    <value>Confirmar eliminación</value>
+  </data>
+  <data name="ProviderExplorer_DeleteConfirmationMessage" xml:space="preserve">
+    <value>¿Eliminar «{0}» del proveedor?
+
+Esto eliminará permanentemente el archivo del almacenamiento remoto. Esta acción no se puede deshacer.</value>
+  </data>
+  <data name="ProviderExplorer_BandwidthSavingsNotice" xml:space="preserve">
+    <value>Ahorro de ancho de banda: las miniaturas se cargaron a través de tu URL pública/CDN (por ejemplo, Cloudflare) en lugar de descargas S3 firmadas directamente.</value>
+  </data>
+  <data name="Destination_CategoryImageUploaders" xml:space="preserve">
+    <value>Subidores de imágenes</value>
+  </data>
+  <data name="Destination_CategoryTextUploaders" xml:space="preserve">
+    <value>Subidores de texto</value>
+  </data>
+  <data name="Destination_CategoryFileUploaders" xml:space="preserve">
+    <value>Subidores de archivos</value>
+  </data>
+  <data name="Destination_CategoryUrlShorteners" xml:space="preserve">
+    <value>Acortadores de URL</value>
+  </data>
+  <data name="Destination_CategoryUrlSharing" xml:space="preserve">
+    <value>Compartir URL</value>
+  </data>
+  <data name="Destination_CategoryNone" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="Destination_SelectShareXConfigTitle" xml:space="preserve">
+    <value>Seleccionar ShareX UploadersConfig.json</value>
+  </data>
+  <data name="Destination_ImportCompleteWithWarnings" xml:space="preserve">
+    <value>Importación completada (con advertencias)</value>
+  </data>
+  <data name="Destination_ImportComplete" xml:space="preserve">
+    <value>Importación completada</value>
+  </data>
+  <data name="Destination_ImportFailed" xml:space="preserve">
+    <value>Error al importar</value>
+  </data>
+  <data name="Destination_ImportFailedMessage" xml:space="preserve">
+    <value>No se pudo importar UploadersConfig:
+{0}</value>
+  </data>
+  <data name="Destination_CustomUploaderAlreadyExists" xml:space="preserve">
+    <value>El subidor personalizado ya existe</value>
+  </data>
+  <data name="Destination_CustomUploaderAlreadyExistsMessage" xml:space="preserve">
+    <value>Ya existe un subidor personalizado con una configuración idéntica a «{0}».</value>
+  </data>
+  <data name="Destination_CustomUploaderCreated" xml:space="preserve">
+    <value>Subidor personalizado creado</value>
+  </data>
+  <data name="Destination_SaveFailed" xml:space="preserve">
+    <value>Error al guardar</value>
+  </data>
+  <data name="Destination_SaveFailedMessage" xml:space="preserve">
+    <value>No se pudo guardar el subidor personalizado. Revisa los registros para obtener detalles.</value>
+  </data>
+  <data name="Destination_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Destination_CreateCustomUploaderFailed" xml:space="preserve">
+    <value>No se pudo crear el subidor personalizado: {0}</value>
+  </data>
+  <data name="Destination_ExportFailed" xml:space="preserve">
+    <value>Error al exportar</value>
+  </data>
+  <data name="Destination_ExportSelectInstance" xml:space="preserve">
+    <value>Selecciona una instancia de destino para exportar.</value>
+  </data>
+  <data name="Destination_ExportConfigTitle" xml:space="preserve">
+    <value>Exportar configuración de destino</value>
+  </data>
+  <data name="Destination_ExportConfigPrompt" xml:space="preserve">
+    <value>Introduce una frase de contraseña para este archivo .xsdc:</value>
+  </data>
+  <data name="Destination_ConfirmPassphraseTitle" xml:space="preserve">
+    <value>Confirmar frase de contraseña</value>
+  </data>
+  <data name="Destination_ConfirmPassphrasePrompt" xml:space="preserve">
+    <value>Vuelve a introducir la frase de contraseña:</value>
+  </data>
+  <data name="Destination_ExportPassphraseMismatch" xml:space="preserve">
+    <value>Las frases de contraseña no coinciden.</value>
+  </data>
+  <data name="Destination_ExportSaveDialogTitle" xml:space="preserve">
+    <value>Exportar configuración de destino de XerahS</value>
+  </data>
+  <data name="Destination_ConfigExported" xml:space="preserve">
+    <value>Configuración de destino exportada</value>
+  </data>
+  <data name="Destination_ConfigExportedMessage" xml:space="preserve">
+    <value>Configuración de destino cifrada guardada:
+{0}</value>
+  </data>
+  <data name="Destination_CustomUploaderSaved" xml:space="preserve">
+    <value>El subidor personalizado «{0}» se guardó en Plugins.</value>
+  </data>
+  <data name="Destination_CreatedInstances" xml:space="preserve">
+    <value>Se crearon {0} instancia(s) de destino: {1}.</value>
+  </data>
+  <data name="Destination_ReusedBindings" xml:space="preserve">
+    <value>Se reutilizaron los enlaces de instancia existentes para: {0}.</value>
+  </data>
+  <data name="Destination_NoCategoriesUpdated" xml:space="preserve">
+    <value>No se actualizó ninguna categoría de destino.</value>
+  </data>
+  <data name="Destination_ReadyToUse" xml:space="preserve">
+    <value>El subidor está listo para usarse sin «Añadir desde el catálogo».</value>
+  </data>
+  <data name="Destination_ImportSource" xml:space="preserve">
+    <value>Origen: {0}</value>
+  </data>
+  <data name="Destination_ImportCustomUploaderExport" xml:space="preserve">
+    <value>Exportación de subidores personalizados:</value>
+  </data>
+  <data name="Destination_ImportFromConfig" xml:space="preserve">
+    <value>- Importados desde la configuración: {0}</value>
+  </data>
+  <data name="Destination_ImportCreatedFiles" xml:space="preserve">
+    <value>- Archivos .sxcu creados: {0}</value>
+  </data>
+  <data name="Destination_ImportSkippedDuplicates" xml:space="preserve">
+    <value>- Duplicados omitidos: {0}</value>
+  </data>
+  <data name="Destination_ImportFailedExports" xml:space="preserve">
+    <value>- Exportaciones fallidas: {0}</value>
+  </data>
+  <data name="Destination_ImportPluginsFolder" xml:space="preserve">
+    <value>- Carpeta de plugins: {0}</value>
+  </data>
+  <data name="Destination_AutoCreatedInstances" xml:space="preserve">
+    <value>Se crearon automáticamente {0} instancia(s) de destino: listas para usar.</value>
+  </data>
+  <data name="Destination_ReusedBindingsSummary" xml:space="preserve">
+    <value>Se reutilizaron {0} enlace(s) de destino existentes sin crear duplicados.</value>
+  </data>
+  <data name="Destination_BuiltInMigration" xml:space="preserve">
+    <value>Migración de proveedores integrados:</value>
+  </data>
+  <data name="ImageAnalyzer_StatusSelectImage" xml:space="preserve">
+    <value>Selecciona una imagen para analizar</value>
+  </data>
+  <data name="ImageAnalyzer_StatusAnalyzing" xml:space="preserve">
+    <value>Analizando...</value>
+  </data>
+  <data name="ImageAnalyzer_StatusLoadFailed" xml:space="preserve">
+    <value>No se pudieron cargar los datos de la imagen</value>
+  </data>
+  <data name="ImageAnalyzer_StatusError" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="ImageAnalyzer_StatusCopied" xml:space="preserve">
+    <value>Copiado al portapapeles</value>
+  </data>
+  <data name="ImageAnalyzer_StatusDimensions" xml:space="preserve">
+    <value>{0} ({1} x {2})</value>
+  </data>
+  <data name="ImageAnalyzer_CapturedImage" xml:space="preserve">
+    <value>Imagen capturada</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryFile" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="ImageAnalyzer_CategorySource" xml:space="preserve">
+    <value>Origen</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryImage" xml:space="preserve">
+    <value>Imagen</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryColor" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="ImageAnalyzer_PropertySize" xml:space="preserve">
+    <value>Tamaño</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyExtension" xml:space="preserve">
+    <value>Extensión</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyDirectory" xml:space="preserve">
+    <value>Directorio</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyCreated" xml:space="preserve">
+    <value>Creado</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyModified" xml:space="preserve">
+    <value>Modificado</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyType" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyInMemoryImage" xml:space="preserve">
+    <value>Imagen en memoria</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyWidth" xml:space="preserve">
+    <value>Ancho</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyHeight" xml:space="preserve">
+    <value>Alto</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyPixelCount" xml:space="preserve">
+    <value>Número de píxeles</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAspectRatio" xml:space="preserve">
+    <value>Relación de aspecto</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyColorType" xml:space="preserve">
+    <value>Tipo de color</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAlphaType" xml:space="preserve">
+    <value>Tipo de alfa</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyBytesPerPixel" xml:space="preserve">
+    <value>Bytes por píxel</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyRowBytes" xml:space="preserve">
+    <value>Bytes por fila</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyTotalBytes" xml:space="preserve">
+    <value>Bytes totales</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAverageColor" xml:space="preserve">
+    <value>Color promedio</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAverageRgb" xml:space="preserve">
+    <value>RGB promedio</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyHasTransparency" xml:space="preserve">
+    <value>Tiene transparencia</value>
+  </data>
+  <data name="ImageAnalyzer_UnitPixels" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="ImageAnalyzer_AverageRgbValue" xml:space="preserve">
+    <value>R:{0} G:{1} B:{2}</value>
+  </data>
+  <data name="ImageAnalyzer_NotAvailable" xml:space="preserve">
+    <value>N/D</value>
+  </data>
+  <data name="Downloader_PreparingDownload" xml:space="preserve">
+    <value>Preparando descarga...</value>
+  </data>
+  <data name="Downloader_UrlNotAvailable" xml:space="preserve">
+    <value>URL de descarga no disponible.</value>
+  </data>
+  <data name="Downloader_GettingFileSize" xml:space="preserve">
+    <value>Obteniendo el tamaño del archivo...</value>
+  </data>
+  <data name="Downloader_CompletedStartingInstaller" xml:space="preserve">
+    <value>Descarga completada. Iniciando el instalador...</value>
+  </data>
+  <data name="Downloader_Canceled" xml:space="preserve">
+    <value>Descarga cancelada.</value>
+  </data>
+  <data name="Downloader_Failed" xml:space="preserve">
+    <value>Error en la descarga.</value>
+  </data>
+  <data name="Downloader_FailedWithMessage" xml:space="preserve">
+    <value>Error en la descarga: {0}</value>
+  </data>
+  <data name="Downloader_Downloading" xml:space="preserve">
+    <value>Descargando {0}...</value>
+  </data>
+  <data name="Downloader_SignatureVerificationFailed" xml:space="preserve">
+    <value>Falló la verificación de la firma del instalador. La actualización no se inició.</value>
+  </data>
+  <data name="Downloader_StartInstallerFailed" xml:space="preserve">
+    <value>No se pudo iniciar el instalador: {0}</value>
+  </data>
+  <data name="AfterUpload_NoPreviewTitle" xml:space="preserve">
+    <value>No hay vista previa disponible</value>
+  </data>
+  <data name="AfterUpload_NoPreviewDescription" xml:space="preserve">
+    <value>Esta carga no incluyó una vista previa local.</value>
+  </data>
+  <data name="AfterUpload_DefaultFileName" xml:space="preserve">
+    <value>Carga</value>
+  </data>
+  <data name="AfterUpload_AutoCloseText" xml:space="preserve">
+    <value>Se cierra automáticamente en {0}s</value>
+  </data>
+  <data name="AfterUpload_PreviewReadyTitle" xml:space="preserve">
+    <value>Vista previa lista</value>
+  </data>
+  <data name="AfterUpload_PreviewLoadedLocal" xml:space="preserve">
+    <value>Vista previa de la imagen cargada desde un archivo local.</value>
+  </data>
+  <data name="AfterUpload_PreviewUnavailableTitle" xml:space="preserve">
+    <value>Vista previa no disponible</value>
+  </data>
+  <data name="AfterUpload_PreviewUnavailableDescription" xml:space="preserve">
+    <value>Solo se pueden previsualizar imágenes. Usa las acciones de archivo para abrirlo.</value>
+  </data>
+  <data name="AfterUpload_PreviewLoadedCaptured" xml:space="preserve">
+    <value>Vista previa cargada desde la imagen capturada.</value>
+  </data>
+  <data name="AfterUpload_FormatGroupPrimaryUrl" xml:space="preserve">
+    <value>URL principal</value>
+  </data>
+  <data name="AfterUpload_FormatGroupEmbeds" xml:space="preserve">
+    <value>Inserciones</value>
+  </data>
+  <data name="AfterUpload_FormatGroupManagement" xml:space="preserve">
+    <value>Gestión</value>
+  </data>
+  <data name="AfterUpload_FormatGroupLocal" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="AfterUpload_FormatGroupCustom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="AfterUpload_FormatClipboardFormat" xml:space="preserve">
+    <value>Formato del portapapeles</value>
+  </data>
+  <data name="AfterUpload_FormatOpenUrlFormat" xml:space="preserve">
+    <value>Formato para abrir URL</value>
+  </data>
+  <data name="AfterUpload_FormatUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="AfterUpload_FormatShortenedUrl" xml:space="preserve">
+    <value>URL acortada</value>
+  </data>
+  <data name="AfterUpload_FormatThumbnailUrl" xml:space="preserve">
+    <value>URL de miniatura</value>
+  </data>
+  <data name="AfterUpload_FormatMarkdown" xml:space="preserve">
+    <value>Markdown</value>
+  </data>
+  <data name="AfterUpload_FormatHtml" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="AfterUpload_FormatBbcode" xml:space="preserve">
+    <value>BBCode</value>
+  </data>
+  <data name="AfterUpload_FormatDeletionUrl" xml:space="preserve">
+    <value>URL de eliminación</value>
+  </data>
+  <data name="AfterUpload_FormatFilePath" xml:space="preserve">
+    <value>Ruta del archivo</value>
+  </data>
+  <data name="AfterUpload_FormatFileName" xml:space="preserve">
+    <value>Nombre del archivo</value>
+  </data>
+  <data name="MainWindow_OpenImageTitle" xml:space="preserve">
+    <value>Abrir imagen</value>
+  </data>
+  <data name="MainWindow_ImageFilesFilter" xml:space="preserve">
+    <value>Archivos de imagen</value>
+  </data>
+  <data name="MainWindow_NoWorkflowsConfigured" xml:space="preserve">
+    <value>No hay flujos de trabajo configurados</value>
+  </data>
 </root>

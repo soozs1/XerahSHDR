@@ -64,7 +64,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
     private TimeSpan _duration = TimeSpan.Zero;
 
     [ObservableProperty]
-    private string _statusText = "Ready";
+    private string _statusText = Resources.GetString("Recording_StatusReady");
 
     [ObservableProperty]
     private bool _isRecording;
@@ -154,22 +154,22 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
             if (OperatingSystem.IsWindows() && Environment.OSVersion.Version.Build >= 17134)
             {
                 return IsFfmpegAvailableForAdvancedCodecs()
-                    ? "Windows uses native capture with Media Foundation for H.264. HEVC, VP9, and AV1 automatically switch to the FFmpeg backend in this build."
-                    : "Windows uses native capture with Media Foundation for H.264. Install FFmpeg to enable HEVC, VP9, and AV1 recording.";
+                    ? Resources.GetString("Recording_EncoderWindowsNativeFfmpeg")
+                    : Resources.GetString("Recording_EncoderWindowsNativeNoFfmpeg");
             }
             else if (OperatingSystem.IsWindows())
             {
-                return "Using FFmpeg fallback for recording (requires Windows 10 1803+ for native recording).";
+                return Resources.GetString("Recording_EncoderWindowsFallback");
             }
             else if (OperatingSystem.IsMacOS())
             {
                 return IsFfmpegAvailableForAdvancedCodecs()
-                    ? "macOS uses native recording for H.264. HEVC, VP9, and AV1 automatically switch to FFmpeg in this build."
-                    : "macOS native recording currently covers H.264 only. Install FFmpeg to enable HEVC, VP9, and AV1 recording.";
+                    ? Resources.GetString("Recording_EncoderMacosFfmpeg")
+                    : Resources.GetString("Recording_EncoderMacosNoFfmpeg");
             }
             else
             {
-                return "Platform-specific recording support not yet implemented. FFmpeg fallback will be used.";
+                return Resources.GetString("Recording_EncoderOther");
             }
         }
     }
@@ -183,19 +183,19 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
         {
             if (OperatingSystem.IsWindows())
             {
-                return "Record your screen to MP4 video using native Windows.Graphics.Capture";
+                return Resources.GetString("Recording_FeatureWindows");
             }
             else if (OperatingSystem.IsMacOS())
             {
-                return "Record your screen to MP4 video using FFmpeg";
+                return Resources.GetString("Recording_FeatureFfmpeg");
             }
             else if (OperatingSystem.IsLinux())
             {
-                return "Record your screen to MP4 video using FFmpeg";
+                return Resources.GetString("Recording_FeatureFfmpeg");
             }
             else
             {
-                return "Record your screen to MP4 video";
+                return Resources.GetString("Recording_FeatureGeneric");
             }
         }
     }
@@ -210,22 +210,22 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
             if (OperatingSystem.IsWindows() && Environment.OSVersion.Version.Build >= 17134)
             {
                 return IsFfmpegAvailableForAdvancedCodecs()
-                    ? "Note: H.264 records through Windows.Graphics.Capture + Media Foundation. HEVC, VP9, and AV1 are routed through FFmpeg automatically."
-                    : "Note: H.264 records through Windows.Graphics.Capture + Media Foundation. Install FFmpeg to unlock HEVC, VP9, and AV1.";
+                    ? Resources.GetString("Recording_UsageWindowsFfmpeg")
+                    : Resources.GetString("Recording_UsageWindowsNoFfmpeg");
             }
             else if (OperatingSystem.IsWindows())
             {
-                return "Note: Recording uses FFmpeg for video encoding. Requires Windows 10 1803+ for native Windows.Graphics.Capture support.";
+                return Resources.GetString("Recording_UsageWindowsFallback");
             }
             else if (OperatingSystem.IsMacOS())
             {
                 return IsFfmpegAvailableForAdvancedCodecs()
-                    ? "Note: H.264 records natively. HEVC, VP9, and AV1 use FFmpeg on macOS in this build."
-                    : "Note: Install FFmpeg if you want HEVC, VP9, or AV1 on macOS.";
+                    ? Resources.GetString("Recording_UsageMacosFfmpeg")
+                    : Resources.GetString("Recording_UsageMacosNoFfmpeg");
             }
             else
             {
-                return "Note: Recording uses FFmpeg for video encoding. Ensure FFmpeg is installed and accessible in your system PATH.";
+                return Resources.GetString("Recording_UsageLinuxGeneric");
             }
         }
     }
@@ -258,7 +258,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
             switch (e.Status)
             {
                 case RecordingStatus.Idle:
-                    StatusText = "Ready";
+                    StatusText = Resources.GetString("Recording_StatusReady");
                     IsRecording = false;
                     IsPaused = false;
                     CanStart = true;
@@ -269,7 +269,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
                     break;
 
                 case RecordingStatus.Initializing:
-                    StatusText = "Initializing...";
+                    StatusText = Resources.GetString("Recording_StatusInitializing");
                     IsRecording = false;
                     IsPaused = false;
                     CanStart = false;
@@ -279,7 +279,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
                     break;
 
                 case RecordingStatus.Recording:
-                    StatusText = "Recording";
+                    StatusText = Resources.GetString("Recording_StatusRecording");
                     IsRecording = true;
                     IsPaused = false;
                     CanStart = false;
@@ -290,7 +290,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
                     break;
 
                 case RecordingStatus.Paused:
-                    StatusText = "Paused";
+                    StatusText = Resources.GetString("Recording_StatusPaused");
                     IsRecording = false;
                     IsPaused = true;
                     CanStart = false;
@@ -301,7 +301,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
                     break;
 
                 case RecordingStatus.Finalizing:
-                    StatusText = "Finalizing...";
+                    StatusText = Resources.GetString("Recording_StatusFinalizing");
                     IsRecording = false;
                     IsPaused = false;
                     CanStart = false;
@@ -312,7 +312,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
                     break;
 
                 case RecordingStatus.Error:
-                    StatusText = "Error";
+                    StatusText = Resources.GetString("Recording_StatusError");
                     IsRecording = false;
                     IsPaused = false;
                     CanStart = true;
@@ -334,7 +334,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
 
             if (e.IsFatal)
             {
-                StatusText = $"Error: {e.Error.Message}";
+                StatusText = Resources.GetString("Recording_ErrorWithMessage", e.Error.Message);
             }
         });
     }
@@ -390,7 +390,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
         {
             DebugHelper.WriteException(ex, "Failed to start recording");
             LastError = ex.Message;
-            StatusText = "Failed to start";
+            StatusText = Resources.GetString("Recording_FailedToStart");
             CanStart = true;
         }
     }
@@ -454,7 +454,7 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        LinuxRecordingDiagnosticsStatusText = "Running Linux recording diagnostics...";
+        LinuxRecordingDiagnosticsStatusText = Resources.GetString("Recording_DiagnosticsRunning");
 
         try
         {
@@ -463,17 +463,17 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
 
             if (!string.IsNullOrWhiteSpace(reportPath))
             {
-                LinuxRecordingDiagnosticsStatusText = $"Diagnostics report saved: {reportPath}";
+                LinuxRecordingDiagnosticsStatusText = Resources.GetString("Recording_DiagnosticsSaved", reportPath);
             }
             else
             {
-                LinuxRecordingDiagnosticsStatusText = "Diagnostics failed. Unable to write report.";
+                LinuxRecordingDiagnosticsStatusText = Resources.GetString("Recording_DiagnosticsFailed");
             }
         }
         catch (Exception ex)
         {
             DebugHelper.WriteException(ex, "Linux recording diagnostics failed.");
-            LinuxRecordingDiagnosticsStatusText = "Diagnostics failed. Check logs for details.";
+            LinuxRecordingDiagnosticsStatusText = Resources.GetString("Recording_DiagnosticsFailedLogs");
         }
     }
 
@@ -531,11 +531,11 @@ public partial class RecordingViewModel : ViewModelBase, IDisposable
         if (!AvailableCodecs.Contains(recordingSettings.Codec))
         {
             recordingSettings.Codec = VideoCodec.H264;
-            CodecAvailabilityMessage = "FFmpeg is not available, so advanced codecs are hidden and the recording codec was reset to H.264.";
+            CodecAvailabilityMessage = Resources.GetString("Recording_CodecFfmpegUnavailable");
         }
         else if ((OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) && !IsFfmpegAvailableForAdvancedCodecs())
         {
-            CodecAvailabilityMessage = "Install FFmpeg to enable HEVC, VP9, and AV1 on this platform.";
+            CodecAvailabilityMessage = Resources.GetString("Recording_CodecInstallFfmpeg");
         }
         else
         {

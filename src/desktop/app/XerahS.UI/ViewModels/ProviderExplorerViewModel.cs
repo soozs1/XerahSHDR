@@ -46,7 +46,7 @@ public record BreadcrumbPart(string Label, string Path);
 public static class ProviderExplorerConverters
 {
     public static Avalonia.Data.Converters.IValueConverter SortDirectionConverter { get; } =
-        new Avalonia.Data.Converters.FuncValueConverter<bool, string>(desc => desc ? "↓ Desc" : "↑ Asc");
+        new Avalonia.Data.Converters.FuncValueConverter<bool, string>(desc => desc ? Resources.GetString("ProviderExplorer_SortDescending") : Resources.GetString("ProviderExplorer_SortAscending"));
 }
 
 /// <summary>
@@ -222,12 +222,12 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
             using var fs = System.IO.File.Create(destPath);
             await stream.CopyToAsync(fs, cts.Token);
 
-            StatusText = $"Downloaded: {item.Item.Name}";
+            StatusText = Resources.GetString("ProviderExplorer_Downloaded", item.Item.Name);
         }
         catch (Exception ex)
         {
             DebugHelper.WriteException(ex, "ProviderExplorerViewModel - DownloadItem failed");
-            StatusText = $"Download failed: {ex.Message}";
+            StatusText = Resources.GetString("ProviderExplorer_DownloadFailed", ex.Message);
             SetError("DownloadItem", ex);
         }
     }
@@ -252,13 +252,13 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
             }
             else
             {
-                StatusText = $"Failed to delete: {item.Item.Name}";
+                StatusText = Resources.GetString("ProviderExplorer_DeleteFailed", item.Item.Name);
             }
         }
         catch (Exception ex)
         {
             DebugHelper.WriteException(ex, "ProviderExplorerViewModel - DeleteItem failed");
-            StatusText = $"Delete failed: {ex.Message}";
+            StatusText = Resources.GetString("ProviderExplorer_DeleteFailedWithError", ex.Message);
             SetError("DeleteItem", ex);
         }
     }
@@ -343,7 +343,7 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
         catch (Exception ex)
         {
             DebugHelper.WriteException(ex, "ProviderExplorerViewModel - LoadPageAsync failed");
-            StatusText = $"Error: {ex.Message}";
+            StatusText = Resources.GetString("ProviderExplorer_ErrorWithMessage", ex.Message);
             SetError("LoadPageAsync", ex);
         }
         finally
@@ -436,7 +436,7 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
     private void UpdateBreadcrumbs(string path)
     {
         Breadcrumbs.Clear();
-        Breadcrumbs.Add(new BreadcrumbPart("Root", ""));
+        Breadcrumbs.Add(new BreadcrumbPart(Resources.GetString("ProviderExplorer_BreadcrumbRoot"), ""));
 
         if (string.IsNullOrEmpty(path)) return;
 
@@ -453,8 +453,8 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
     private void UpdateStatusText()
     {
         long totalBytes = Items.Sum(i => i.Item.SizeBytes);
-        string sizeStr = totalBytes > 0 ? $" | {FormatBytes(totalBytes)} total" : "";
-        StatusText = $"{Items.Count} items{sizeStr}";
+        string sizeStr = totalBytes > 0 ? Resources.GetString("ProviderExplorer_StatusTotalSize", FormatBytes(totalBytes)) : "";
+        StatusText = Resources.GetString("ProviderExplorer_StatusItemCount", Items.Count) + sizeStr;
     }
 
     private static string FormatBytes(long bytes)
@@ -479,8 +479,8 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
     private Task<bool> ShowConfirmDeleteDialogAsync(string itemName)
     {
         return _coreDialogService.ShowConfirmationAsync(
-            "Confirm Delete",
-            $"Delete '{itemName}' from the provider?\n\nThis will permanently remove the file from the remote storage. This cannot be undone.");
+            Resources.GetString("ProviderExplorer_DeleteConfirmationTitle"),
+            Resources.GetString("ProviderExplorer_DeleteConfirmationMessage", itemName));
     }
 
     private void SetError(string operation, Exception ex)
@@ -499,7 +499,7 @@ public partial class ProviderExplorerViewModel : ViewModelBase, IDisposable
 
         _hasShownBandwidthSavingsNotice = true;
         BandwidthSavingsNotice =
-            "Bandwidth saver: thumbnails were loaded through your public/CDN URL (for example Cloudflare) instead of direct signed S3 downloads.";
+            Resources.GetString("ProviderExplorer_BandwidthSavingsNotice");
     }
 
     private void ClearBandwidthSavingsNotice()

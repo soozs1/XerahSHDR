@@ -345,4 +345,500 @@
   <data name="ColorPicker_CopyFailed" xml:space="preserve">
     <value>无法将颜色复制到剪贴板。</value>
   </data>
+  <data name="Recording_StatusReady" xml:space="preserve">
+    <value>就绪</value>
+  </data>
+  <data name="Recording_StatusInitializing" xml:space="preserve">
+    <value>正在初始化...</value>
+  </data>
+  <data name="Recording_StatusRecording" xml:space="preserve">
+    <value>正在录制</value>
+  </data>
+  <data name="Recording_StatusPaused" xml:space="preserve">
+    <value>已暂停</value>
+  </data>
+  <data name="Recording_StatusFinalizing" xml:space="preserve">
+    <value>正在完成...</value>
+  </data>
+  <data name="Recording_StatusError" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Recording_FailedToStart" xml:space="preserve">
+    <value>启动失败</value>
+  </data>
+  <data name="Recording_ErrorWithMessage" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+  <data name="Recording_EncoderWindowsNativeFfmpeg" xml:space="preserve">
+    <value>Windows 使用 Media Foundation 原生采集 H.264。在此版本中，HEVC、VP9 和 AV1 会自动切换到 FFmpeg 后端。</value>
+  </data>
+  <data name="Recording_EncoderWindowsNativeNoFfmpeg" xml:space="preserve">
+    <value>Windows 使用 Media Foundation 原生采集 H.264。请安装 FFmpeg 以启用 HEVC、VP9 和 AV1 录制。</value>
+  </data>
+  <data name="Recording_EncoderWindowsFallback" xml:space="preserve">
+    <value>使用 FFmpeg 回退进行录制（原生录制需要 Windows 10 1803+）。</value>
+  </data>
+  <data name="Recording_EncoderMacosFfmpeg" xml:space="preserve">
+    <value>macOS 使用原生录制 H.264。在此版本中，HEVC、VP9 和 AV1 会自动切换到 FFmpeg。</value>
+  </data>
+  <data name="Recording_EncoderMacosNoFfmpeg" xml:space="preserve">
+    <value>macOS 原生录制目前仅支持 H.264。请安装 FFmpeg 以启用 HEVC、VP9 和 AV1 录制。</value>
+  </data>
+  <data name="Recording_EncoderOther" xml:space="preserve">
+    <value>特定平台的录制支持尚未实现。将使用 FFmpeg 回退。</value>
+  </data>
+  <data name="Recording_FeatureWindows" xml:space="preserve">
+    <value>使用原生 Windows.Graphics.Capture 将屏幕录制为 MP4 视频</value>
+  </data>
+  <data name="Recording_FeatureFfmpeg" xml:space="preserve">
+    <value>使用 FFmpeg 将屏幕录制为 MP4 视频</value>
+  </data>
+  <data name="Recording_FeatureGeneric" xml:space="preserve">
+    <value>将屏幕录制为 MP4 视频</value>
+  </data>
+  <data name="Recording_UsageWindowsFfmpeg" xml:space="preserve">
+    <value>注意：H.264 通过 Windows.Graphics.Capture + Media Foundation 录制。HEVC、VP9 和 AV1 会自动通过 FFmpeg 处理。</value>
+  </data>
+  <data name="Recording_UsageWindowsNoFfmpeg" xml:space="preserve">
+    <value>注意：H.264 通过 Windows.Graphics.Capture + Media Foundation 录制。请安装 FFmpeg 以解锁 HEVC、VP9 和 AV1。</value>
+  </data>
+  <data name="Recording_UsageWindowsFallback" xml:space="preserve">
+    <value>注意：录制使用 FFmpeg 进行视频编码。原生 Windows.Graphics.Capture 支持需要 Windows 10 1803+。</value>
+  </data>
+  <data name="Recording_UsageMacosFfmpeg" xml:space="preserve">
+    <value>注意：H.264 原生录制。在此版本中，HEVC、VP9 和 AV1 在 macOS 上使用 FFmpeg。</value>
+  </data>
+  <data name="Recording_UsageMacosNoFfmpeg" xml:space="preserve">
+    <value>注意：如需在 macOS 上使用 HEVC、VP9 或 AV1，请安装 FFmpeg。</value>
+  </data>
+  <data name="Recording_UsageLinuxGeneric" xml:space="preserve">
+    <value>注意：录制使用 FFmpeg 进行视频编码。请确保 FFmpeg 已安装且可从系统 PATH 访问。</value>
+  </data>
+  <data name="Recording_CodecFfmpegUnavailable" xml:space="preserve">
+    <value>FFmpeg 不可用，因此高级编解码器已隐藏，录制编解码器已重置为 H.264。</value>
+  </data>
+  <data name="Recording_CodecInstallFfmpeg" xml:space="preserve">
+    <value>请安装 FFmpeg 以在此平台上启用 HEVC、VP9 和 AV1。</value>
+  </data>
+  <data name="Recording_DiagnosticsRunning" xml:space="preserve">
+    <value>正在运行 Linux 录制诊断...</value>
+  </data>
+  <data name="Recording_DiagnosticsSaved" xml:space="preserve">
+    <value>诊断报告已保存：{0}</value>
+  </data>
+  <data name="Recording_DiagnosticsFailed" xml:space="preserve">
+    <value>诊断失败。无法写入报告。</value>
+  </data>
+  <data name="Recording_DiagnosticsFailedLogs" xml:space="preserve">
+    <value>诊断失败。请查看日志了解详情。</value>
+  </data>
+  <data name="AutoCapture_Start" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="AutoCapture_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="AutoCapture_StoppedSummary" xml:space="preserve">
+    <value>已停止。总捕获次数：{0}</value>
+  </data>
+  <data name="AutoCapture_RegionFullScreen" xml:space="preserve">
+    <value>全屏</value>
+  </data>
+  <data name="AutoCapture_RegionCoordinates" xml:space="preserve">
+    <value>X：{0}，Y：{1}，宽度：{2}，高度：{3}</value>
+  </data>
+  <data name="AutoCapture_RegionNone" xml:space="preserve">
+    <value>未选择区域</value>
+  </data>
+  <data name="AutoCapture_StatusTimeLeft" xml:space="preserve">
+    <value>剩余时间：{0} 秒  {1}%  总计：{2}</value>
+  </data>
+  <data name="ProviderExplorer_SortDescending" xml:space="preserve">
+    <value>↓ 降序</value>
+  </data>
+  <data name="ProviderExplorer_SortAscending" xml:space="preserve">
+    <value>↑ 升序</value>
+  </data>
+  <data name="ProviderExplorer_Downloaded" xml:space="preserve">
+    <value>已下载：{0}</value>
+  </data>
+  <data name="ProviderExplorer_DownloadFailed" xml:space="preserve">
+    <value>下载失败：{0}</value>
+  </data>
+  <data name="ProviderExplorer_DeleteFailed" xml:space="preserve">
+    <value>删除失败：{0}</value>
+  </data>
+  <data name="ProviderExplorer_DeleteFailedWithError" xml:space="preserve">
+    <value>删除失败：{0}</value>
+  </data>
+  <data name="ProviderExplorer_ErrorWithMessage" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+  <data name="ProviderExplorer_StatusItemCount" xml:space="preserve">
+    <value>{0} 个项目</value>
+  </data>
+  <data name="ProviderExplorer_StatusTotalSize" xml:space="preserve">
+    <value> | 共 {0}</value>
+  </data>
+  <data name="ProviderExplorer_BreadcrumbRoot" xml:space="preserve">
+    <value>根目录</value>
+  </data>
+  <data name="ProviderExplorer_DeleteConfirmationTitle" xml:space="preserve">
+    <value>确认删除</value>
+  </data>
+  <data name="ProviderExplorer_DeleteConfirmationMessage" xml:space="preserve">
+    <value>从提供者删除“{0}”？
+
+这将从远程存储中永久删除该文件。此操作无法撤销。</value>
+  </data>
+  <data name="ProviderExplorer_BandwidthSavingsNotice" xml:space="preserve">
+    <value>带宽节省：缩略图通过你的公共/CDN 网址（例如 Cloudflare）加载，而不是直接签名的 S3 下载。</value>
+  </data>
+  <data name="Destination_CategoryImageUploaders" xml:space="preserve">
+    <value>图片上传器</value>
+  </data>
+  <data name="Destination_CategoryTextUploaders" xml:space="preserve">
+    <value>文本上传器</value>
+  </data>
+  <data name="Destination_CategoryFileUploaders" xml:space="preserve">
+    <value>文件上传器</value>
+  </data>
+  <data name="Destination_CategoryUrlShorteners" xml:space="preserve">
+    <value>网址缩短器</value>
+  </data>
+  <data name="Destination_CategoryUrlSharing" xml:space="preserve">
+    <value>网址分享</value>
+  </data>
+  <data name="Destination_CategoryNone" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="Destination_SelectShareXConfigTitle" xml:space="preserve">
+    <value>选择 ShareX UploadersConfig.json</value>
+  </data>
+  <data name="Destination_ImportCompleteWithWarnings" xml:space="preserve">
+    <value>导入完成（有警告）</value>
+  </data>
+  <data name="Destination_ImportComplete" xml:space="preserve">
+    <value>导入完成</value>
+  </data>
+  <data name="Destination_ImportFailed" xml:space="preserve">
+    <value>导入失败</value>
+  </data>
+  <data name="Destination_ImportFailedMessage" xml:space="preserve">
+    <value>无法导入 UploadersConfig：
+{0}</value>
+  </data>
+  <data name="Destination_CustomUploaderAlreadyExists" xml:space="preserve">
+    <value>自定义上传器已存在</value>
+  </data>
+  <data name="Destination_CustomUploaderAlreadyExistsMessage" xml:space="preserve">
+    <value>已存在与“{0}”配置完全相同的自定义上传器。</value>
+  </data>
+  <data name="Destination_CustomUploaderCreated" xml:space="preserve">
+    <value>自定义上传器已创建</value>
+  </data>
+  <data name="Destination_SaveFailed" xml:space="preserve">
+    <value>保存失败</value>
+  </data>
+  <data name="Destination_SaveFailedMessage" xml:space="preserve">
+    <value>无法保存自定义上传器。请查看日志了解详情。</value>
+  </data>
+  <data name="Destination_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Destination_CreateCustomUploaderFailed" xml:space="preserve">
+    <value>无法创建自定义上传器：{0}</value>
+  </data>
+  <data name="Destination_ExportFailed" xml:space="preserve">
+    <value>导出失败</value>
+  </data>
+  <data name="Destination_ExportSelectInstance" xml:space="preserve">
+    <value>请选择要导出的目标实例。</value>
+  </data>
+  <data name="Destination_ExportConfigTitle" xml:space="preserve">
+    <value>导出目标配置</value>
+  </data>
+  <data name="Destination_ExportConfigPrompt" xml:space="preserve">
+    <value>为此 .xsdc 文件输入口令：</value>
+  </data>
+  <data name="Destination_ConfirmPassphraseTitle" xml:space="preserve">
+    <value>确认口令</value>
+  </data>
+  <data name="Destination_ConfirmPassphrasePrompt" xml:space="preserve">
+    <value>再次输入口令：</value>
+  </data>
+  <data name="Destination_ExportPassphraseMismatch" xml:space="preserve">
+    <value>口令不匹配。</value>
+  </data>
+  <data name="Destination_ExportSaveDialogTitle" xml:space="preserve">
+    <value>导出 XerahS 目标配置</value>
+  </data>
+  <data name="Destination_ConfigExported" xml:space="preserve">
+    <value>目标配置已导出</value>
+  </data>
+  <data name="Destination_ConfigExportedMessage" xml:space="preserve">
+    <value>已保存加密的目标配置：
+{0}</value>
+  </data>
+  <data name="Destination_CustomUploaderSaved" xml:space="preserve">
+    <value>自定义上传器“{0}”已保存到 Plugins。</value>
+  </data>
+  <data name="Destination_CreatedInstances" xml:space="preserve">
+    <value>已创建 {0} 个目标实例：{1}。</value>
+  </data>
+  <data name="Destination_ReusedBindings" xml:space="preserve">
+    <value>已为以下项复用现有实例绑定：{0}。</value>
+  </data>
+  <data name="Destination_NoCategoriesUpdated" xml:space="preserve">
+    <value>未更新任何目标类别。</value>
+  </data>
+  <data name="Destination_ReadyToUse" xml:space="preserve">
+    <value>上传器无需从目录中添加即可使用。</value>
+  </data>
+  <data name="Destination_ImportSource" xml:space="preserve">
+    <value>来源：{0}</value>
+  </data>
+  <data name="Destination_ImportCustomUploaderExport" xml:space="preserve">
+    <value>自定义上传器导出：</value>
+  </data>
+  <data name="Destination_ImportFromConfig" xml:space="preserve">
+    <value>- 从配置导入：{0}</value>
+  </data>
+  <data name="Destination_ImportCreatedFiles" xml:space="preserve">
+    <value>- 创建的 .sxcu 文件：{0}</value>
+  </data>
+  <data name="Destination_ImportSkippedDuplicates" xml:space="preserve">
+    <value>- 跳过的重复项：{0}</value>
+  </data>
+  <data name="Destination_ImportFailedExports" xml:space="preserve">
+    <value>- 导出失败：{0}</value>
+  </data>
+  <data name="Destination_ImportPluginsFolder" xml:space="preserve">
+    <value>- Plugins 文件夹：{0}</value>
+  </data>
+  <data name="Destination_AutoCreatedInstances" xml:space="preserve">
+    <value>已自动创建 {0} 个目标实例 - 即可使用。</value>
+  </data>
+  <data name="Destination_ReusedBindingsSummary" xml:space="preserve">
+    <value>复用了 {0} 个现有目标绑定，未创建重复项。</value>
+  </data>
+  <data name="Destination_BuiltInMigration" xml:space="preserve">
+    <value>内置提供者迁移：</value>
+  </data>
+  <data name="ImageAnalyzer_StatusSelectImage" xml:space="preserve">
+    <value>选择要分析的图像</value>
+  </data>
+  <data name="ImageAnalyzer_StatusAnalyzing" xml:space="preserve">
+    <value>正在分析...</value>
+  </data>
+  <data name="ImageAnalyzer_StatusLoadFailed" xml:space="preserve">
+    <value>无法加载图像数据</value>
+  </data>
+  <data name="ImageAnalyzer_StatusError" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+  <data name="ImageAnalyzer_StatusCopied" xml:space="preserve">
+    <value>已复制到剪贴板</value>
+  </data>
+  <data name="ImageAnalyzer_StatusDimensions" xml:space="preserve">
+    <value>{0}（{1} x {2}）</value>
+  </data>
+  <data name="ImageAnalyzer_CapturedImage" xml:space="preserve">
+    <value>捕获的图像</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryFile" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="ImageAnalyzer_CategorySource" xml:space="preserve">
+    <value>来源</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryImage" xml:space="preserve">
+    <value>图像</value>
+  </data>
+  <data name="ImageAnalyzer_CategoryColor" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyName" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="ImageAnalyzer_PropertySize" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyExtension" xml:space="preserve">
+    <value>扩展名</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyDirectory" xml:space="preserve">
+    <value>目录</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyCreated" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyModified" xml:space="preserve">
+    <value>修改时间</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyType" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyInMemoryImage" xml:space="preserve">
+    <value>内存中的图像</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyWidth" xml:space="preserve">
+    <value>宽度</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyHeight" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyPixelCount" xml:space="preserve">
+    <value>像素数</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAspectRatio" xml:space="preserve">
+    <value>宽高比</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyColorType" xml:space="preserve">
+    <value>颜色类型</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAlphaType" xml:space="preserve">
+    <value>Alpha 类型</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyBytesPerPixel" xml:space="preserve">
+    <value>每像素字节数</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyRowBytes" xml:space="preserve">
+    <value>每行字节数</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyTotalBytes" xml:space="preserve">
+    <value>总字节数</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAverageColor" xml:space="preserve">
+    <value>平均颜色</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyAverageRgb" xml:space="preserve">
+    <value>平均 RGB</value>
+  </data>
+  <data name="ImageAnalyzer_PropertyHasTransparency" xml:space="preserve">
+    <value>是否透明</value>
+  </data>
+  <data name="ImageAnalyzer_UnitPixels" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="ImageAnalyzer_AverageRgbValue" xml:space="preserve">
+    <value>R:{0} G:{1} B:{2}</value>
+  </data>
+  <data name="ImageAnalyzer_NotAvailable" xml:space="preserve">
+    <value>不适用</value>
+  </data>
+  <data name="Downloader_PreparingDownload" xml:space="preserve">
+    <value>正在准备下载...</value>
+  </data>
+  <data name="Downloader_UrlNotAvailable" xml:space="preserve">
+    <value>下载网址不可用。</value>
+  </data>
+  <data name="Downloader_GettingFileSize" xml:space="preserve">
+    <value>正在获取文件大小...</value>
+  </data>
+  <data name="Downloader_CompletedStartingInstaller" xml:space="preserve">
+    <value>下载完成。正在启动安装程序...</value>
+  </data>
+  <data name="Downloader_Canceled" xml:space="preserve">
+    <value>下载已取消。</value>
+  </data>
+  <data name="Downloader_Failed" xml:space="preserve">
+    <value>下载失败。</value>
+  </data>
+  <data name="Downloader_FailedWithMessage" xml:space="preserve">
+    <value>下载失败：{0}</value>
+  </data>
+  <data name="Downloader_Downloading" xml:space="preserve">
+    <value>正在下载 {0}...</value>
+  </data>
+  <data name="Downloader_SignatureVerificationFailed" xml:space="preserve">
+    <value>安装程序签名验证失败。更新未启动。</value>
+  </data>
+  <data name="Downloader_StartInstallerFailed" xml:space="preserve">
+    <value>无法启动安装程序：{0}</value>
+  </data>
+  <data name="AfterUpload_NoPreviewTitle" xml:space="preserve">
+    <value>没有可用的预览</value>
+  </data>
+  <data name="AfterUpload_NoPreviewDescription" xml:space="preserve">
+    <value>此次上传不包含本地预览。</value>
+  </data>
+  <data name="AfterUpload_DefaultFileName" xml:space="preserve">
+    <value>上传</value>
+  </data>
+  <data name="AfterUpload_AutoCloseText" xml:space="preserve">
+    <value>{0} 秒后自动关闭</value>
+  </data>
+  <data name="AfterUpload_PreviewReadyTitle" xml:space="preserve">
+    <value>预览已就绪</value>
+  </data>
+  <data name="AfterUpload_PreviewLoadedLocal" xml:space="preserve">
+    <value>已从本地文件加载图像预览。</value>
+  </data>
+  <data name="AfterUpload_PreviewUnavailableTitle" xml:space="preserve">
+    <value>预览不可用</value>
+  </data>
+  <data name="AfterUpload_PreviewUnavailableDescription" xml:space="preserve">
+    <value>只能预览图像。请使用文件操作打开它。</value>
+  </data>
+  <data name="AfterUpload_PreviewLoadedCaptured" xml:space="preserve">
+    <value>已从捕获的图像加载预览。</value>
+  </data>
+  <data name="AfterUpload_FormatGroupPrimaryUrl" xml:space="preserve">
+    <value>主网址</value>
+  </data>
+  <data name="AfterUpload_FormatGroupEmbeds" xml:space="preserve">
+    <value>嵌入</value>
+  </data>
+  <data name="AfterUpload_FormatGroupManagement" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="AfterUpload_FormatGroupLocal" xml:space="preserve">
+    <value>本地</value>
+  </data>
+  <data name="AfterUpload_FormatGroupCustom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="AfterUpload_FormatClipboardFormat" xml:space="preserve">
+    <value>剪贴板格式</value>
+  </data>
+  <data name="AfterUpload_FormatOpenUrlFormat" xml:space="preserve">
+    <value>打开网址格式</value>
+  </data>
+  <data name="AfterUpload_FormatUrl" xml:space="preserve">
+    <value>网址</value>
+  </data>
+  <data name="AfterUpload_FormatShortenedUrl" xml:space="preserve">
+    <value>缩短的网址</value>
+  </data>
+  <data name="AfterUpload_FormatThumbnailUrl" xml:space="preserve">
+    <value>缩略图网址</value>
+  </data>
+  <data name="AfterUpload_FormatMarkdown" xml:space="preserve">
+    <value>Markdown</value>
+  </data>
+  <data name="AfterUpload_FormatHtml" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="AfterUpload_FormatBbcode" xml:space="preserve">
+    <value>BBCode</value>
+  </data>
+  <data name="AfterUpload_FormatDeletionUrl" xml:space="preserve">
+    <value>删除网址</value>
+  </data>
+  <data name="AfterUpload_FormatFilePath" xml:space="preserve">
+    <value>文件路径</value>
+  </data>
+  <data name="AfterUpload_FormatFileName" xml:space="preserve">
+    <value>文件名</value>
+  </data>
+  <data name="MainWindow_OpenImageTitle" xml:space="preserve">
+    <value>打开图像</value>
+  </data>
+  <data name="MainWindow_ImageFilesFilter" xml:space="preserve">
+    <value>图像文件</value>
+  </data>
+  <data name="MainWindow_NoWorkflowsConfigured" xml:space="preserve">
+    <value>未配置工作流</value>
+  </data>
 </root>

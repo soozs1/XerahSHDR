@@ -264,11 +264,11 @@ namespace XerahS.UI.Views
 
             var options = new FilePickerOpenOptions
             {
-                Title = "Open Image",
+                Title = XerahS.Common.Resources.GetString("MainWindow_OpenImageTitle"),
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-                    new FilePickerFileType("Image Files")
+                    new FilePickerFileType(XerahS.Common.Resources.GetString("MainWindow_ImageFilesFilter"))
                     {
                         Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.webp", "*.tiff", "*.tif" }
                     },
@@ -417,7 +417,7 @@ namespace XerahS.UI.Views
             {
                 workflowMenuItems.Add(new MenuItem
                 {
-                    Header = "No workflows configured",
+                    Header = XerahS.Common.Resources.GetString("MainWindow_NoWorkflowsConfigured"),
                     IsEnabled = false
                 });
             }

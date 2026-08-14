@@ -40,7 +40,7 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
     private bool _disposed;
 
     [ObservableProperty]
-    private string _statusText = "Preparing download...";
+    private string _statusText = Resources.GetString("Downloader_PreparingDownload");
 
     [ObservableProperty]
     private double _downloadPercentage;
@@ -86,12 +86,12 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
 
         if (string.IsNullOrEmpty(_updateChecker.DownloadURL))
         {
-            StatusText = "Download URL not available.";
+            StatusText = Resources.GetString("Downloader_UrlNotAvailable");
             return;
         }
 
         Status = DownloaderFormStatus.DownloadStarted;
-        StatusText = "Getting file size...";
+        StatusText = Resources.GetString("Downloader_GettingFileSize");
 
         // Create temp folder
         string folderPath = Path.Combine(Path.GetTempPath(), AppResources.AppName);
@@ -115,7 +115,7 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
 
             if (success)
             {
-                StatusText = "Download completed. Starting installer...";
+                StatusText = Resources.GetString("Downloader_CompletedStartingInstaller");
                 Status = DownloaderFormStatus.DownloadCompleted;
                 CanCancel = false;
 
@@ -123,16 +123,16 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
             }
             else if (_downloader.IsCanceled)
             {
-                StatusText = "Download canceled.";
+                StatusText = Resources.GetString("Downloader_Canceled");
             }
             else
             {
-                StatusText = "Download failed.";
+                StatusText = Resources.GetString("Downloader_Failed");
             }
         }
         catch (Exception ex)
         {
-            StatusText = $"Download failed: {ex.Message}";
+            StatusText = Resources.GetString("Downloader_FailedWithMessage", ex.Message);
             DebugHelper.WriteException(ex, "Update download failed");
         }
     }
@@ -142,7 +142,7 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
         Dispatcher.UIThread.Post(() =>
         {
             TotalSizeText = _downloader.FileSize.ToSizeString();
-            StatusText = $"Downloading {FileName}...";
+            StatusText = Resources.GetString("Downloader_Downloading", FileName);
         });
     }
 
@@ -165,7 +165,7 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
 
         if (!VerifyInstallerSignature(DownloadLocation))
         {
-            StatusText = "Installer signature verification failed. The update was not launched.";
+            StatusText = Resources.GetString("Downloader_SignatureVerificationFailed");
             DebugHelper.WriteLine("Installer launch aborted: Authenticode signature is missing or invalid.");
             CanCancel = true;
             return;
@@ -188,7 +188,7 @@ public partial class DownloaderWindowViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            StatusText = $"Failed to start installer: {ex.Message}";
+            StatusText = Resources.GetString("Downloader_StartInstallerFailed", ex.Message);
             DebugHelper.WriteException(ex, "Failed to launch installer");
             CanCancel = true;
         }
