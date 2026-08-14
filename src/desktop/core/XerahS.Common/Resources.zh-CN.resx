@@ -3292,4 +3292,28 @@
   <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
     <value>收藏的图像特效（右键）</value>
   </data>
+  <data name="HdrToneMappingMode_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="HdrToneMappingMode_Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
+    <value>Reinhard</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
+    <value>ACES</value>
+  </data>
+  <data name="TaskSettings_HdrSection" xml:space="preserve">
+    <value>HDR</value>
+  </data>
+  <data name="TaskSettings_HdrGeneral" xml:space="preserve">
+    <value>预览 / 编辑器 / 上传：</value>
+  </data>
+  <data name="TaskSettings_HdrSave" xml:space="preserve">
+    <value>保存到文件：</value>
+  </data>
+  <data name="TaskSettings_HdrClipboard" xml:space="preserve">
+    <value>剪贴板：</value>
+  </data>
 </root>

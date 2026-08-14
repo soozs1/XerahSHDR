@@ -3292,4 +3292,28 @@ Esto eliminará permanentemente el archivo del almacenamiento remoto. Esta acci�
   <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
     <value>Efectos de imagen favoritos (clic derecho)</value>
   </data>
+  <data name="HdrToneMappingMode_None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="HdrToneMappingMode_Auto" xml:space="preserve">
+    <value>Automático</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
+    <value>Reinhard</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
+    <value>ACES</value>
+  </data>
+  <data name="TaskSettings_HdrSection" xml:space="preserve">
+    <value>HDR</value>
+  </data>
+  <data name="TaskSettings_HdrGeneral" xml:space="preserve">
+    <value>Vista previa / editor / subida:</value>
+  </data>
+  <data name="TaskSettings_HdrSave" xml:space="preserve">
+    <value>Guardar en archivo:</value>
+  </data>
+  <data name="TaskSettings_HdrClipboard" xml:space="preserve">
+    <value>Portapapeles:</value>
+  </data>
 </root>

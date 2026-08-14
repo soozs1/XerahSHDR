@@ -22,6 +22,7 @@
 */
 
 #endregion License Information (GPL v3)
+using XerahS.Common;
 using XerahS.Core;
 using XerahS.Services.Abstractions;
 
@@ -104,6 +105,48 @@ namespace XerahS.UI.ViewModels
                 if (_settings.ImageSettings.ThumbnailCheckSize != value)
                 {
                     _settings.ImageSettings.ThumbnailCheckSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public IReadOnlyList<HdrToneMappingMode> HdrToneMappingOptions =>
+            Enum.GetValues<HdrToneMappingMode>();
+
+        public HdrToneMappingMode ImageHdrToneMapping
+        {
+            get => _settings.ImageSettings.ImageHdrToneMapping;
+            set
+            {
+                if (_settings.ImageSettings.ImageHdrToneMapping != value)
+                {
+                    _settings.ImageSettings.ImageHdrToneMapping = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public HdrToneMappingMode ImageHdrSaveToneMapping
+        {
+            get => _settings.ImageSettings.ImageHdrSaveToneMapping;
+            set
+            {
+                if (_settings.ImageSettings.ImageHdrSaveToneMapping != value)
+                {
+                    _settings.ImageSettings.ImageHdrSaveToneMapping = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public HdrToneMappingMode ImageHdrClipboardToneMapping
+        {
+            get => _settings.ImageSettings.ImageHdrClipboardToneMapping;
+            set
+            {
+                if (_settings.ImageSettings.ImageHdrClipboardToneMapping != value)
+                {
+                    _settings.ImageSettings.ImageHdrClipboardToneMapping = value;
                     OnPropertyChanged();
                 }
             }

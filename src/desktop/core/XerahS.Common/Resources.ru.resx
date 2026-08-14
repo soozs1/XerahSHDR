@@ -3292,4 +3292,28 @@
   <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
     <value>Избранные эффекты изображения (правый клик)</value>
   </data>
+  <data name="HdrToneMappingMode_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="HdrToneMappingMode_Auto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
+    <value>Рейнхард</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
+    <value>ACES</value>
+  </data>
+  <data name="TaskSettings_HdrSection" xml:space="preserve">
+    <value>HDR</value>
+  </data>
+  <data name="TaskSettings_HdrGeneral" xml:space="preserve">
+    <value>Предпросмотр / редактор / загрузка:</value>
+  </data>
+  <data name="TaskSettings_HdrSave" xml:space="preserve">
+    <value>Сохранение в файл:</value>
+  </data>
+  <data name="TaskSettings_HdrClipboard" xml:space="preserve">
+    <value>Буфер обмена:</value>
+  </data>
 </root>

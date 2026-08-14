@@ -3292,4 +3292,28 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="EditorToolbar_ImageEffectsHint" xml:space="preserve">
     <value>Favorite image effects (Right click)</value>
   </data>
+  <data name="HdrToneMappingMode_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="HdrToneMappingMode_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
+    <value>Reinhard</value>
+  </data>
+  <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
+    <value>ACES</value>
+  </data>
+  <data name="TaskSettings_HdrSection" xml:space="preserve">
+    <value>HDR</value>
+  </data>
+  <data name="TaskSettings_HdrGeneral" xml:space="preserve">
+    <value>Preview / editor / upload:</value>
+  </data>
+  <data name="TaskSettings_HdrSave" xml:space="preserve">
+    <value>Save to file:</value>
+  </data>
+  <data name="TaskSettings_HdrClipboard" xml:space="preserve">
+    <value>Clipboard:</value>
+  </data>
 </root>

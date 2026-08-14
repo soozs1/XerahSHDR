@@ -95,18 +95,45 @@ namespace XerahS.Core.Tasks.Processors
             string? annotationSidecarPath = null;
             bool annotationSidecarSaveAttempted = false;
 
-            // HDR (fp16) captures are scRGB-linear; SDR-only steps (UI, effects, editor, clipboard,
-            // upload) need an 8-bit tonemapped copy. Tonemap once, before ShowAfterCaptureWindow
-            // (HDR_CAPTURE_PLAN §6.3).
-            SKBitmap currentImage = info.Metadata.Image; // non-null (checked above)
-            bool needsTonemap = currentImage.ColorType == SKColorType.RgbaF16 &&
-                HdrTonemapper.ShouldTonemapToSdr(settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob);
+            // HDR (fp16) captures are scRGB-linear. The SDR-only steps (preview, effects, editor,
+            // upload) share one tonemapped copy, while save-to-file and clipboard are tonemapped
+            // independently so their modes can differ (HDR_CAPTURE_PLAN §6.3).
+            SKBitmap fp16Source = info.Metadata.Image; // non-null (checked above)
+            bool isHdr = fp16Source.ColorType == SKColorType.RgbaF16;
 
-            if (TryTonemapHdr(currentImage, settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob, out SKBitmap? tonemapped) &&
+            AfterCaptureTasks generalSdrTasks =
+                AfterCaptureTasks.ShowAfterCaptureWindow |
+                AfterCaptureTasks.AddImageEffects |
+                AfterCaptureTasks.AnnotateMedia |
+                AfterCaptureTasks.UploadImageToHost;
+
+            // fp16Source must survive the general pipeline only when a destination still needs to
+            // read it (keep-HDR save, or a per-destination tonemap computed just-in-time).
+            bool retainFp16 = isHdr &&
+                (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.SaveImageToFile) ||
+                 settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.CopyImageToClipboard));
+
+            void DisposeRetainedFp16Source()
+            {
+                if (retainFp16 && !ReferenceEquals(fp16Source, info.Metadata.Image))
+                {
+                    fp16Source.Dispose();
+                    retainFp16 = false;
+                }
+            }
+
+            SKBitmap currentImage = fp16Source;
+            bool needsTonemap = isHdr &&
+                HdrTonemapper.ShouldTonemapToSdr(settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob & generalSdrTasks);
+
+            if (TryTonemapHdr(currentImage, settings.ImageSettings.ImageHdrToneMapping, settings.AfterCaptureJob & generalSdrTasks, out SKBitmap? tonemapped) &&
                 tonemapped != null)
             {
                 info.Metadata.Image = tonemapped;
-                currentImage.Dispose();
+                if (!retainFp16)
+                {
+                    currentImage.Dispose();
+                }
                 currentImage = tonemapped;
                 DebugHelper.WriteLine("Tonemapped HDR (fp16) capture to 8-bit SDR.");
             }
@@ -132,6 +159,7 @@ namespace XerahS.Core.Tasks.Processors
                     if (result.Cancel)
                     {
                         DebugHelper.WriteLine("After capture window cancelled; aborting workflow.");
+                        DisposeRetainedFp16Source();
                         return false;
                     }
 
@@ -151,11 +179,14 @@ namespace XerahS.Core.Tasks.Processors
                     // selected None after that replacement, the fp16 source is already disposed and
                     // the 8-bit copy stays — acceptable, the choice still applies to future captures.
                     settings.ImageSettings.ImageHdrToneMapping = result.ToneMapping;
-                    if (TryTonemapHdr(currentImage, result.ToneMapping, settings.AfterCaptureJob, out SKBitmap? postWindowTonemapped) &&
+                    if (TryTonemapHdr(currentImage, result.ToneMapping, settings.AfterCaptureJob & generalSdrTasks, out SKBitmap? postWindowTonemapped) &&
                         postWindowTonemapped != null)
                     {
                         info.Metadata.Image = postWindowTonemapped;
-                        currentImage.Dispose();
+                        if (!(retainFp16 && ReferenceEquals(currentImage, fp16Source)))
+                        {
+                            currentImage.Dispose();
+                        }
                         currentImage = postWindowTonemapped;
                         DebugHelper.WriteLine("Applied HDR tonemapping selected in after-capture window.");
                     }
@@ -171,6 +202,7 @@ namespace XerahS.Core.Tasks.Processors
                     if (processed == null)
                     {
                         DebugHelper.WriteLine("Error: Applying image effects resulted in null image.");
+                        DisposeRetainedFp16Source();
                         return true;
                     }
 
@@ -202,19 +234,82 @@ namespace XerahS.Core.Tasks.Processors
 
             if (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.SaveImageToFile))
             {
-                await SaveImageToFileAsync(info);
-                annotationSidecarPath = await SaveAnnotationSidecarAsync(info, editorResult);
-                annotationSidecarSaveAttempted = true;
+                SKBitmap saveBitmap;
+                SKBitmap? ownedSave = null;
+
+                if (isHdr)
+                {
+                    var saveMode = settings.ImageSettings.ImageHdrSaveToneMapping;
+                    if (HdrTonemapper.ShouldTonemapToSdr(saveMode, AfterCaptureTasks.SaveImageToFile))
+                    {
+                        ownedSave = HdrTonemapper.TonemapToBgra8888(fp16Source, saveMode, peakNits: 1000f);
+                        saveBitmap = ownedSave ?? fp16Source;
+                    }
+                    else
+                    {
+                        // Keep HDR (fp16) so the 16-bit PNG path is preserved.
+                        saveBitmap = fp16Source;
+                    }
+                }
+                else
+                {
+                    saveBitmap = info.Metadata.Image!;
+                }
+
+                try
+                {
+                    await SaveImageToFileAsync(info, saveBitmap);
+                    annotationSidecarPath = await SaveAnnotationSidecarAsync(info, editorResult);
+                    annotationSidecarSaveAttempted = true;
+                }
+                finally
+                {
+                    ownedSave?.Dispose();
+                }
             }
 
             if (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.CopyImageToClipboard))
             {
-                if (PlatformServices.IsInitialized && info.Metadata?.Image != null)
+                SKBitmap clipboardBitmap;
+                SKBitmap? ownedClipboard = null;
+
+                if (isHdr)
                 {
-                    PlatformServices.Clipboard.SetImage(info.Metadata.Image);
-                    DebugHelper.WriteLine("Image copied to clipboard.");
+                    var clipboardMode = settings.ImageSettings.ImageHdrClipboardToneMapping;
+                    if (HdrTonemapper.ShouldTonemapToSdr(clipboardMode, AfterCaptureTasks.CopyImageToClipboard))
+                    {
+                        ownedClipboard = HdrTonemapper.TonemapToBgra8888(fp16Source, clipboardMode, peakNits: 1000f);
+                    }
+
+                    // The clipboard cannot hold HDR; if no tonemap was requested, fall back to the
+                    // already-8-bit working image (or the fp16 source, which the clipboard helper clamps).
+                    clipboardBitmap = ownedClipboard ?? info.Metadata.Image!;
+                }
+                else
+                {
+                    clipboardBitmap = info.Metadata.Image!;
+                }
+
+                if (PlatformServices.IsInitialized)
+                {
+                    try
+                    {
+                        PlatformServices.Clipboard.SetImage(clipboardBitmap);
+                        DebugHelper.WriteLine("Image copied to clipboard.");
+                    }
+                    finally
+                    {
+                        ownedClipboard?.Dispose();
+                    }
+                }
+                else
+                {
+                    ownedClipboard?.Dispose();
                 }
             }
+
+            // fp16Source is no longer needed once save/clipboard have consumed it.
+            DisposeRetainedFp16Source();
 
             if (settings.AfterCaptureJob.HasFlag(AfterCaptureTasks.UploadImageToHost))
             {
@@ -498,12 +593,8 @@ namespace XerahS.Core.Tasks.Processors
             }
         }
 
-        private async Task SaveImageToFileAsync(TaskInfo info)
+        private async Task SaveImageToFileAsync(TaskInfo info, SkiaSharp.SKBitmap bmp)
         {
-            if (info.Metadata?.Image == null) return;
-
-            SkiaSharp.SKBitmap bmp = info.Metadata.Image;
-
             // TaskHelpers contains the logic for folder resolution, naming, and file exists handling.
             // It runs synchronously (SkiaSharp limitation), so wrap in Task.Run if needed, 
             // though here we are already on background thread from WorkerTask.
