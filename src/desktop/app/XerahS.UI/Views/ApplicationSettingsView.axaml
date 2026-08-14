@@ -457,7 +457,8 @@
                                                        FontWeight="SemiBold"
                                                        FontSize="12"/>
                                             <Grid ColumnDefinitions="Auto, 16, *">
-                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_FolderPolicy}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_FolderPolicy}" VerticalAlignment="Center"
+                                                           ToolTip.Tip="{local:Localize Settings_Integration_FolderPolicyToolTip}"/>
                                                 <ComboBox Grid.Column="2"
                                                           ItemsSource="{Binding SendToDefaultFolderPolicyOptions}"
                                                           SelectedItem="{Binding SendToDefaultFolderPolicy}"
@@ -466,7 +467,8 @@
                                                           AutomationProperties.Name="Send-to Default Folder Policy"/>
                                             </Grid>
                                             <Grid ColumnDefinitions="Auto, 16, *">
-                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_ImageBatchPolicy}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_ImageBatchPolicy}" VerticalAlignment="Center"
+                                                           ToolTip.Tip="{local:Localize Settings_Integration_ImageBatchPolicyToolTip}"/>
                                                 <ComboBox Grid.Column="2"
                                                           ItemsSource="{Binding SendToDefaultBatchPolicyOptions}"
                                                           SelectedItem="{Binding SendToDefaultBatchPolicy}"
@@ -475,7 +477,8 @@
                                                           AutomationProperties.Name="Send-to Default Batch Policy"/>
                                             </Grid>
                                             <Grid ColumnDefinitions="Auto, 16, *">
-                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_BatchConfirmThreshold}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="0" Text="{local:Localize Settings_Integration_BatchConfirmThreshold}" VerticalAlignment="Center"
+                                                           ToolTip.Tip="{local:Localize Settings_Integration_BatchConfirmThresholdToolTip}"/>
                                                 <NumericUpDown Grid.Column="2"
                                                                Value="{Binding SendToDefaultBatchThreshold}"
                                                                Minimum="1" Maximum="100"

@@ -1246,6 +1246,15 @@
   <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
     <value>批量确认阈值：</value>
   </data>
+  <data name="Settings_Integration_FolderPolicyToolTip" xml:space="preserve">
+    <value>控制在将文件夹发送到编辑器或上传器时如何展开：打开文件夹本身、仅包含其顶层文件，或递归包含所有文件。</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicyToolTip" xml:space="preserve">
+    <value>控制如何打开一批图片：立即全部打开、逐个打开，或在批量超过阈值时请求确认。</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThresholdToolTip" xml:space="preserve">
+    <value>图片数量超过该值时，XerahS 会在打开批量之前请求确认。</value>
+  </data>
   <data name="Settings_Integration_Clipboard" xml:space="preserve">
     <value>剪贴板</value>
   </data>

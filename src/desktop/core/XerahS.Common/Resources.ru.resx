@@ -1246,6 +1246,15 @@
   <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
     <value>Порог подтверждения пакета:</value>
   </data>
+  <data name="Settings_Integration_FolderPolicyToolTip" xml:space="preserve">
+    <value>Определяет, как раскрываются папки при отправке в редактор или загрузчик: открыть саму папку, включить только файлы верхнего уровня или включить все файлы рекурсивно.</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicyToolTip" xml:space="preserve">
+    <value>Определяет, как открывается пакет изображений: открыть все сразу, открывать по одному или запрашивать подтверждение, когда пакет превышает порог.</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThresholdToolTip" xml:space="preserve">
+    <value>Количество изображений, при превышении которого XerahS запрашивает подтверждение перед открытием пакета.</value>
+  </data>
   <data name="Settings_Integration_Clipboard" xml:space="preserve">
     <value>Буфер обмена</value>
   </data>

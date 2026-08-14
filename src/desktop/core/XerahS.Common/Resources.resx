@@ -1246,6 +1246,15 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
     <value>Batch confirm threshold:</value>
   </data>
+  <data name="Settings_Integration_FolderPolicyToolTip" xml:space="preserve">
+    <value>Controls how folders are expanded when sending them to an editor or uploader: open the folder itself, include only its top-level files, or include all files recursively.</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicyToolTip" xml:space="preserve">
+    <value>Controls how a batch of images is opened: open all immediately, open them one by one, or ask for confirmation when the batch exceeds the threshold.</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThresholdToolTip" xml:space="preserve">
+    <value>Number of images above which XerahS asks for confirmation before opening the batch.</value>
+  </data>
   <data name="Settings_Integration_Clipboard" xml:space="preserve">
     <value>Clipboard</value>
   </data>

@@ -1246,6 +1246,15 @@ Dadurch wird die Datei dauerhaft aus dem Remote-Speicher entfernt. Dies kann nic
   <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
     <value>Bestätigungsschwelle für Stapel:</value>
   </data>
+  <data name="Settings_Integration_FolderPolicyToolTip" xml:space="preserve">
+    <value>Legt fest, wie Ordner beim Senden an einen Editor oder Uploader erweitert werden: den Ordner selbst öffnen, nur Dateien der obersten Ebene einbeziehen oder alle Dateien rekursiv einbeziehen.</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicyToolTip" xml:space="preserve">
+    <value>Legt fest, wie ein Bildstapel geöffnet wird: alle sofort öffnen, nacheinander öffnen oder bei Überschreiten des Schwellenwerts bestätigen.</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThresholdToolTip" xml:space="preserve">
+    <value>Anzahl der Bilder, ab der XerahS vor dem Öffnen des Stapels eine Bestätigung anfordert.</value>
+  </data>
   <data name="Settings_Integration_Clipboard" xml:space="preserve">
     <value>Zwischenablage</value>
   </data>

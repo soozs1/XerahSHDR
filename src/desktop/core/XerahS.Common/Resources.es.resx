@@ -1246,6 +1246,15 @@ Esto eliminará permanentemente el archivo del almacenamiento remoto. Esta acci�
   <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
     <value>Umbral de confirmación de lote:</value>
   </data>
+  <data name="Settings_Integration_FolderPolicyToolTip" xml:space="preserve">
+    <value>Controla cómo se expanden las carpetas al enviarlas a un editor o cargador: abrir la carpeta en sí, incluir solo sus archivos de nivel superior o incluir todos los archivos de forma recursiva.</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicyToolTip" xml:space="preserve">
+    <value>Controla cómo se abre un lote de imágenes: abrir todas inmediatamente, abrirlas una por una o pedir confirmación cuando el lote supere el umbral.</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThresholdToolTip" xml:space="preserve">
+    <value>Número de imágenes por encima del cual XerahS pide confirmación antes de abrir el lote.</value>
+  </data>
   <data name="Settings_Integration_Clipboard" xml:space="preserve">
     <value>Portapapeles</value>
   </data>
