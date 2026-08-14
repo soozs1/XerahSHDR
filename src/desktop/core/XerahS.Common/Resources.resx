@@ -841,4 +841,184 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="MainWindow_NoWorkflowsConfigured" xml:space="preserve">
     <value>No workflows configured</value>
   </data>
+  <data name="Update_StatusPrompt" xml:space="preserve">
+    <value>Use Update Now to check and install the latest release for your selected channel.</value>
+  </data>
+  <data name="Update_CheckingButton" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="Update_UpdateNowButton" xml:space="preserve">
+    <value>Update Now</value>
+  </data>
+  <data name="Update_CheckingForUpdates" xml:space="preserve">
+    <value>Checking for updates...</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>Update available. Review the prompt to continue.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>XerahS is already up to date.</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Update check failed. Check the debug log for details.</value>
+  </data>
+  <data name="Update_CheckFailedWithError" xml:space="preserve">
+    <value>Update check failed: {0}</value>
+  </data>
+  <data name="Mcp_NotGenerated" xml:space="preserve">
+    <value>Not generated yet</value>
+  </data>
+  <data name="Mcp_KeyConfigured" xml:space="preserve">
+    <value>API key is configured. Use Copy to place the full token on the clipboard.</value>
+  </data>
+  <data name="Mcp_KeyNotGenerated" xml:space="preserve">
+    <value>API key has not been generated yet.</value>
+  </data>
+  <data name="SendTo_NoRememberedChoices" xml:space="preserve">
+    <value>No remembered Send-to choices.</value>
+  </data>
+  <data name="Assistant_HotkeyStatusText" xml:space="preserve">
+    <value>Use the assistant shortcut to open the in-app command overlay.</value>
+  </data>
+  <data name="Assistant_PaletteStatusText" xml:space="preserve">
+    <value>Use the palette shortcut to search configured capture workflows.</value>
+  </data>
+  <data name="Assistant_LocalCommandsAvailable" xml:space="preserve">
+    <value>Local commands are available without an AI provider.</value>
+  </data>
+  <data name="Assistant_KeyStored" xml:space="preserve">
+    <value>API key is stored in the XerahS secret store.</value>
+  </data>
+  <data name="Assistant_KeyNotConfigured" xml:space="preserve">
+    <value>API key is not configured.</value>
+  </data>
+  <data name="Assistant_OllamaNoKeyNeeded" xml:space="preserve">
+    <value>Ollama uses the local daemon and does not need an API key.</value>
+  </data>
+  <data name="Assistant_CurrentShortcut" xml:space="preserve">
+    <value>Current shortcut: {0}</value>
+  </data>
+  <data name="Assistant_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Platform services are not initialized yet.</value>
+  </data>
+  <data name="Assistant_SelectProviderFirst" xml:space="preserve">
+    <value>Select a provider first.</value>
+  </data>
+  <data name="Assistant_ActiveProvider" xml:space="preserve">
+    <value>{0} is the active assistant provider.</value>
+  </data>
+  <data name="Assistant_SaveApiKeyBeforeValidate" xml:space="preserve">
+    <value>Save an API key before validating this provider.</value>
+  </data>
+  <data name="Assistant_SettingsIncomplete" xml:space="preserve">
+    <value>Provider settings are incomplete.</value>
+  </data>
+  <data name="Assistant_Validating" xml:space="preserve">
+    <value>Validating {0}...</value>
+  </data>
+  <data name="Assistant_ValidatedSuccessfully" xml:space="preserve">
+    <value>{0} validated successfully.</value>
+  </data>
+  <data name="Assistant_ValidationFailed" xml:space="preserve">
+    <value>Provider validation failed.</value>
+  </data>
+  <data name="Assistant_ApiKeyRemoved" xml:space="preserve">
+    <value>{0} API key removed.</value>
+  </data>
+  <data name="Assistant_ProviderActive" xml:space="preserve">
+    <value>{0} is active.</value>
+  </data>
+  <data name="Assistant_ProviderSelected" xml:space="preserve">
+    <value>{0} is selected. Save to make it active.</value>
+  </data>
+  <data name="LinuxCapture_Unavailable" xml:space="preserve">
+    <value>unavailable</value>
+  </data>
+  <data name="LinuxCapture_CurrentSessionUnavailable" xml:space="preserve">
+    <value>Current session: Linux diagnostics unavailable</value>
+  </data>
+  <data name="LinuxCapture_PortalBackendUnavailable" xml:space="preserve">
+    <value>Portal backend: unavailable</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectorsFallback" xml:space="preserve">
+    <value>Available selectors: Automatic (recommended), XerahS overlay crosshair</value>
+  </data>
+  <data name="LinuxCapture_AutomaticFallback" xml:space="preserve">
+    <value>Automatic will prefer the best available selector at runtime.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionUnavailable" xml:space="preserve">
+    <value>Last selector result: unavailable</value>
+  </data>
+  <data name="LinuxCapture_CurrentSession" xml:space="preserve">
+    <value>Current session: Session type: {0} / Desktop: {1} / Compositor: {2}</value>
+  </data>
+  <data name="LinuxCapture_PortalBackend" xml:space="preserve">
+    <value>Portal backend: {0}</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectors" xml:space="preserve">
+    <value>Available selectors: {0}</value>
+  </data>
+  <data name="LinuxCapture_AutomaticPreference" xml:space="preserve">
+    <value>Automatic will prefer: {0}</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionNone" xml:space="preserve">
+    <value>Last selector result: no Linux interactive capture has run in this session.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionSucceeded" xml:space="preserve">
+    <value>Last selector result: {0} used {1} (provider: {2}) at {3}. Requested {4}; effective {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionCancelled" xml:space="preserve">
+    <value>Last selector result: {0} was cancelled in {1} (provider: {2}) at {3}. Requested {4}; effective {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionFailed" xml:space="preserve">
+    <value>Last selector result: {0} failed in {1} (provider: {2}) at {3}. Requested {4}; effective {5}.</value>
+  </data>
+  <data name="WatchFolderDaemon_StatusUnknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="WatchFolderDaemon_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="WatchFolderDaemon_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="WatchFolderDaemon_InstallAndStart" xml:space="preserve">
+    <value>Install + Start</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupported" xml:space="preserve">
+    <value>Selected scope '{0}' is not supported on this platform.</value>
+  </data>
+  <data name="WatchFolderDaemon_UnsupportedScope" xml:space="preserve">
+    <value>Unsupported scope.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToControl" xml:space="preserve">
+    <value>Failed to control daemon.</value>
+  </data>
+  <data name="WatchFolderDaemon_NotSupportedOnPlatform" xml:space="preserve">
+    <value>Watch folder daemon is not supported on this platform.</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupportedShort" xml:space="preserve">
+    <value>Scope '{0}' is not supported.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToQueryStatus" xml:space="preserve">
+    <value>Failed to query daemon status.</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailed" xml:space="preserve">
+    <value>Daemon operation failed ({0}).</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailedWithError" xml:space="preserve">
+    <value>Operation failed with error: {0}</value>
+  </data>
+  <data name="WatchFolder_AddTitle" xml:space="preserve">
+    <value>Add Watch Folder</value>
+  </data>
+  <data name="WatchFolder_EditTitle" xml:space="preserve">
+    <value>Edit Watch Folder</value>
+  </data>
+  <data name="WatchFolder_Unassigned" xml:space="preserve">
+    <value>Unassigned</value>
+  </data>
+  <data name="WatchFolder_UnknownWorkflow" xml:space="preserve">
+    <value>Unknown workflow</value>
+  </data>
 </root>

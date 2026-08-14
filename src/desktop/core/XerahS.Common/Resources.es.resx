@@ -841,4 +841,184 @@ Esto eliminará permanentemente el archivo del almacenamiento remoto. Esta acci�
   <data name="MainWindow_NoWorkflowsConfigured" xml:space="preserve">
     <value>No hay flujos de trabajo configurados</value>
   </data>
+  <data name="Update_StatusPrompt" xml:space="preserve">
+    <value>Use «Actualizar ahora» para buscar e instalar la última versión de su canal seleccionado.</value>
+  </data>
+  <data name="Update_CheckingButton" xml:space="preserve">
+    <value>Comprobando...</value>
+  </data>
+  <data name="Update_UpdateNowButton" xml:space="preserve">
+    <value>Actualizar ahora</value>
+  </data>
+  <data name="Update_CheckingForUpdates" xml:space="preserve">
+    <value>Buscando actualizaciones...</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>Actualización disponible. Revise el aviso para continuar.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>XerahS ya está actualizado.</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>No se pudo comprobar la actualización. Consulte el registro de depuración para obtener más detalles.</value>
+  </data>
+  <data name="Update_CheckFailedWithError" xml:space="preserve">
+    <value>Error al comprobar la actualización: {0}</value>
+  </data>
+  <data name="Mcp_NotGenerated" xml:space="preserve">
+    <value>Aún no generada</value>
+  </data>
+  <data name="Mcp_KeyConfigured" xml:space="preserve">
+    <value>La clave API está configurada. Use «Copiar» para colocar el token completo en el portapapeles.</value>
+  </data>
+  <data name="Mcp_KeyNotGenerated" xml:space="preserve">
+    <value>La clave API aún no se ha generado.</value>
+  </data>
+  <data name="SendTo_NoRememberedChoices" xml:space="preserve">
+    <value>No hay opciones recordadas de Enviar a.</value>
+  </data>
+  <data name="Assistant_HotkeyStatusText" xml:space="preserve">
+    <value>Use el atajo del asistente para abrir la superposición de comandos de la aplicación.</value>
+  </data>
+  <data name="Assistant_PaletteStatusText" xml:space="preserve">
+    <value>Use el atajo de la paleta para buscar los flujos de captura configurados.</value>
+  </data>
+  <data name="Assistant_LocalCommandsAvailable" xml:space="preserve">
+    <value>Los comandos locales están disponibles sin un proveedor de IA.</value>
+  </data>
+  <data name="Assistant_KeyStored" xml:space="preserve">
+    <value>La clave API está almacenada en el almacén secreto de XerahS.</value>
+  </data>
+  <data name="Assistant_KeyNotConfigured" xml:space="preserve">
+    <value>La clave API no está configurada.</value>
+  </data>
+  <data name="Assistant_OllamaNoKeyNeeded" xml:space="preserve">
+    <value>Ollama usa el daemon local y no necesita una clave API.</value>
+  </data>
+  <data name="Assistant_CurrentShortcut" xml:space="preserve">
+    <value>Atajo actual: {0}</value>
+  </data>
+  <data name="Assistant_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Los servicios de la plataforma aún no se han inicializado.</value>
+  </data>
+  <data name="Assistant_SelectProviderFirst" xml:space="preserve">
+    <value>Seleccione primero un proveedor.</value>
+  </data>
+  <data name="Assistant_ActiveProvider" xml:space="preserve">
+    <value>{0} es el proveedor de asistente activo.</value>
+  </data>
+  <data name="Assistant_SaveApiKeyBeforeValidate" xml:space="preserve">
+    <value>Guarde una clave API antes de validar este proveedor.</value>
+  </data>
+  <data name="Assistant_SettingsIncomplete" xml:space="preserve">
+    <value>La configuración del proveedor está incompleta.</value>
+  </data>
+  <data name="Assistant_Validating" xml:space="preserve">
+    <value>Validando {0}...</value>
+  </data>
+  <data name="Assistant_ValidatedSuccessfully" xml:space="preserve">
+    <value>{0} validado correctamente.</value>
+  </data>
+  <data name="Assistant_ValidationFailed" xml:space="preserve">
+    <value>Error al validar el proveedor.</value>
+  </data>
+  <data name="Assistant_ApiKeyRemoved" xml:space="preserve">
+    <value>Clave API de {0} eliminada.</value>
+  </data>
+  <data name="Assistant_ProviderActive" xml:space="preserve">
+    <value>{0} está activo.</value>
+  </data>
+  <data name="Assistant_ProviderSelected" xml:space="preserve">
+    <value>{0} está seleccionado. Guarde para activarlo.</value>
+  </data>
+  <data name="LinuxCapture_Unavailable" xml:space="preserve">
+    <value>no disponible</value>
+  </data>
+  <data name="LinuxCapture_CurrentSessionUnavailable" xml:space="preserve">
+    <value>Sesión actual: diagnóstico de Linux no disponible</value>
+  </data>
+  <data name="LinuxCapture_PortalBackendUnavailable" xml:space="preserve">
+    <value>Backend del portal: no disponible</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectorsFallback" xml:space="preserve">
+    <value>Selectores disponibles: Automático (recomendado), punto de mira superpuesto de XerahS</value>
+  </data>
+  <data name="LinuxCapture_AutomaticFallback" xml:space="preserve">
+    <value>Automático preferirá el mejor selector disponible en tiempo de ejecución.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionUnavailable" xml:space="preserve">
+    <value>Último resultado del selector: no disponible</value>
+  </data>
+  <data name="LinuxCapture_CurrentSession" xml:space="preserve">
+    <value>Sesión actual: tipo de sesión: {0} / Escritorio: {1} / Compositor: {2}</value>
+  </data>
+  <data name="LinuxCapture_PortalBackend" xml:space="preserve">
+    <value>Backend del portal: {0}</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectors" xml:space="preserve">
+    <value>Selectores disponibles: {0}</value>
+  </data>
+  <data name="LinuxCapture_AutomaticPreference" xml:space="preserve">
+    <value>Automático preferirá: {0}</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionNone" xml:space="preserve">
+    <value>Último resultado del selector: no se ha ejecutado ninguna captura interactiva de Linux en esta sesión.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionSucceeded" xml:space="preserve">
+    <value>Último resultado del selector: {0} usó {1} (proveedor: {2}) a las {3}. Solicitado: {4}; efectivo: {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionCancelled" xml:space="preserve">
+    <value>Último resultado del selector: {0} se canceló en {1} (proveedor: {2}) a las {3}. Solicitado: {4}; efectivo: {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionFailed" xml:space="preserve">
+    <value>Último resultado del selector: {0} falló en {1} (proveedor: {2}) a las {3}. Solicitado: {4}; efectivo: {5}.</value>
+  </data>
+  <data name="WatchFolderDaemon_StatusUnknown" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="WatchFolderDaemon_Stop" xml:space="preserve">
+    <value>Detener</value>
+  </data>
+  <data name="WatchFolderDaemon_Start" xml:space="preserve">
+    <value>Iniciar</value>
+  </data>
+  <data name="WatchFolderDaemon_InstallAndStart" xml:space="preserve">
+    <value>Instalar + Iniciar</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupported" xml:space="preserve">
+    <value>El ámbito seleccionado «{0}» no es compatible con esta plataforma.</value>
+  </data>
+  <data name="WatchFolderDaemon_UnsupportedScope" xml:space="preserve">
+    <value>Ámbito no compatible.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToControl" xml:space="preserve">
+    <value>No se pudo controlar el daemon.</value>
+  </data>
+  <data name="WatchFolderDaemon_NotSupportedOnPlatform" xml:space="preserve">
+    <value>El daemon de carpetas vigiladas no es compatible con esta plataforma.</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupportedShort" xml:space="preserve">
+    <value>El ámbito «{0}» no es compatible.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToQueryStatus" xml:space="preserve">
+    <value>No se pudo consultar el estado del daemon.</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailed" xml:space="preserve">
+    <value>La operación del daemon falló ({0}).</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailedWithError" xml:space="preserve">
+    <value>La operación falló con el error: {0}</value>
+  </data>
+  <data name="WatchFolder_AddTitle" xml:space="preserve">
+    <value>Añadir carpeta vigilada</value>
+  </data>
+  <data name="WatchFolder_EditTitle" xml:space="preserve">
+    <value>Editar carpeta vigilada</value>
+  </data>
+  <data name="WatchFolder_Unassigned" xml:space="preserve">
+    <value>Sin asignar</value>
+  </data>
+  <data name="WatchFolder_UnknownWorkflow" xml:space="preserve">
+    <value>Flujo de trabajo desconocido</value>
+  </data>
 </root>

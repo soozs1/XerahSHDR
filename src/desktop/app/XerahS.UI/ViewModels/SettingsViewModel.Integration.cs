@@ -80,7 +80,7 @@ namespace XerahS.UI.ViewModels
                 var choices = SettingsManager.Settings.SendToRememberedChoices;
                 if (choices.Count == 0)
                 {
-                    return "No remembered Send-to choices.";
+                    return Resources.GetString("SendTo_NoRememberedChoices");
                 }
 
                 return string.Join(
@@ -101,7 +101,7 @@ namespace XerahS.UI.ViewModels
                 var apiKey = McpApiKeyVault.Get();
                 if (string.IsNullOrWhiteSpace(apiKey))
                 {
-                    return "Not generated yet";
+                    return Resources.GetString("Mcp_NotGenerated");
                 }
 
                 var suffixLength = Math.Min(4, apiKey.Length);
@@ -110,13 +110,13 @@ namespace XerahS.UI.ViewModels
         }
 
         public string McpApiKeyStatusText => HasMcpApiKey
-            ? "API key is configured. Use Copy to place the full token on the clipboard."
-            : "API key has not been generated yet.";
+            ? Resources.GetString("Mcp_KeyConfigured")
+            : Resources.GetString("Mcp_KeyNotGenerated");
 
         public string McpManifestUrl => "https://xerahs.com/.well-known/mcp/manifest.json";
 
-        private string _assistantHotkeyStatusText = "Use the assistant shortcut to open the in-app command overlay.";
-        private string _captureCommandPaletteStatusText = "Use the palette shortcut to search configured capture workflows.";
+        private string _assistantHotkeyStatusText = Resources.GetString("Assistant_HotkeyStatusText");
+        private string _captureCommandPaletteStatusText = Resources.GetString("Assistant_PaletteStatusText");
 
         public ObservableCollection<AssistantProviderOptionViewModel> AssistantProviderOptions { get; } = new(
             AssistantProviderCatalog.GetProviders().Select(provider => new AssistantProviderOptionViewModel(provider.Id, provider.DisplayName)));
@@ -134,7 +134,7 @@ namespace XerahS.UI.ViewModels
         private string _assistantProviderApiKey = string.Empty;
 
         [ObservableProperty]
-        private string _assistantProviderStatusText = "Local commands are available without an AI provider.";
+        private string _assistantProviderStatusText = Resources.GetString("Assistant_LocalCommandsAvailable");
 
         public bool AssistantEnabled
         {
@@ -191,10 +191,10 @@ namespace XerahS.UI.ViewModels
             SelectedAssistantProvider != null && AssistantProviderSecrets.HasApiKey(SelectedAssistantProvider.Id);
 
         public string AssistantProviderKeyStatus => AssistantProviderHasApiKey
-            ? "API key is stored in the XerahS secret store."
+            ? Resources.GetString("Assistant_KeyStored")
             : AssistantProviderNeedsApiKey
-                ? "API key is not configured."
-                : "Ollama uses the local daemon and does not need an API key.";
+                ? Resources.GetString("Assistant_KeyNotConfigured")
+                : Resources.GetString("Assistant_OllamaNoKeyNeeded");
 
         public string AssistantHotkeyStatusText
         {
@@ -212,16 +212,16 @@ namespace XerahS.UI.ViewModels
         private void TestAssistantShortcut()
         {
             AssistantHotkeyStatusText = PlatformServices.IsInitialized
-                ? $"Current shortcut: {AssistantHotkeyText}"
-                : "Platform services are not initialized yet.";
+                ? Resources.GetString("Assistant_CurrentShortcut", AssistantHotkeyText)
+                : Resources.GetString("Assistant_PlatformServicesNotInitialized");
         }
 
         [RelayCommand]
         private void TestCaptureCommandPaletteShortcut()
         {
             CaptureCommandPaletteStatusText = PlatformServices.IsInitialized
-                ? $"Current shortcut: {CaptureCommandPaletteHotkeyText}"
-                : "Platform services are not initialized yet.";
+                ? Resources.GetString("Assistant_CurrentShortcut", CaptureCommandPaletteHotkeyText)
+                : Resources.GetString("Assistant_PlatformServicesNotInitialized");
         }
 
         [RelayCommand]
@@ -229,12 +229,12 @@ namespace XerahS.UI.ViewModels
         {
             if (SelectedAssistantProvider == null)
             {
-                AssistantProviderStatusText = "Select a provider first.";
+                AssistantProviderStatusText = Resources.GetString("Assistant_SelectProviderFirst");
                 return;
             }
 
             SaveSelectedAssistantProviderSettings();
-            AssistantProviderStatusText = $"{SelectedAssistantProvider.DisplayName} is the active assistant provider.";
+            AssistantProviderStatusText = Resources.GetString("Assistant_ActiveProvider", SelectedAssistantProvider.DisplayName);
         }
 
         [RelayCommand]
@@ -242,7 +242,7 @@ namespace XerahS.UI.ViewModels
         {
             if (SelectedAssistantProvider == null)
             {
-                AssistantProviderStatusText = "Select a provider first.";
+                AssistantProviderStatusText = Resources.GetString("Assistant_SelectProviderFirst");
                 return;
             }
 
@@ -250,12 +250,12 @@ namespace XerahS.UI.ViewModels
             if (!AssistantProviderSettingsResolver.TryGetActive(out AssistantProviderRuntimeSettings runtimeSettings))
             {
                 AssistantProviderStatusText = AssistantProviderNeedsApiKey
-                    ? "Save an API key before validating this provider."
-                    : "Provider settings are incomplete.";
+                    ? Resources.GetString("Assistant_SaveApiKeyBeforeValidate")
+                    : Resources.GetString("Assistant_SettingsIncomplete");
                 return;
             }
 
-            AssistantProviderStatusText = $"Validating {SelectedAssistantProvider.DisplayName}...";
+            AssistantProviderStatusText = Resources.GetString("Assistant_Validating", SelectedAssistantProvider.DisplayName);
             IAssistantModelProvider provider = AssistantModelProviderFactory.Create(runtimeSettings);
             AssistantModelResult result = await provider.ValidateAsync(runtimeSettings.ModelId, CancellationToken.None);
 
@@ -264,11 +264,11 @@ namespace XerahS.UI.ViewModels
                 AssistantProviderConfig config = AssistantProviderSettingsResolver.GetOrCreateConfig(runtimeSettings.Metadata.Id);
                 config.LastValidatedAt = DateTime.UtcNow;
                 SettingsManager.SaveApplicationConfig();
-                AssistantProviderStatusText = $"{SelectedAssistantProvider.DisplayName} validated successfully.";
+                AssistantProviderStatusText = Resources.GetString("Assistant_ValidatedSuccessfully", SelectedAssistantProvider.DisplayName);
             }
             else
             {
-                AssistantProviderStatusText = result.Text ?? "Provider validation failed.";
+                AssistantProviderStatusText = result.Text ?? Resources.GetString("Assistant_ValidationFailed");
             }
         }
 
@@ -282,7 +282,7 @@ namespace XerahS.UI.ViewModels
 
             AssistantProviderSecrets.DeleteApiKey(SelectedAssistantProvider.Id);
             AssistantProviderApiKey = string.Empty;
-            AssistantProviderStatusText = $"{SelectedAssistantProvider.DisplayName} API key removed.";
+            AssistantProviderStatusText = Resources.GetString("Assistant_ApiKeyRemoved", SelectedAssistantProvider.DisplayName);
             NotifyAssistantProviderSecretProperties();
         }
 
@@ -321,8 +321,8 @@ namespace XerahS.UI.ViewModels
             AssistantProviderBaseUrl = string.IsNullOrWhiteSpace(config.BaseUrl) ? metadata?.DefaultBaseUrl ?? string.Empty : config.BaseUrl;
             AssistantProviderApiKey = string.Empty;
             AssistantProviderStatusText = string.Equals(SettingsManager.Settings.AssistantActiveProviderId, providerId, StringComparison.OrdinalIgnoreCase)
-                ? $"{metadata?.DisplayName ?? providerId} is active."
-                : $"{metadata?.DisplayName ?? providerId} is selected. Save to make it active.";
+                ? Resources.GetString("Assistant_ProviderActive", metadata?.DisplayName ?? providerId)
+                : Resources.GetString("Assistant_ProviderSelected", metadata?.DisplayName ?? providerId);
 
             _isLoadingAssistantProvider = false;
             NotifyAssistantProviderSecretProperties();

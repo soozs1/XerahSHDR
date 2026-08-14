@@ -841,4 +841,184 @@
   <data name="MainWindow_NoWorkflowsConfigured" xml:space="preserve">
     <value>Рабочие процессы не настроены</value>
   </data>
+  <data name="Update_StatusPrompt" xml:space="preserve">
+    <value>Используйте «Проверить обновления», чтобы проверить и установить последнюю версию для выбранного канала.</value>
+  </data>
+  <data name="Update_CheckingButton" xml:space="preserve">
+    <value>Проверка...</value>
+  </data>
+  <data name="Update_UpdateNowButton" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="Update_CheckingForUpdates" xml:space="preserve">
+    <value>Проверка обновлений...</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>Доступно обновление. Просмотрите запрос, чтобы продолжить.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>XerahS уже обновлена до последней версии.</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Не удалось проверить обновления. Подробности см. в журнале отладки.</value>
+  </data>
+  <data name="Update_CheckFailedWithError" xml:space="preserve">
+    <value>Не удалось проверить обновления: {0}</value>
+  </data>
+  <data name="Mcp_NotGenerated" xml:space="preserve">
+    <value>Ещё не создан</value>
+  </data>
+  <data name="Mcp_KeyConfigured" xml:space="preserve">
+    <value>Ключ API настроен. Используйте «Копировать», чтобы поместить полный токен в буфер обмена.</value>
+  </data>
+  <data name="Mcp_KeyNotGenerated" xml:space="preserve">
+    <value>Ключ API ещё не создан.</value>
+  </data>
+  <data name="SendTo_NoRememberedChoices" xml:space="preserve">
+    <value>Нет сохранённых вариантов отправки.</value>
+  </data>
+  <data name="Assistant_HotkeyStatusText" xml:space="preserve">
+    <value>Используйте сочетание клавиш помощника, чтобы открыть встроенное командное меню.</value>
+  </data>
+  <data name="Assistant_PaletteStatusText" xml:space="preserve">
+    <value>Используйте сочетание клавиш палитры, чтобы найти настроенные рабочие процессы захвата.</value>
+  </data>
+  <data name="Assistant_LocalCommandsAvailable" xml:space="preserve">
+    <value>Локальные команды доступны без ИИ-провайдера.</value>
+  </data>
+  <data name="Assistant_KeyStored" xml:space="preserve">
+    <value>Ключ API хранится в защищённом хранилище XerahS.</value>
+  </data>
+  <data name="Assistant_KeyNotConfigured" xml:space="preserve">
+    <value>Ключ API не настроен.</value>
+  </data>
+  <data name="Assistant_OllamaNoKeyNeeded" xml:space="preserve">
+    <value>Ollama использует локальный демон и не требует ключа API.</value>
+  </data>
+  <data name="Assistant_CurrentShortcut" xml:space="preserve">
+    <value>Текущее сочетание клавиш: {0}</value>
+  </data>
+  <data name="Assistant_PlatformServicesNotInitialized" xml:space="preserve">
+    <value>Платформенные службы ещё не инициализированы.</value>
+  </data>
+  <data name="Assistant_SelectProviderFirst" xml:space="preserve">
+    <value>Сначала выберите провайдера.</value>
+  </data>
+  <data name="Assistant_ActiveProvider" xml:space="preserve">
+    <value>{0} — активный провайдер помощника.</value>
+  </data>
+  <data name="Assistant_SaveApiKeyBeforeValidate" xml:space="preserve">
+    <value>Сохраните ключ API перед проверкой этого провайдера.</value>
+  </data>
+  <data name="Assistant_SettingsIncomplete" xml:space="preserve">
+    <value>Настройки провайдера неполные.</value>
+  </data>
+  <data name="Assistant_Validating" xml:space="preserve">
+    <value>Проверка {0}...</value>
+  </data>
+  <data name="Assistant_ValidatedSuccessfully" xml:space="preserve">
+    <value>{0} успешно проверен.</value>
+  </data>
+  <data name="Assistant_ValidationFailed" xml:space="preserve">
+    <value>Проверка провайдера не удалась.</value>
+  </data>
+  <data name="Assistant_ApiKeyRemoved" xml:space="preserve">
+    <value>Ключ API {0} удалён.</value>
+  </data>
+  <data name="Assistant_ProviderActive" xml:space="preserve">
+    <value>{0} активен.</value>
+  </data>
+  <data name="Assistant_ProviderSelected" xml:space="preserve">
+    <value>Выбран {0}. Сохраните, чтобы сделать его активным.</value>
+  </data>
+  <data name="LinuxCapture_Unavailable" xml:space="preserve">
+    <value>недоступно</value>
+  </data>
+  <data name="LinuxCapture_CurrentSessionUnavailable" xml:space="preserve">
+    <value>Текущий сеанс: диагностика Linux недоступна</value>
+  </data>
+  <data name="LinuxCapture_PortalBackendUnavailable" xml:space="preserve">
+    <value>Портальный бэкенд: недоступен</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectorsFallback" xml:space="preserve">
+    <value>Доступные селекторы: автоматический (рекомендуется), оверлей-прицел XerahS</value>
+  </data>
+  <data name="LinuxCapture_AutomaticFallback" xml:space="preserve">
+    <value>Автоматический режим предпочтёт лучший доступный селектор во время работы.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionUnavailable" xml:space="preserve">
+    <value>Последний результат селектора: недоступен</value>
+  </data>
+  <data name="LinuxCapture_CurrentSession" xml:space="preserve">
+    <value>Текущий сеанс: тип сеанса: {0} / Рабочий стол: {1} / Композитор: {2}</value>
+  </data>
+  <data name="LinuxCapture_PortalBackend" xml:space="preserve">
+    <value>Портальный бэкенд: {0}</value>
+  </data>
+  <data name="LinuxCapture_AvailableSelectors" xml:space="preserve">
+    <value>Доступные селекторы: {0}</value>
+  </data>
+  <data name="LinuxCapture_AutomaticPreference" xml:space="preserve">
+    <value>Автоматический режим предпочтёт: {0}</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionNone" xml:space="preserve">
+    <value>Последний результат селектора: в этом сеансе интерактивный захват Linux не выполнялся.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionSucceeded" xml:space="preserve">
+    <value>Последний результат селектора: {0} использовал {1} (провайдер: {2}) в {3}. Запрошено: {4}; применено: {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionCancelled" xml:space="preserve">
+    <value>Последний результат селектора: {0} отменён в {1} (провайдер: {2}) в {3}. Запрошено: {4}; применено: {5}.</value>
+  </data>
+  <data name="LinuxCapture_LastDecisionFailed" xml:space="preserve">
+    <value>Последний результат селектора: {0} завершился ошибкой в {1} (провайдер: {2}) в {3}. Запрошено: {4}; применено: {5}.</value>
+  </data>
+  <data name="WatchFolderDaemon_StatusUnknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="WatchFolderDaemon_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="WatchFolderDaemon_Start" xml:space="preserve">
+    <value>Запустить</value>
+  </data>
+  <data name="WatchFolderDaemon_InstallAndStart" xml:space="preserve">
+    <value>Установить и запустить</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupported" xml:space="preserve">
+    <value>Выбранная область «{0}» не поддерживается на этой платформе.</value>
+  </data>
+  <data name="WatchFolderDaemon_UnsupportedScope" xml:space="preserve">
+    <value>Неподдерживаемая область.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToControl" xml:space="preserve">
+    <value>Не удалось управлять демоном.</value>
+  </data>
+  <data name="WatchFolderDaemon_NotSupportedOnPlatform" xml:space="preserve">
+    <value>Демон отслеживаемых папок не поддерживается на этой платформе.</value>
+  </data>
+  <data name="WatchFolderDaemon_ScopeNotSupportedShort" xml:space="preserve">
+    <value>Область «{0}» не поддерживается.</value>
+  </data>
+  <data name="WatchFolderDaemon_FailedToQueryStatus" xml:space="preserve">
+    <value>Не удалось запросить состояние демона.</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailed" xml:space="preserve">
+    <value>Операция демона завершилась ошибкой ({0}).</value>
+  </data>
+  <data name="WatchFolderDaemon_OperationFailedWithError" xml:space="preserve">
+    <value>Операция завершилась ошибкой: {0}</value>
+  </data>
+  <data name="WatchFolder_AddTitle" xml:space="preserve">
+    <value>Добавить отслеживаемую папку</value>
+  </data>
+  <data name="WatchFolder_EditTitle" xml:space="preserve">
+    <value>Изменить отслеживаемую папку</value>
+  </data>
+  <data name="WatchFolder_Unassigned" xml:space="preserve">
+    <value>Не назначен</value>
+  </data>
+  <data name="WatchFolder_UnknownWorkflow" xml:space="preserve">
+    <value>Неизвестный рабочий процесс</value>
+  </data>
 </root>
