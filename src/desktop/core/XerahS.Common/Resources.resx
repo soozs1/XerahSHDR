@@ -144,4 +144,19 @@
   <data name="SendToPrompt_Index_Folders" xml:space="preserve">
     <value>Run the folder indexing workflow for the sent folders.</value>
   </data>
+  <data name="SendToPrompt_FileSingular" xml:space="preserve">
+    <value>{0} file</value>
+  </data>
+  <data name="SendToPrompt_FilePlural" xml:space="preserve">
+    <value>{0} files</value>
+  </data>
+  <data name="SendToPrompt_FolderSingular" xml:space="preserve">
+    <value>{0} folder</value>
+  </data>
+  <data name="SendToPrompt_FolderPlural" xml:space="preserve">
+    <value>{0} folders</value>
+  </data>
+  <data name="SendToPrompt_MixedSummary" xml:space="preserve">
+    <value>{0} and {1}</value>
+  </data>
 </root>

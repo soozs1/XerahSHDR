@@ -144,4 +144,19 @@
   <data name="SendToPrompt_Index_Folders" xml:space="preserve">
     <value>Выполнить индексацию отправленных папок.</value>
   </data>
+  <data name="SendToPrompt_FileSingular" xml:space="preserve">
+    <value>{0} файл</value>
+  </data>
+  <data name="SendToPrompt_FilePlural" xml:space="preserve">
+    <value>{0} файлов</value>
+  </data>
+  <data name="SendToPrompt_FolderSingular" xml:space="preserve">
+    <value>{0} папка</value>
+  </data>
+  <data name="SendToPrompt_FolderPlural" xml:space="preserve">
+    <value>{0} папок</value>
+  </data>
+  <data name="SendToPrompt_MixedSummary" xml:space="preserve">
+    <value>{0} и {1}</value>
+  </data>
 </root>

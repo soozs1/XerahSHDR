@@ -162,9 +162,11 @@ public partial class SendToPromptViewModel : ViewModelBase
 
     public string SelectionSummaryText => _selection.Kind switch
     {
-        SendToSelectionKind.AllFiles => FormatCount(_selection.FilePaths.Count, "file"),
-        SendToSelectionKind.AllFolders => FormatCount(_selection.FolderPaths.Count, "folder"),
-        _ => $"{FormatCount(_selection.FilePaths.Count, "file")} and {FormatCount(_selection.FolderPaths.Count, "folder")}"
+        SendToSelectionKind.AllFiles => FormatFileCount(_selection.FilePaths.Count),
+        SendToSelectionKind.AllFolders => FormatFolderCount(_selection.FolderPaths.Count),
+        _ => XerahS.Common.Resources.GetString("SendToPrompt_MixedSummary",
+            FormatFileCount(_selection.FilePaths.Count),
+            FormatFolderCount(_selection.FolderPaths.Count))
     };
 
     public string SelectionKindText => _selection.Kind switch
@@ -247,8 +249,11 @@ public partial class SendToPromptViewModel : ViewModelBase
         RequestClose?.Invoke();
     }
 
-    private static string FormatCount(int count, string singular) =>
-        count == 1 ? $"1 {singular}" : $"{count} {singular}s";
+    private static string FormatFileCount(int count) =>
+        XerahS.Common.Resources.GetString(count == 1 ? "SendToPrompt_FileSingular" : "SendToPrompt_FilePlural", count);
+
+    private static string FormatFolderCount(int count) =>
+        XerahS.Common.Resources.GetString(count == 1 ? "SendToPrompt_FolderSingular" : "SendToPrompt_FolderPlural", count);
 
     private static int ToFolderPolicyIndex(SendToFolderPolicy policy) => policy switch
     {

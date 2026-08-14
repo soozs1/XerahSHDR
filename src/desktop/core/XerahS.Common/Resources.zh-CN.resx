@@ -144,4 +144,19 @@
   <data name="SendToPrompt_Index_Folders" xml:space="preserve">
     <value>对已发送的文件夹运行文件夹索引工作流。</value>
   </data>
+  <data name="SendToPrompt_FileSingular" xml:space="preserve">
+    <value>{0} 个文件</value>
+  </data>
+  <data name="SendToPrompt_FilePlural" xml:space="preserve">
+    <value>{0} 个文件</value>
+  </data>
+  <data name="SendToPrompt_FolderSingular" xml:space="preserve">
+    <value>{0} 个文件夹</value>
+  </data>
+  <data name="SendToPrompt_FolderPlural" xml:space="preserve">
+    <value>{0} 个文件夹</value>
+  </data>
+  <data name="SendToPrompt_MixedSummary" xml:space="preserve">
+    <value>{0} 和 {1}</value>
+  </data>
 </root>
