@@ -1477,4 +1477,499 @@ Dadurch wird die Datei dauerhaft aus dem Remote-Speicher entfernt. Dies kann nic
   <data name="Settings_Advanced_ApplicationConfiguration" xml:space="preserve">
     <value>Anwendungskonfiguration</value>
   </data>
+  <data name="MainWindow_Menu_File" xml:space="preserve">
+    <value>_Datei</value>
+  </data>
+  <data name="MainWindow_Menu_Open" xml:space="preserve">
+    <value>_Öffnen...</value>
+  </data>
+  <data name="MainWindow_Menu_Upload" xml:space="preserve">
+    <value>_Hochladen</value>
+  </data>
+  <data name="MainWindow_Menu_UploadFile" xml:space="preserve">
+    <value>Datei _hochladen...</value>
+  </data>
+  <data name="MainWindow_Menu_UploadContent" xml:space="preserve">
+    <value>Inhalt _hochladen...</value>
+  </data>
+  <data name="MainWindow_Menu_Save" xml:space="preserve">
+    <value>_Speichern</value>
+  </data>
+  <data name="MainWindow_Menu_SaveAs" xml:space="preserve">
+    <value>Speichern _unter...</value>
+  </data>
+  <data name="MainWindow_Menu_Exit" xml:space="preserve">
+    <value>_Beenden</value>
+  </data>
+  <data name="MainWindow_Menu_Edit" xml:space="preserve">
+    <value>_Bearbeiten</value>
+  </data>
+  <data name="MainWindow_Menu_Undo" xml:space="preserve">
+    <value>_Rückgängig</value>
+  </data>
+  <data name="MainWindow_Menu_Redo" xml:space="preserve">
+    <value>_Wiederholen</value>
+  </data>
+  <data name="MainWindow_Menu_CopyToClipboard" xml:space="preserve">
+    <value>In die _Zwischenablage kopieren</value>
+  </data>
+  <data name="MainWindow_Menu_View" xml:space="preserve">
+    <value>_Ansicht</value>
+  </data>
+  <data name="MainWindow_Menu_Editor" xml:space="preserve">
+    <value>_Editor</value>
+  </data>
+  <data name="MainWindow_Menu_History" xml:space="preserve">
+    <value>_Verlauf</value>
+  </data>
+  <data name="MainWindow_Menu_ResetZoom" xml:space="preserve">
+    <value>Zoom _zurücksetzen</value>
+  </data>
+  <data name="MainWindow_Menu_ZoomIn" xml:space="preserve">
+    <value>_Vergrößern</value>
+  </data>
+  <data name="MainWindow_Menu_ZoomOut" xml:space="preserve">
+    <value>_Verkleinern</value>
+  </data>
+  <data name="MainWindow_Menu_ZoomToFit" xml:space="preserve">
+    <value>Ein_passen</value>
+  </data>
+  <data name="MainWindow_Menu_Workflows" xml:space="preserve">
+    <value>_Workflows</value>
+  </data>
+  <data name="MainWindow_Menu_ManageWorkflows" xml:space="preserve">
+    <value>Workflows _verwalten</value>
+  </data>
+  <data name="MainWindow_Menu_RunWorkflow" xml:space="preserve">
+    <value>Workflow _ausführen</value>
+  </data>
+  <data name="MainWindow_Menu_Tools" xml:space="preserve">
+    <value>_Werkzeuge</value>
+  </data>
+  <data name="MainWindow_Menu_ColorPicker" xml:space="preserve">
+    <value>_Farbwähler...</value>
+  </data>
+  <data name="MainWindow_Menu_Ruler" xml:space="preserve">
+    <value>_Lineal</value>
+  </data>
+  <data name="MainWindow_Menu_QRCode" xml:space="preserve">
+    <value>_QR-Code</value>
+  </data>
+  <data name="MainWindow_Menu_QRGenerator" xml:space="preserve">
+    <value>_Generator...</value>
+  </data>
+  <data name="MainWindow_Menu_QRScanScreen" xml:space="preserve">
+    <value>Vom _Bildschirm scannen</value>
+  </data>
+  <data name="MainWindow_Menu_QRScanRegion" xml:space="preserve">
+    <value>Aus _Bereich scannen</value>
+  </data>
+  <data name="MainWindow_Menu_PinToScreen" xml:space="preserve">
+    <value>Am _Bildschirm anheften</value>
+  </data>
+  <data name="MainWindow_Menu_PinFromScreen" xml:space="preserve">
+    <value>Vom _Bildschirm</value>
+  </data>
+  <data name="MainWindow_Menu_PinFromClipboard" xml:space="preserve">
+    <value>Aus der _Zwischenablage</value>
+  </data>
+  <data name="MainWindow_Menu_PinFromFile" xml:space="preserve">
+    <value>Aus _Datei</value>
+  </data>
+  <data name="MainWindow_Menu_PinCloseAll" xml:space="preserve">
+    <value>Alle _schließen</value>
+  </data>
+  <data name="MainWindow_Menu_OCR" xml:space="preserve">
+    <value>_OCR</value>
+  </data>
+  <data name="MainWindow_Menu_HashChecker" xml:space="preserve">
+    <value>_Hash-Prüfung...</value>
+  </data>
+  <data name="MainWindow_Menu_IndexFolder" xml:space="preserve">
+    <value>Ordner _indizieren...</value>
+  </data>
+  <data name="MainWindow_Menu_ImageCombiner" xml:space="preserve">
+    <value>Bilder _kombinieren...</value>
+  </data>
+  <data name="MainWindow_Menu_ImageSplitter" xml:space="preserve">
+    <value>Bild _teilen...</value>
+  </data>
+  <data name="MainWindow_Menu_ImageThumbnailer" xml:space="preserve">
+    <value>_Miniaturansichten...</value>
+  </data>
+  <data name="MainWindow_Menu_AnalyzeImage" xml:space="preserve">
+    <value>Bild _analysieren...</value>
+  </data>
+  <data name="MainWindow_Menu_VideoEditor" xml:space="preserve">
+    <value>_Video-Editor...</value>
+  </data>
+  <data name="MainWindow_Menu_VideoConverter" xml:space="preserve">
+    <value>_Video-Konverter...</value>
+  </data>
+  <data name="MainWindow_Menu_VideoThumbnailer" xml:space="preserve">
+    <value>_Video-Miniaturansichten...</value>
+  </data>
+  <data name="MainWindow_Menu_ClipboardViewer" xml:space="preserve">
+    <value>Zwischenablage-_Betrachter</value>
+  </data>
+  <data name="MainWindow_Menu_MonitorTest" xml:space="preserve">
+    <value>_Monitor-Test</value>
+  </data>
+  <data name="MainWindow_Menu_Settings" xml:space="preserve">
+    <value>_Einstellungen</value>
+  </data>
+  <data name="MainWindow_Menu_ApplicationSettings" xml:space="preserve">
+    <value>_Anwendungseinstellungen</value>
+  </data>
+  <data name="MainWindow_Menu_DestinationSettings" xml:space="preserve">
+    <value>_Zieleinstellungen</value>
+  </data>
+  <data name="MainWindow_Menu_Help" xml:space="preserve">
+    <value>_Hilfe</value>
+  </data>
+  <data name="MainWindow_Menu_About" xml:space="preserve">
+    <value>_Über</value>
+  </data>
+  <data name="MainWindow_Menu_Debug" xml:space="preserve">
+    <value>_Debuggen</value>
+  </data>
+  <data name="MainWindow_NavigationSearchWatermark" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
+  <data name="History_SearchPlaceholder" xml:space="preserve">
+    <value>Verlauf durchsuchen</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
+  <data name="History_ClearSearch" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="History_ListView" xml:space="preserve">
+    <value>Listenansicht</value>
+  </data>
+  <data name="History_GridView" xml:space="preserve">
+    <value>Rasteransicht</value>
+  </data>
+  <data name="History_CombineHorizontal" xml:space="preserve">
+    <value>Horizontal kombinieren</value>
+  </data>
+  <data name="History_CombineVertical" xml:space="preserve">
+    <value>Vertikal kombinieren</value>
+  </data>
+  <data name="History_Loading" xml:space="preserve">
+    <value>Verlauf wird geladen...</value>
+  </data>
+  <data name="History_ColumnFilename" xml:space="preserve">
+    <value>Dateiname</value>
+  </data>
+  <data name="History_ColumnTypeHost" xml:space="preserve">
+    <value>Typ / Host</value>
+  </data>
+  <data name="History_ColumnDate" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="History_Previous" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="History_Next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (c) 2007-2026 ShareX Team</value>
+  </data>
+  <data name="About_Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="About_Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="About_GitHubProject" xml:space="preserve">
+    <value>GitHub-Projekt</value>
+  </data>
+  <data name="About_Issues" xml:space="preserve">
+    <value>Issues</value>
+  </data>
+  <data name="About_Contributors" xml:space="preserve">
+    <value>Mitwirkende</value>
+  </data>
+  <data name="About_Changelog" xml:space="preserve">
+    <value>Änderungsprotokoll</value>
+  </data>
+  <data name="About_PrivacyPolicy" xml:space="preserve">
+    <value>Datenschutzrichtlinie</value>
+  </data>
+  <data name="About_Donate" xml:space="preserve">
+    <value>Spenden</value>
+  </data>
+  <data name="About_Social" xml:space="preserve">
+    <value>Social Media</value>
+  </data>
+  <data name="About_X" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="About_Discord" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="About_Reddit" xml:space="preserve">
+    <value>Reddit</value>
+  </data>
+  <data name="About_LoadedAssembliesDescription" xml:space="preserve">
+    <value>Geladene Assemblys werden aus der aktuellen Laufzeit erfasst, damit Benutzer die genauen Versionen im Speicher bestätigen können, einschließlich zentraler Abhängigkeiten wie Avalonia.</value>
+  </data>
+  <data name="Destination_Categories" xml:space="preserve">
+    <value>Kategorien</value>
+  </data>
+  <data name="Destination_ImportShareXConfig" xml:space="preserve">
+    <value>ShareX-Konfiguration importieren</value>
+  </data>
+  <data name="Destination_ImportShareXConfigToolTip" xml:space="preserve">
+    <value>Importiert die alte UploadersConfig.json von ShareX und exportiert benutzerdefinierte Uploader als .sxcu-Dateien in den Plugins-Ordner</value>
+  </data>
+  <data name="Destination_PluginsFolder" xml:space="preserve">
+    <value>Plugins-Ordner</value>
+  </data>
+  <data name="Destination_OpenPluginsFolderToolTip" xml:space="preserve">
+    <value>Plugins-Ordner öffnen</value>
+  </data>
+  <data name="Destination_InstallPlugin" xml:space="preserve">
+    <value>Plugin installieren</value>
+  </data>
+  <data name="Destination_InstallPluginToolTip" xml:space="preserve">
+    <value>Community-Plugins installieren oder ein lokales .xsdp-Paket importieren</value>
+  </data>
+  <data name="Destination_AddCustomUploader" xml:space="preserve">
+    <value>Benutzerdefinierten Uploader hinzufügen</value>
+  </data>
+  <data name="Destination_AddCustomUploaderToolTip" xml:space="preserve">
+    <value>Neuen benutzerdefinierten Uploader erstellen (.sxcu)</value>
+  </data>
+  <data name="Destination_AddFromCatalog" xml:space="preserve">
+    <value>Aus Katalog hinzufügen</value>
+  </data>
+  <data name="Destination_SetAsDefault" xml:space="preserve">
+    <value>Als Standard festlegen</value>
+  </data>
+  <data name="Destination_Duplicate" xml:space="preserve">
+    <value>Duplizieren</value>
+  </data>
+  <data name="Destination_ExportXsdc" xml:space="preserve">
+    <value>.xsdc exportieren</value>
+  </data>
+  <data name="Destination_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Destination_FixInstructions" xml:space="preserve">
+    <value>Anweisungen zur Behebung</value>
+  </data>
+  <data name="Destination_CleanDuplicates" xml:space="preserve">
+    <value>Duplikate bereinigen</value>
+  </data>
+  <data name="Destination_OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="Destination_Identity" xml:space="preserve">
+    <value>Identität</value>
+  </data>
+  <data name="Destination_Name" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="Destination_DisplayName" xml:space="preserve">
+    <value>Anzeigename</value>
+  </data>
+  <data name="Destination_InstanceId" xml:space="preserve">
+    <value>Instanz-ID:</value>
+  </data>
+  <data name="Destination_DefinitionBinding" xml:space="preserve">
+    <value>Definitionsbindung</value>
+  </data>
+  <data name="Destination_DefinitionFile" xml:space="preserve">
+    <value>Definitionsdatei:</value>
+  </data>
+  <data name="Destination_DefinitionFilePlaceholder" xml:space="preserve">
+    <value>Diese Instanz kann keiner .sxcu-Quelldatei zugeordnet werden.</value>
+  </data>
+  <data name="Destination_BoundInstanceIds" xml:space="preserve">
+    <value>Gebundene Instanz-ID(s):</value>
+  </data>
+  <data name="Destination_BoundInstanceIdsToolTip" xml:space="preserve">
+    <value>Liest XerahS.instanceIds, wenn verfügbar, andernfalls wird auf die aktuelle Instanzbindung zurückgegriffen.</value>
+  </data>
+  <data name="Destination_SaveDefinitionToPlugins" xml:space="preserve">
+    <value>Definition in Plugins speichern</value>
+  </data>
+  <data name="Destination_SaveAsNewSxcu" xml:space="preserve">
+    <value>Als neue .sxcu speichern</value>
+  </data>
+  <data name="Destination_FileTypeConfiguration" xml:space="preserve">
+    <value>Dateityp-Konfiguration</value>
+  </data>
+  <data name="Destination_ProviderSettings" xml:space="preserve">
+    <value>Anbietereinstellungen</value>
+  </data>
+  <data name="Destination_ExportConfigToolTip" xml:space="preserve">
+    <value>Diese Zielkonfiguration für den mobilen Import exportieren</value>
+  </data>
+  <data name="Destination_MediaExplorer" xml:space="preserve">
+    <value>Medien-Explorer</value>
+  </data>
+  <data name="Destination_MediaExplorerDescription" xml:space="preserve">
+    <value>Mit diesem Anbieter gespeicherte Dateien durchsuchen und verwalten.</value>
+  </data>
+  <data name="Destination_BrowseFiles" xml:space="preserve">
+    <value>Dateien durchsuchen</value>
+  </data>
+  <data name="Destination_BrowseFilesToolTip" xml:space="preserve">
+    <value>Medien-Explorer öffnen, um entfernte Dateien zu durchsuchen (gültige Anmeldedaten erforderlich)</value>
+  </data>
+  <data name="Destination_ConfigureCredentialsNote" xml:space="preserve">
+    <value>Konfigurieren Sie oben die Anmeldedaten, um das Durchsuchen zu aktivieren.</value>
+  </data>
+  <data name="Destination_NoInstanceSelected" xml:space="preserve">
+    <value>Keine Instanz ausgewählt</value>
+  </data>
+  <data name="Destination_NoInstanceSelectedDescription" xml:space="preserve">
+    <value>Wählen Sie eine Instanz aus oder fügen Sie eine neue hinzu, um sie zu konfigurieren.</value>
+  </data>
+  <data name="AfterCapture_Title" xml:space="preserve">
+    <value>Aufgaben nach der Aufnahme</value>
+  </data>
+  <data name="AfterCapture_Header" xml:space="preserve">
+    <value>Aufgaben nach der Aufnahme</value>
+  </data>
+  <data name="AfterCapture_Description" xml:space="preserve">
+    <value>Wählen Sie, was mit dem Bild geschehen soll, bevor Sie fortfahren.</value>
+  </data>
+  <data name="AfterCapture_Preview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="AfterCapture_PreviewDescription" xml:space="preserve">
+    <value>Überprüfen Sie die Aufnahme, bevor Sie Aufgaben anwenden.</value>
+  </data>
+  <data name="AfterCapture_AfterCapture" xml:space="preserve">
+    <value>Nach der Aufnahme</value>
+  </data>
+  <data name="AfterCapture_AfterCaptureDescription" xml:space="preserve">
+    <value>Diese Aktionen sofort nach der Aufnahme ausführen.</value>
+  </data>
+  <data name="AfterCapture_SaveImageToFile" xml:space="preserve">
+    <value>Bild in Datei speichern</value>
+  </data>
+  <data name="AfterCapture_CopyImageToClipboard" xml:space="preserve">
+    <value>Bild in die Zwischenablage kopieren</value>
+  </data>
+  <data name="AfterCapture_CopyFilePathToClipboard" xml:space="preserve">
+    <value>Dateipfad in die Zwischenablage kopieren</value>
+  </data>
+  <data name="AfterCapture_AnnotateMedia" xml:space="preserve">
+    <value>Medium kommentieren</value>
+  </data>
+  <data name="AfterCapture_UploadImageToHost" xml:space="preserve">
+    <value>Bild zum Host hochladen</value>
+  </data>
+  <data name="AfterCapture_CopyOcrTextToClipboard" xml:space="preserve">
+    <value>OCR-Text in die Zwischenablage kopieren</value>
+  </data>
+  <data name="AfterCapture_HdrToneMapping" xml:space="preserve">
+    <value>HDR-Tonemapping:</value>
+  </data>
+  <data name="AfterCapture_AfterUpload" xml:space="preserve">
+    <value>Nach dem Hochladen</value>
+  </data>
+  <data name="AfterCapture_AfterUploadDescription" xml:space="preserve">
+    <value>Wählen Sie Folgeaktionen, sobald der Upload abgeschlossen ist.</value>
+  </data>
+  <data name="AfterCapture_ShowAfterUploadWindow" xml:space="preserve">
+    <value>Fenster nach dem Hochladen anzeigen</value>
+  </data>
+  <data name="AfterCapture_CopyURLToClipboard" xml:space="preserve">
+    <value>URL in die Zwischenablage kopieren</value>
+  </data>
+  <data name="AfterCapture_UseURLShortener" xml:space="preserve">
+    <value>URL-Kürzer verwenden</value>
+  </data>
+  <data name="AfterCapture_ShareURL" xml:space="preserve">
+    <value>URL teilen</value>
+  </data>
+  <data name="AfterCapture_FooterNote" xml:space="preserve">
+    <value>Diese Einstellungen können Sie später in den Aufgabeneinstellungen anpassen.</value>
+  </data>
+  <data name="AfterCapture_Continue" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="AfterUpload_Title" xml:space="preserve">
+    <value>Nach dem Hochladen</value>
+  </data>
+  <data name="AfterUpload_Header" xml:space="preserve">
+    <value>Nach dem Hochladen</value>
+  </data>
+  <data name="AfterUpload_ClipboardFormats" xml:space="preserve">
+    <value>Zwischenablage-Formate</value>
+  </data>
+  <data name="AfterUpload_ClipboardFormatsDescription" xml:space="preserve">
+    <value>Wählen Sie ein Format zum Anzeigen und Kopieren.</value>
+  </data>
+  <data name="AfterUpload_SelectedFormat" xml:space="preserve">
+    <value>Ausgewähltes Format</value>
+  </data>
+  <data name="AfterUpload_Preview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="AfterUpload_PreviewDescription" xml:space="preserve">
+    <value>Lokale Datei und visuelle Vorschau.</value>
+  </data>
+  <data name="AfterUpload_LocalFile" xml:space="preserve">
+    <value>Lokale Datei</value>
+  </data>
+  <data name="AfterUpload_NoLocalFile" xml:space="preserve">
+    <value>Für diesen Upload wurde keine lokale Datei erstellt.</value>
+  </data>
+  <data name="AfterUpload_CopyImage" xml:space="preserve">
+    <value>Bild kopieren</value>
+  </data>
+  <data name="AfterUpload_CopyFormat" xml:space="preserve">
+    <value>Format kopieren</value>
+  </data>
+  <data name="AfterUpload_CopyErrors" xml:space="preserve">
+    <value>Fehler kopieren</value>
+  </data>
+  <data name="AfterUpload_OpenUrl" xml:space="preserve">
+    <value>URL öffnen</value>
+  </data>
+  <data name="AfterUpload_OpenFile" xml:space="preserve">
+    <value>Datei öffnen</value>
+  </data>
+  <data name="AfterUpload_OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="AfterUpload_Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="AutoCapture_Title" xml:space="preserve">
+    <value>Automatische Aufnahme</value>
+  </data>
+  <data name="AutoCapture_Region" xml:space="preserve">
+    <value>Bereich</value>
+  </data>
+  <data name="AutoCapture_CustomRegion" xml:space="preserve">
+    <value>Benutzerdefinierter Bereich</value>
+  </data>
+  <data name="AutoCapture_SelectRegion" xml:space="preserve">
+    <value>Bereich auswählen...</value>
+  </data>
+  <data name="AutoCapture_Options" xml:space="preserve">
+    <value>Optionen</value>
+  </data>
+  <data name="AutoCapture_RepeatTime" xml:space="preserve">
+    <value>Wiederholungszeit:</value>
+  </data>
+  <data name="AutoCapture_Seconds" xml:space="preserve">
+    <value>Sekunden</value>
+  </data>
+  <data name="AutoCapture_MinimizeToTray" xml:space="preserve">
+    <value>Beim Aufnehmen in den Tray minimieren</value>
+  </data>
+  <data name="AutoCapture_WaitForUploads" xml:space="preserve">
+    <value>Auf Abschluss der Uploads warten</value>
+  </data>
 </root>

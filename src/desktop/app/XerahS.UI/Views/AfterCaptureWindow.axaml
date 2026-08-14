@@ -1,5 +1,6 @@
 <ui:SurfaceWindow xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:XerahS.UI.Markup"
         xmlns:ui="using:XerahS.UI.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +8,7 @@
         mc:Ignorable="d"
         x:Class="XerahS.UI.Views.AfterCaptureWindow"
         x:DataType="vm:AfterCaptureViewModel"
-        Title="After Capture Tasks"
+        Title="{local:Localize AfterCapture_Title}"
         Icon="/Assets/Logo.ico"
         Width="{DynamicResource WindowWidth}"
         Height="{DynamicResource WindowHeight}"
@@ -105,9 +106,9 @@
     <!-- Header -->
     <Border Grid.Row="0" Classes="card" Padding="{StaticResource CardPadding}">
       <Grid RowDefinitions="Auto, Auto" RowSpacing="{StaticResource SpaceXS}">
-        <TextBlock Text="After capture tasks" Classes="title" AutomationProperties.Name="After Capture Title"/>
+        <TextBlock Text="{local:Localize AfterCapture_Header}" Classes="title" AutomationProperties.Name="After Capture Title"/>
         <TextBlock Grid.Row="1"
-                   Text="Choose what happens to the image before you continue."
+                   Text="{local:Localize AfterCapture_Description}"
                    Classes="caption"
                    AutomationProperties.Name="After Capture Description"/>
       </Grid>
@@ -118,8 +119,8 @@
       <!-- Preview Column -->
       <Grid Grid.Column="0" RowDefinitions="Auto, *" RowSpacing="{StaticResource SpaceS}">
         <StackPanel Spacing="{StaticResource SpaceXS}">
-          <TextBlock Text="Preview" Classes="section-header" AutomationProperties.Name="Preview Heading"/>
-          <TextBlock Text="Inspect the capture before applying tasks." Classes="caption" AutomationProperties.Name="Preview Description"/>
+          <TextBlock Text="{local:Localize AfterCapture_Preview}" Classes="section-header" AutomationProperties.Name="Preview Heading"/>
+          <TextBlock Text="{local:Localize AfterCapture_PreviewDescription}" Classes="caption" AutomationProperties.Name="Preview Description"/>
         </StackPanel>
         <Border Grid.Row="1"
                 Classes="card"
@@ -147,34 +148,34 @@
                     MaxWidth="380">
         <StackPanel Spacing="{StaticResource SpaceL}">
           <StackPanel Spacing="{StaticResource SpaceXS}">
-            <TextBlock Text="After capture" Classes="section-header" AutomationProperties.Name="After Capture Heading"/>
-            <TextBlock Text="Run these actions immediately after the capture." Classes="caption" AutomationProperties.Name="After Capture Section Description"/>
+            <TextBlock Text="{local:Localize AfterCapture_AfterCapture}" Classes="section-header" AutomationProperties.Name="After Capture Heading"/>
+            <TextBlock Text="{local:Localize AfterCapture_AfterCaptureDescription}" Classes="caption" AutomationProperties.Name="After Capture Section Description"/>
           </StackPanel>
           <Border Classes="card" Padding="{StaticResource CardPadding}">
             <StackPanel Spacing="{StaticResource SpaceM}">
-              <CheckBox Content="Save image to file"
+              <CheckBox Content="{local:Localize AfterCapture_SaveImageToFile}"
                         IsChecked="{Binding SaveImageToFile}"
                         AutomationProperties.Name="Save Image to File"/>
-              <CheckBox Content="Copy image to clipboard"
+              <CheckBox Content="{local:Localize AfterCapture_CopyImageToClipboard}"
                         IsChecked="{Binding CopyImageToClipboard}"
                         AutomationProperties.Name="Copy Image to Clipboard"/>
-              <CheckBox Content="Copy file path to clipboard"
+              <CheckBox Content="{local:Localize AfterCapture_CopyFilePathToClipboard}"
                         IsChecked="{Binding CopyFilePathToClipboard}"
                         AutomationProperties.Name="Copy File Path to Clipboard"/>
-              <CheckBox Content="Annotate media"
+              <CheckBox Content="{local:Localize AfterCapture_AnnotateMedia}"
                         IsChecked="{Binding AnnotateMedia}"
                         AutomationProperties.Name="Annotate Media"/>
-              <CheckBox Content="Upload image to host"
+              <CheckBox Content="{local:Localize AfterCapture_UploadImageToHost}"
                         IsChecked="{Binding UploadImageToHost}"
                         AutomationProperties.Name="Upload Image to Host"/>
-              <CheckBox Content="Copy OCR text to clipboard"
+              <CheckBox Content="{local:Localize AfterCapture_CopyOcrTextToClipboard}"
                         IsChecked="{Binding CopyOcrTextToClipboard}"
                         AutomationProperties.Name="Copy OCR Text to Clipboard"/>
             </StackPanel>
           </Border>
 
           <StackPanel Spacing="{StaticResource SpaceXS}" IsVisible="{Binding IsHdrCapture}">
-            <TextBlock Text="HDR tone mapping:" Classes="caption" AutomationProperties.Name="HDR Tone Mapping Label"/>
+            <TextBlock Text="{local:Localize AfterCapture_HdrToneMapping}" Classes="caption" AutomationProperties.Name="HDR Tone Mapping Label"/>
             <ComboBox ItemsSource="{Binding ToneMappingOptions}"
                       SelectedItem="{Binding ToneMapping}"
                       MinHeight="{StaticResource ControlHeight}"
@@ -183,21 +184,21 @@
           </StackPanel>
 
           <StackPanel Spacing="{StaticResource SpaceXS}">
-            <TextBlock Text="After upload" Classes="section-header" AutomationProperties.Name="After Upload Heading"/>
-            <TextBlock Text="Choose follow-up actions once the upload completes." Classes="caption" AutomationProperties.Name="After Upload Section Description"/>
+            <TextBlock Text="{local:Localize AfterCapture_AfterUpload}" Classes="section-header" AutomationProperties.Name="After Upload Heading"/>
+            <TextBlock Text="{local:Localize AfterCapture_AfterUploadDescription}" Classes="caption" AutomationProperties.Name="After Upload Section Description"/>
           </StackPanel>
           <Border Classes="card" Padding="{StaticResource CardPadding}">
             <StackPanel Spacing="{StaticResource SpaceM}">
-              <CheckBox Content="Show after upload window"
+              <CheckBox Content="{local:Localize AfterCapture_ShowAfterUploadWindow}"
                         IsChecked="{Binding ShowAfterUploadWindow}"
                         AutomationProperties.Name="Show After Upload Window"/>
-              <CheckBox Content="Copy URL to clipboard"
+              <CheckBox Content="{local:Localize AfterCapture_CopyURLToClipboard}"
                         IsChecked="{Binding CopyURLToClipboard}"
                         AutomationProperties.Name="Copy URL to Clipboard"/>
-              <CheckBox Content="Use URL shortener"
+              <CheckBox Content="{local:Localize AfterCapture_UseURLShortener}"
                         IsChecked="{Binding UseURLShortener}"
                         AutomationProperties.Name="Use URL Shortener"/>
-              <CheckBox Content="Share URL"
+              <CheckBox Content="{local:Localize AfterCapture_ShareURL}"
                         IsChecked="{Binding ShareURL}"
                         AutomationProperties.Name="Share URL"/>
             </StackPanel>
@@ -209,16 +210,16 @@
     <!-- Action Bar -->
     <Border Grid.Row="2" Classes="card" Padding="{StaticResource CardPaddingCompact}">
       <Grid ColumnDefinitions="*, Auto" ColumnSpacing="{StaticResource SpaceM}" VerticalAlignment="Center">
-        <TextBlock Text="You can adjust these later in task settings." Classes="caption" AutomationProperties.Name="After Capture Footer Note"/>
+        <TextBlock Text="{local:Localize AfterCapture_FooterNote}" Classes="caption" AutomationProperties.Name="After Capture Footer Note"/>
         <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Spacing="{StaticResource SpaceS}">
-          <Button Content="Cancel"
+          <Button Content="{local:Localize SendToAction_Cancel}"
                   Command="{Binding CancelCommand}"
                   IsCancel="True"
                   AutomationProperties.Name="Cancel"/>
-          <Button Content="Continue"
+          <Button Content="{local:Localize AfterCapture_Continue}"
                   Command="{Binding ContinueCommand}"
                   IsDefault="True"
                   AutomationProperties.Name="Continue"/>
