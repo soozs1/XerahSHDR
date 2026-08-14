@@ -3055,4 +3055,160 @@ Esto eliminará permanentemente el archivo del almacenamiento remoto. Esta acci�
   <data name="App_Delete" xml:space="preserve">
     <value>Eliminar</value>
   </data>
+  <data name="Onboarding_WelcomeTitle" xml:space="preserve">
+    <value>Bienvenido a XerahS</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitlePeriod" xml:space="preserve">
+    <value>Unos pocos pasos rápidos para empezar.</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitle" xml:space="preserve">
+    <value>Unos pocos pasos rápidos para empezar</value>
+  </data>
+  <data name="Onboarding_WelcomeWalkthrough" xml:space="preserve">
+    <value>Le guiaremos a través de:</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletSave" xml:space="preserve">
+    <value>• Dónde se guardan las capturas</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletHotkeys" xml:space="preserve">
+    <value>• Atajos de captura</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletUpload" xml:space="preserve">
+    <value>• Destino de subida</value>
+  </data>
+  <data name="Onboarding_WelcomeChangeLater" xml:space="preserve">
+    <value>Puede cambiar cualquiera de estas opciones más tarde en Ajustes.</value>
+  </data>
+  <data name="Onboarding_FolderPath" xml:space="preserve">
+    <value>Ruta de carpeta</value>
+  </data>
+  <data name="Onboarding_SelectFolder" xml:space="preserve">
+    <value>Seleccione una carpeta...</value>
+  </data>
+  <data name="Onboarding_Preview" xml:space="preserve">
+    <value>Vista previa:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfolders" xml:space="preserve">
+    <value>Crear subcarpetas por fecha</value>
+  </data>
+  <data name="Onboarding_PrimaryCaptureHotkey" xml:space="preserve">
+    <value>Atajo principal de captura</value>
+  </data>
+  <data name="Onboarding_HotkeyInstructions" xml:space="preserve">
+    <value>Haga clic en el botón de atajo y pulse la combinación deseada. Pulse Escape para cancelar.</value>
+  </data>
+  <data name="Onboarding_AdditionalHotkeys" xml:space="preserve">
+    <value>Atajos adicionales</value>
+  </data>
+  <data name="Onboarding_TestHotkey" xml:space="preserve">
+    <value>Probar atajo</value>
+  </data>
+  <data name="Onboarding_UploadDestination" xml:space="preserve">
+    <value>Destino de subida</value>
+  </data>
+  <data name="Onboarding_Config" xml:space="preserve">
+    <value>Configurar...</value>
+  </data>
+  <data name="Onboarding_TestConnection" xml:space="preserve">
+    <value>Probar conexión</value>
+  </data>
+  <data name="Onboarding_Ok" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Onboarding_SetupComplete" xml:space="preserve">
+    <value>Configuración completada</value>
+  </data>
+  <data name="Onboarding_ShowTipsOnStartup" xml:space="preserve">
+    <value>Mostrar consejos al iniciar</value>
+  </data>
+  <data name="Onboarding_TakeFirstScreenshot" xml:space="preserve">
+    <value>Tomar la primera captura</value>
+  </data>
+  <data name="Onboarding_OpenSettings" xml:space="preserve">
+    <value>Abrir ajustes</value>
+  </data>
+  <data name="Onboarding_SkipStep" xml:space="preserve">
+    <value>Omitir este paso</value>
+  </data>
+  <data name="Onboarding_Back" xml:space="preserve">
+    <value>Atrás</value>
+  </data>
+  <data name="Onboarding_SkipAll" xml:space="preserve">
+    <value>Omitir todo</value>
+  </data>
+  <data name="Onboarding_Clear" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="Onboarding_ClickToRecordHotkey" xml:space="preserve">
+    <value>Haga clic para grabar el atajo...</value>
+  </data>
+  <data name="Onboarding_ClearHotkey" xml:space="preserve">
+    <value>Borrar atajo</value>
+  </data>
+  <data name="Onboarding_CaptureHotkeyLabel" xml:space="preserve">
+    <value>Atajo de captura:</value>
+  </data>
+  <data name="Onboarding_TestYourHotkey" xml:space="preserve">
+    <value>Probar su atajo</value>
+  </data>
+  <data name="Onboarding_HotkeyConflict" xml:space="preserve">
+    <value>Conflicto de atajo</value>
+  </data>
+  <data name="Onboarding_SecondaryHotkeys" xml:space="preserve">
+    <value>Atajos secundarios (opcional)</value>
+  </data>
+  <data name="Onboarding_OcrTitle" xml:space="preserve">
+    <value>Reconocimiento de texto (OCR)</value>
+  </data>
+  <data name="Onboarding_OcrSubtitle" xml:space="preserve">
+    <value>Seleccione los idiomas para la extracción de texto</value>
+  </data>
+  <data name="Onboarding_OcrDescription" xml:space="preserve">
+    <value>Podrá extraer texto de las capturas usando su atajo + T</value>
+  </data>
+  <data name="Onboarding_OcrTotalSize" xml:space="preserve">
+    <value>Tamaño total:</value>
+  </data>
+  <data name="Onboarding_OcrExceedsSize" xml:space="preserve">
+    <value>El total supera 200 MB; considere deseleccionar algunos idiomas</value>
+  </data>
+  <data name="Onboarding_OcrDownloadInBackground" xml:space="preserve">
+    <value>Descargar en segundo plano</value>
+  </data>
+  <data name="Onboarding_SaveLocationTitle" xml:space="preserve">
+    <value>Ubicación de guardado</value>
+  </data>
+  <data name="Onboarding_SaveLocationSubtitle" xml:space="preserve">
+    <value>¿Dónde se deben guardar las capturas?</value>
+  </data>
+  <data name="Onboarding_ScreenshotsFolderLabel" xml:space="preserve">
+    <value>Carpeta de capturas:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfoldersDetailed" xml:space="preserve">
+    <value>Crear subcarpetas por año-mes (p. ej., 2025-01)</value>
+  </data>
+  <data name="Onboarding_PathNotWritable" xml:space="preserve">
+    <value>Esta ruta no es escribible</value>
+  </data>
+  <data name="Onboarding_UploadSubtitle" xml:space="preserve">
+    <value>¿A dónde deben subirse las capturas de forma predeterminada?</value>
+  </data>
+  <data name="Onboarding_UploadOnlyWhenChosen" xml:space="preserve">
+    <value>Sus imágenes solo se suben cuando elige explícitamente «Subir»</value>
+  </data>
+  <data name="Onboarding_CompleteTitle" xml:space="preserve">
+    <value>¡Todo listo!</value>
+  </data>
+  <data name="Onboarding_CompleteConfiguration" xml:space="preserve">
+    <value>Su configuración</value>
+  </data>
+  <data name="Onboarding_CompleteNoSteps" xml:space="preserve">
+    <value>No se configuró ningún paso.</value>
+  </data>
+  <data name="Onboarding_CompleteTakeScreenshot" xml:space="preserve">
+    <value>Tome su primera captura →</value>
+  </data>
+  <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
+    <value>Abrir ajustes completos</value>
+  </data>
 </root>

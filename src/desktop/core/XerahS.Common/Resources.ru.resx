@@ -3055,4 +3055,160 @@
   <data name="App_Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="Onboarding_WelcomeTitle" xml:space="preserve">
+    <value>Добро пожаловать в XerahS</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitlePeriod" xml:space="preserve">
+    <value>Несколько быстрых шагов для начала работы.</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitle" xml:space="preserve">
+    <value>Несколько быстрых шагов для начала работы</value>
+  </data>
+  <data name="Onboarding_WelcomeWalkthrough" xml:space="preserve">
+    <value>Мы проведём вас по следующим пунктам:</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletSave" xml:space="preserve">
+    <value>• Куда сохраняются скриншоты</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletHotkeys" xml:space="preserve">
+    <value>• Горячие клавиши захвата</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletUpload" xml:space="preserve">
+    <value>• Место назначения загрузки</value>
+  </data>
+  <data name="Onboarding_WelcomeChangeLater" xml:space="preserve">
+    <value>Вы сможете изменить всё это позже в настройках.</value>
+  </data>
+  <data name="Onboarding_FolderPath" xml:space="preserve">
+    <value>Путь к папке</value>
+  </data>
+  <data name="Onboarding_SelectFolder" xml:space="preserve">
+    <value>Выберите папку...</value>
+  </data>
+  <data name="Onboarding_Preview" xml:space="preserve">
+    <value>Предпросмотр:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfolders" xml:space="preserve">
+    <value>Создавать подпапки по дате</value>
+  </data>
+  <data name="Onboarding_PrimaryCaptureHotkey" xml:space="preserve">
+    <value>Основная горячая клавиша захвата</value>
+  </data>
+  <data name="Onboarding_HotkeyInstructions" xml:space="preserve">
+    <value>Нажмите кнопку горячей клавиши и введите желаемое сочетание. Нажмите Escape для отмены.</value>
+  </data>
+  <data name="Onboarding_AdditionalHotkeys" xml:space="preserve">
+    <value>Дополнительные горячие клавиши</value>
+  </data>
+  <data name="Onboarding_TestHotkey" xml:space="preserve">
+    <value>Проверить горячую клавишу</value>
+  </data>
+  <data name="Onboarding_UploadDestination" xml:space="preserve">
+    <value>Место назначения загрузки</value>
+  </data>
+  <data name="Onboarding_Config" xml:space="preserve">
+    <value>Настроить...</value>
+  </data>
+  <data name="Onboarding_TestConnection" xml:space="preserve">
+    <value>Проверить подключение</value>
+  </data>
+  <data name="Onboarding_Ok" xml:space="preserve">
+    <value>ОК</value>
+  </data>
+  <data name="Onboarding_SetupComplete" xml:space="preserve">
+    <value>Настройка завершена</value>
+  </data>
+  <data name="Onboarding_ShowTipsOnStartup" xml:space="preserve">
+    <value>Показывать подсказки при запуске</value>
+  </data>
+  <data name="Onboarding_TakeFirstScreenshot" xml:space="preserve">
+    <value>Сделать первый скриншот</value>
+  </data>
+  <data name="Onboarding_OpenSettings" xml:space="preserve">
+    <value>Открыть настройки</value>
+  </data>
+  <data name="Onboarding_SkipStep" xml:space="preserve">
+    <value>Пропустить этот шаг</value>
+  </data>
+  <data name="Onboarding_Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Onboarding_SkipAll" xml:space="preserve">
+    <value>Пропустить всё</value>
+  </data>
+  <data name="Onboarding_Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="Onboarding_ClickToRecordHotkey" xml:space="preserve">
+    <value>Нажмите, чтобы записать горячую клавишу...</value>
+  </data>
+  <data name="Onboarding_ClearHotkey" xml:space="preserve">
+    <value>Очистить горячую клавишу</value>
+  </data>
+  <data name="Onboarding_CaptureHotkeyLabel" xml:space="preserve">
+    <value>Горячая клавиша захвата:</value>
+  </data>
+  <data name="Onboarding_TestYourHotkey" xml:space="preserve">
+    <value>Проверить горячую клавишу</value>
+  </data>
+  <data name="Onboarding_HotkeyConflict" xml:space="preserve">
+    <value>Конфликт горячей клавиши</value>
+  </data>
+  <data name="Onboarding_SecondaryHotkeys" xml:space="preserve">
+    <value>Дополнительные горячие клавиши (необязательно)</value>
+  </data>
+  <data name="Onboarding_OcrTitle" xml:space="preserve">
+    <value>Распознавание текста (OCR)</value>
+  </data>
+  <data name="Onboarding_OcrSubtitle" xml:space="preserve">
+    <value>Выберите языки для извлечения текста</value>
+  </data>
+  <data name="Onboarding_OcrDescription" xml:space="preserve">
+    <value>Вы сможете извлекать текст из скриншотов с помощью горячей клавиши + T</value>
+  </data>
+  <data name="Onboarding_OcrTotalSize" xml:space="preserve">
+    <value>Общий размер:</value>
+  </data>
+  <data name="Onboarding_OcrExceedsSize" xml:space="preserve">
+    <value>Общий размер превышает 200 МБ — рассмотрите отключение некоторых языков</value>
+  </data>
+  <data name="Onboarding_OcrDownloadInBackground" xml:space="preserve">
+    <value>Загружать в фоновом режиме</value>
+  </data>
+  <data name="Onboarding_SaveLocationTitle" xml:space="preserve">
+    <value>Место сохранения</value>
+  </data>
+  <data name="Onboarding_SaveLocationSubtitle" xml:space="preserve">
+    <value>Куда сохранять скриншоты?</value>
+  </data>
+  <data name="Onboarding_ScreenshotsFolderLabel" xml:space="preserve">
+    <value>Папка для скриншотов:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfoldersDetailed" xml:space="preserve">
+    <value>Создавать подпапки по году и месяцу (например, 2025-01)</value>
+  </data>
+  <data name="Onboarding_PathNotWritable" xml:space="preserve">
+    <value>Этот путь недоступен для записи</value>
+  </data>
+  <data name="Onboarding_UploadSubtitle" xml:space="preserve">
+    <value>Куда по умолчанию отправлять скриншоты?</value>
+  </data>
+  <data name="Onboarding_UploadOnlyWhenChosen" xml:space="preserve">
+    <value>Изображения загружаются только при явном выборе «Загрузить»</value>
+  </data>
+  <data name="Onboarding_CompleteTitle" xml:space="preserve">
+    <value>Всё готово!</value>
+  </data>
+  <data name="Onboarding_CompleteConfiguration" xml:space="preserve">
+    <value>Ваша конфигурация</value>
+  </data>
+  <data name="Onboarding_CompleteNoSteps" xml:space="preserve">
+    <value>Шаги не были настроены.</value>
+  </data>
+  <data name="Onboarding_CompleteTakeScreenshot" xml:space="preserve">
+    <value>Сделайте первый скриншот →</value>
+  </data>
+  <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
+    <value>Открыть полные настройки</value>
+  </data>
 </root>

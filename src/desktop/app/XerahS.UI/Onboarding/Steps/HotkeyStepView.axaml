@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:XerahS.UI.Onboarding.Steps"
+             xmlns:loc="using:XerahS.UI.Markup"
              xmlns:vm="using:XerahS.UI.Onboarding.ViewModels.Steps"
              xmlns:hotkeyControls="using:XerahS.UI.Views.Controls"
              xmlns:uiVm="using:XerahS.UI.ViewModels"
@@ -40,7 +41,7 @@
 
       <!-- Hotkey Selection -->
       <StackPanel Spacing="8">
-        <TextBlock Text="Capture hotkey:"
+        <TextBlock Text="{loc:Localize Onboarding_CaptureHotkeyLabel}"
                    FontSize="13"
                    FontWeight="Medium"
                    Foreground="{DynamicResource WizTextSecondary}" />
@@ -58,7 +59,7 @@
           </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBlock Text="Click the hotkey button and press your preferred shortcut. Press Escape to cancel."
+        <TextBlock Text="{loc:Localize Onboarding_HotkeyInstructions}"
                    FontSize="12"
                    Foreground="{DynamicResource WizTextSecondary}"
                    TextWrapping="Wrap" />
@@ -66,7 +67,7 @@
 
       <!-- Test Button -->
       <Button Classes="WizardGhostButton"
-              Content="Test your hotkey"
+              Content="{loc:Localize Onboarding_TestYourHotkey}"
               Command="{Binding TestHotkeyCommand}"
               Height="40"
               HorizontalAlignment="Left"
@@ -80,7 +81,7 @@
                      FontSize="16"
                      VerticalAlignment="Center" />
           <StackPanel Spacing="4">
-            <TextBlock Text="Hotkey Conflict"
+            <TextBlock Text="{loc:Localize Onboarding_HotkeyConflict}"
                        FontWeight="SemiBold"
                        Foreground="{DynamicResource WizDanger}" />
             <TextBlock Text="{Binding ConflictMessage}"
@@ -93,7 +94,7 @@
 
       <!-- Secondary Hotkeys (Expander) -->
       <Expander Classes="WizardExpander"
-                Header="Secondary hotkeys (optional)"
+                Header="{loc:Localize Onboarding_SecondaryHotkeys}"
                 IsExpanded="False"
                 MinHeight="48">
 

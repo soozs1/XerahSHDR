@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XerahS.UI.Onboarding.ViewModels.Steps"
              xmlns:controls="using:XerahS.UI.Onboarding.Controls"
+             xmlns:local="using:XerahS.UI.Markup"
              mc:Ignorable="d"
              x:Class="XerahS.UI.Onboarding.Steps.SaveLocationStepView"
              d:DesignWidth="560"
@@ -24,21 +25,21 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Border>
       <StackPanel VerticalAlignment="Center">
-        <TextBlock Text="Save Location" Classes="WizardStepTitle" />
-        <TextBlock Text="Where should screenshots go?" Classes="WizardStepSubtitle" />
+        <TextBlock Text="{local:Localize Onboarding_SaveLocationTitle}" Classes="WizardStepTitle" />
+        <TextBlock Text="{local:Localize Onboarding_SaveLocationSubtitle}" Classes="WizardStepSubtitle" />
       </StackPanel>
     </StackPanel>
 
     <!-- Directory Picker -->
     <StackPanel Spacing="8">
-      <TextBlock Text="Screenshots folder:"
+      <TextBlock Text="{local:Localize Onboarding_ScreenshotsFolderLabel}"
                  FontSize="13" FontWeight="Medium"
                  Foreground="{DynamicResource WizTextPrimary}" />
       <controls:DirectoryPicker Value="{Binding SelectedPath, Mode=TwoWay}" />
     </StackPanel>
 
     <!-- Date Subfolder -->
-    <CheckBox Classes="WizardCheckBox" Content="Create subfolders by year-month (e.g. 2025-01)"
+    <CheckBox Classes="WizardCheckBox" Content="{local:Localize Onboarding_CreateDateSubfoldersDetailed}"
               IsChecked="{Binding CreateDateSubfolders, Mode=TwoWay}" Margin="0,16,0,0" />
 
     <!-- Path Preview -->
@@ -46,7 +47,7 @@
             Background="{DynamicResource WizBg}"
             IsVisible="{Binding HasPathPreview}">
       <StackPanel Spacing="4">
-        <TextBlock Text="Preview:" FontSize="11"
+        <TextBlock Text="{local:Localize Onboarding_Preview}" FontSize="11"
                    Foreground="{DynamicResource WizTextSecondary}" />
         <TextBlock Text="{Binding PathPreview}"
                    FontFamily="JetBrains Mono, Consolas, monospace" FontSize="13"
@@ -60,7 +61,7 @@
       <StackPanel Orientation="Horizontal" Spacing="8">
         <TextBlock Text="⚠" FontSize="14" VerticalAlignment="Center"
                    Foreground="{DynamicResource WizDanger}" />
-        <TextBlock Text="This path is not writable"
+        <TextBlock Text="{local:Localize Onboarding_PathNotWritable}"
                    FontSize="13"
                    Foreground="{DynamicResource WizDanger}" />
       </StackPanel>

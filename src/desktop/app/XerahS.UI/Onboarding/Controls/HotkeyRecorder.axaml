@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:XerahS.UI.Onboarding.Controls"
+             xmlns:loc="using:XerahS.UI.Markup"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="56"
              x:Class="XerahS.UI.Onboarding.Controls.HotkeyRecorder"
              x:DataType="local:HotkeyRecorder"
@@ -27,7 +28,7 @@
                   VerticalAlignment="Center"
                   Spacing="8">
         <TextBlock x:Name="PlaceholderText"
-                   Text="Click to record hotkey..."
+                   Text="{loc:Localize Onboarding_ClickToRecordHotkey}"
                    FontSize="14"
                    Foreground="{DynamicResource WizTextSecondary}" />
 
@@ -44,7 +45,7 @@
               Padding="0"
               VerticalAlignment="Center"
               HorizontalContentAlignment="Center"
-              ToolTip.Tip="Clear hotkey"
+              ToolTip.Tip="{loc:Localize Onboarding_ClearHotkey}"
               Click="OnClearClick"
               IsVisible="False" />
     </Grid>

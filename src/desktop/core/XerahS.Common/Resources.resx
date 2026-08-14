@@ -3055,4 +3055,160 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="App_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Onboarding_WelcomeTitle" xml:space="preserve">
+    <value>Welcome to XerahS</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitlePeriod" xml:space="preserve">
+    <value>A few quick steps to get started.</value>
+  </data>
+  <data name="Onboarding_WelcomeSubtitle" xml:space="preserve">
+    <value>A few quick steps to get started</value>
+  </data>
+  <data name="Onboarding_WelcomeWalkthrough" xml:space="preserve">
+    <value>We'll walk you through:</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletSave" xml:space="preserve">
+    <value>• Where screenshots are saved</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletHotkeys" xml:space="preserve">
+    <value>• Capture hotkeys</value>
+  </data>
+  <data name="Onboarding_WelcomeBulletUpload" xml:space="preserve">
+    <value>• Upload destination</value>
+  </data>
+  <data name="Onboarding_WelcomeChangeLater" xml:space="preserve">
+    <value>You can change any of these later in Settings.</value>
+  </data>
+  <data name="Onboarding_FolderPath" xml:space="preserve">
+    <value>Folder Path</value>
+  </data>
+  <data name="Onboarding_SelectFolder" xml:space="preserve">
+    <value>Select a folder...</value>
+  </data>
+  <data name="Onboarding_Preview" xml:space="preserve">
+    <value>Preview:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfolders" xml:space="preserve">
+    <value>Create date subfolders</value>
+  </data>
+  <data name="Onboarding_PrimaryCaptureHotkey" xml:space="preserve">
+    <value>Primary Capture Hotkey</value>
+  </data>
+  <data name="Onboarding_HotkeyInstructions" xml:space="preserve">
+    <value>Click the hotkey button and press your preferred shortcut. Press Escape to cancel.</value>
+  </data>
+  <data name="Onboarding_AdditionalHotkeys" xml:space="preserve">
+    <value>Additional Hotkeys</value>
+  </data>
+  <data name="Onboarding_TestHotkey" xml:space="preserve">
+    <value>Test Hotkey</value>
+  </data>
+  <data name="Onboarding_UploadDestination" xml:space="preserve">
+    <value>Upload Destination</value>
+  </data>
+  <data name="Onboarding_Config" xml:space="preserve">
+    <value>Config...</value>
+  </data>
+  <data name="Onboarding_TestConnection" xml:space="preserve">
+    <value>Test Connection</value>
+  </data>
+  <data name="Onboarding_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Onboarding_SetupComplete" xml:space="preserve">
+    <value>Setup complete</value>
+  </data>
+  <data name="Onboarding_ShowTipsOnStartup" xml:space="preserve">
+    <value>Show tips on startup</value>
+  </data>
+  <data name="Onboarding_TakeFirstScreenshot" xml:space="preserve">
+    <value>Take First Screenshot</value>
+  </data>
+  <data name="Onboarding_OpenSettings" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
+  <data name="Onboarding_SkipStep" xml:space="preserve">
+    <value>Skip this step</value>
+  </data>
+  <data name="Onboarding_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Onboarding_SkipAll" xml:space="preserve">
+    <value>Skip All</value>
+  </data>
+  <data name="Onboarding_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Onboarding_ClickToRecordHotkey" xml:space="preserve">
+    <value>Click to record hotkey...</value>
+  </data>
+  <data name="Onboarding_ClearHotkey" xml:space="preserve">
+    <value>Clear hotkey</value>
+  </data>
+  <data name="Onboarding_CaptureHotkeyLabel" xml:space="preserve">
+    <value>Capture hotkey:</value>
+  </data>
+  <data name="Onboarding_TestYourHotkey" xml:space="preserve">
+    <value>Test your hotkey</value>
+  </data>
+  <data name="Onboarding_HotkeyConflict" xml:space="preserve">
+    <value>Hotkey Conflict</value>
+  </data>
+  <data name="Onboarding_SecondaryHotkeys" xml:space="preserve">
+    <value>Secondary hotkeys (optional)</value>
+  </data>
+  <data name="Onboarding_OcrTitle" xml:space="preserve">
+    <value>Text Recognition (OCR)</value>
+  </data>
+  <data name="Onboarding_OcrSubtitle" xml:space="preserve">
+    <value>Select languages for text extraction</value>
+  </data>
+  <data name="Onboarding_OcrDescription" xml:space="preserve">
+    <value>You'll be able to extract text from screenshots using your hotkey + T</value>
+  </data>
+  <data name="Onboarding_OcrTotalSize" xml:space="preserve">
+    <value>Total size:</value>
+  </data>
+  <data name="Onboarding_OcrExceedsSize" xml:space="preserve">
+    <value>Total exceeds 200 MB — consider deselecting some languages</value>
+  </data>
+  <data name="Onboarding_OcrDownloadInBackground" xml:space="preserve">
+    <value>Download in background</value>
+  </data>
+  <data name="Onboarding_SaveLocationTitle" xml:space="preserve">
+    <value>Save Location</value>
+  </data>
+  <data name="Onboarding_SaveLocationSubtitle" xml:space="preserve">
+    <value>Where should screenshots go?</value>
+  </data>
+  <data name="Onboarding_ScreenshotsFolderLabel" xml:space="preserve">
+    <value>Screenshots folder:</value>
+  </data>
+  <data name="Onboarding_CreateDateSubfoldersDetailed" xml:space="preserve">
+    <value>Create subfolders by year-month (e.g. 2025-01)</value>
+  </data>
+  <data name="Onboarding_PathNotWritable" xml:space="preserve">
+    <value>This path is not writable</value>
+  </data>
+  <data name="Onboarding_UploadSubtitle" xml:space="preserve">
+    <value>Where should screenshots go by default?</value>
+  </data>
+  <data name="Onboarding_UploadOnlyWhenChosen" xml:space="preserve">
+    <value>Your images are only uploaded when you explicitly choose 'Upload'</value>
+  </data>
+  <data name="Onboarding_CompleteTitle" xml:space="preserve">
+    <value>You're all set!</value>
+  </data>
+  <data name="Onboarding_CompleteConfiguration" xml:space="preserve">
+    <value>Your configuration</value>
+  </data>
+  <data name="Onboarding_CompleteNoSteps" xml:space="preserve">
+    <value>No steps were configured.</value>
+  </data>
+  <data name="Onboarding_CompleteTakeScreenshot" xml:space="preserve">
+    <value>Take your first screenshot →</value>
+  </data>
+  <data name="Onboarding_CompleteOpenSettings" xml:space="preserve">
+    <value>Open full settings</value>
+  </data>
 </root>

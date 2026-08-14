@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XerahS.UI.Onboarding.ViewModels.Steps"
+             xmlns:local="using:XerahS.UI.Markup"
              mc:Ignorable="d"
              x:Class="XerahS.UI.Onboarding.Steps.UploadStepView"
              x:DataType="vm:UploadStepViewModel"
@@ -17,8 +18,8 @@
     <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,0,0,32">
       <TextBlock Text="☁" FontSize="32" VerticalAlignment="Center" />
       <StackPanel VerticalAlignment="Center">
-        <TextBlock Text="Upload Destination" Classes="WizardStepTitle" />
-        <TextBlock Text="Where should screenshots go by default?" Classes="WizardStepSubtitle" />
+        <TextBlock Text="{local:Localize Onboarding_UploadDestination}" Classes="WizardStepTitle" />
+        <TextBlock Text="{local:Localize Onboarding_UploadSubtitle}" Classes="WizardStepSubtitle" />
       </StackPanel>
     </StackPanel>
 
@@ -44,7 +45,7 @@
                            Margin="26,0,0,0" />
               </StackPanel>
               <Button Grid.Column="2"
-                      Content="Config..."
+                      Content="{local:Localize Onboarding_Config}"
                       Command="{Binding $parent[ItemsControl].DataContext.ConfigureUploaderCommand}"
                       CommandParameter="{Binding}"
                       Classes="WizardGhostButton"
@@ -67,13 +68,13 @@
                  TextWrapping="Wrap" />
     </Border>
 
-    <Button Classes="WizardGhostButton" Content="Test Connection"
+    <Button Classes="WizardGhostButton" Content="{local:Localize Onboarding_TestConnection}"
             Command="{Binding TestConnectionCommand}" Margin="0,12,0,0"
             HorizontalAlignment="Left" />
 
     <Border Margin="0,20,0,0" Padding="12,10" CornerRadius="6"
             Background="{DynamicResource WizBg}">
-      <TextBlock Text="Your images are only uploaded when you explicitly choose 'Upload'"
+      <TextBlock Text="{local:Localize Onboarding_UploadOnlyWhenChosen}"
                  FontSize="12"
                  Foreground="{DynamicResource WizTextSecondary}"
                  TextWrapping="Wrap" />

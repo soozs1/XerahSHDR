@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:XerahS.UI.Onboarding.Controls"
+             xmlns:loc="using:XerahS.UI.Markup"
              mc:Ignorable="d"
              x:Class="XerahS.UI.Onboarding.Controls.DirectoryPicker"
              x:DataType="local:DirectoryPicker"
@@ -22,7 +23,7 @@
                  Grid.Column="0"
                  Classes="WizardInput"
                  IsReadOnly="True"
-                 PlaceholderText="Select a folder..."
+                 PlaceholderText="{loc:Localize Onboarding_SelectFolder}"
                  Text="{Binding Value, Mode=TwoWay}"
                  BorderThickness="0"
                  Background="Transparent"
@@ -32,7 +33,7 @@
 
         <Button Grid.Column="1"
                 x:Name="BrowseButton"
-                Content="Browse..."
+                Content="{loc:Localize ImageAnalyzer_Browse}"
                 Classes="WizardGhostButton"
                 Margin="0,0,4,0"
                 Click="BrowseButton_Click" />
@@ -47,7 +48,7 @@
                 Padding="8,4"
                 Margin="0,0,4,0"
                 Click="ClearButton_Click"
-                ToolTip.Tip="Clear" />
+                ToolTip.Tip="{loc:Localize Onboarding_Clear}" />
       </Grid>
     </Border>
 

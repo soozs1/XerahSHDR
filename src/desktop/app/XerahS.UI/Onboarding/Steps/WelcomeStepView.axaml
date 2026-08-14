@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XerahS.UI.Onboarding.ViewModels.Steps"
+             xmlns:local="using:XerahS.UI.Markup"
              mc:Ignorable="d"
              x:Class="XerahS.UI.Onboarding.Steps.WelcomeStepView"
              d:DesignWidth="560"
@@ -25,32 +26,32 @@
                    VerticalAlignment="Center" />
       </Border>
       <StackPanel VerticalAlignment="Center" Spacing="4">
-        <TextBlock Text="Welcome to XerahS"
+        <TextBlock Text="{local:Localize Onboarding_WelcomeTitle}"
                    Classes="WizardStepTitle" />
-        <TextBlock Text="A few quick steps to get started"
+        <TextBlock Text="{local:Localize Onboarding_WelcomeSubtitle}"
                    Classes="WizardStepSubtitle" />
       </StackPanel>
     </StackPanel>
 
-    <TextBlock Text="We'll walk you through:"
+    <TextBlock Text="{local:Localize Onboarding_WelcomeWalkthrough}"
                FontSize="13"
                FontWeight="Medium"
                Foreground="{DynamicResource WizTextPrimary}"
                Margin="0,0,0,8" />
 
     <StackPanel Spacing="6" Margin="4,0,0,0">
-      <TextBlock Text="• Where screenshots are saved"
+      <TextBlock Text="{local:Localize Onboarding_WelcomeBulletSave}"
                  FontSize="13"
                  Foreground="{DynamicResource WizTextSecondary}" />
-      <TextBlock Text="• Capture hotkeys"
+      <TextBlock Text="{local:Localize Onboarding_WelcomeBulletHotkeys}"
                  FontSize="13"
                  Foreground="{DynamicResource WizTextSecondary}" />
-      <TextBlock Text="• Upload destination"
+      <TextBlock Text="{local:Localize Onboarding_WelcomeBulletUpload}"
                  FontSize="13"
                  Foreground="{DynamicResource WizTextSecondary}" />
     </StackPanel>
 
-    <TextBlock Text="You can change any of these later in Settings."
+    <TextBlock Text="{local:Localize Onboarding_WelcomeChangeLater}"
                FontSize="12"
                Foreground="{DynamicResource WizTextSecondary}"
                Margin="0,16,0,0"
