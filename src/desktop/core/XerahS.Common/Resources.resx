@@ -1021,4 +1021,460 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="WatchFolder_UnknownWorkflow" xml:space="preserve">
     <value>Unknown workflow</value>
   </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_Tab_Paths" xml:space="preserve">
+    <value>Paths</value>
+  </data>
+  <data name="Settings_Tab_WatchFolders" xml:space="preserve">
+    <value>Watch Folders</value>
+  </data>
+  <data name="Settings_Tab_Integration" xml:space="preserve">
+    <value>Integration</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Settings_Tab_Proxy" xml:space="preserve">
+    <value>Proxy</value>
+  </data>
+  <data name="Settings_Tab_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Settings_Theme_Title" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_Theme_ApplicationTheme" xml:space="preserve">
+    <value>Application Theme:</value>
+  </data>
+  <data name="Settings_Theme_Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="Settings_Theme_LanguageRestartNote" xml:space="preserve">
+    <value>Language changes take effect after restarting XerahS.</value>
+  </data>
+  <data name="Settings_Theme_SystemDefaultNote" xml:space="preserve">
+    <value>'System default' follows your operating system's light/dark mode preference.</value>
+  </data>
+  <data name="Settings_Updates_Title" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="Settings_Updates_AutoCheck" xml:space="preserve">
+    <value>Automatically check for updates</value>
+  </data>
+  <data name="Settings_Updates_UpdateChannel" xml:space="preserve">
+    <value>Update channel:</value>
+  </data>
+  <data name="Settings_Updates_PreReleaseSource" xml:space="preserve">
+    <value>Pre-release source:</value>
+  </data>
+  <data name="Settings_Updates_CustomSource" xml:space="preserve">
+    <value>Custom source:</value>
+  </data>
+  <data name="Settings_Updates_CustomSourcePlaceholder" xml:space="preserve">
+    <value>GitHub owner or owner/repo</value>
+  </data>
+  <data name="Settings_Notifications_Title" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Settings_Notifications_DisableWindow" xml:space="preserve">
+    <value>Disable notification window</value>
+  </data>
+  <data name="Settings_Notifications_DisableWindowToolTip" xml:space="preserve">
+    <value>Suppress the corner toast popup that normally appears after a task completes (e.g. 'Task Completed', 'Upload Completed'). Capture, upload and other actions still run normally.</value>
+  </data>
+  <data name="Settings_TrayIcon_Title" xml:space="preserve">
+    <value>Tray Icon</value>
+  </data>
+  <data name="Settings_TrayIcon_ShowProgress" xml:space="preserve">
+    <value>Show progress on tray icon</value>
+  </data>
+  <data name="Settings_TrayIcon_UseWhiteIcon" xml:space="preserve">
+    <value>Use single-color white tray icon</value>
+  </data>
+  <data name="Settings_TrayIcon_UseWhiteIconToolTip" xml:space="preserve">
+    <value>Use the simple monochrome outline tray icon instead of the full-color one. Recommended on macOS and Linux where system panels are dark; opt-in on Windows. On GNOME, requires the AppIndicator extension.</value>
+  </data>
+  <data name="Settings_TrayIcon_ClickActions" xml:space="preserve">
+    <value>Click Actions</value>
+  </data>
+  <data name="Settings_TrayIcon_LeftClick" xml:space="preserve">
+    <value>Left click:</value>
+  </data>
+  <data name="Settings_TrayIcon_DoubleClick" xml:space="preserve">
+    <value>Double click:</value>
+  </data>
+  <data name="Settings_TrayIcon_MiddleClick" xml:space="preserve">
+    <value>Middle click:</value>
+  </data>
+  <data name="Settings_Taskbar_Title" xml:space="preserve">
+    <value>Taskbar</value>
+  </data>
+  <data name="Settings_Taskbar_ShowProgress" xml:space="preserve">
+    <value>Show progress on taskbar</value>
+  </data>
+  <data name="Settings_Paths_ScreenshotsFolder" xml:space="preserve">
+    <value>Screenshots Folder</value>
+  </data>
+  <data name="Settings_Paths_UseCustomScreenshotsPath" xml:space="preserve">
+    <value>Use custom screenshots path</value>
+  </data>
+  <data name="Settings_Paths_ScreenshotsPathPlaceholder" xml:space="preserve">
+    <value>Path to screenshots folder</value>
+  </data>
+  <data name="Settings_Paths_BrowseScreenshotsToolTip" xml:space="preserve">
+    <value>Browse for screenshots folder</value>
+  </data>
+  <data name="Settings_Paths_SubfolderPattern" xml:space="preserve">
+    <value>Subfolder Pattern</value>
+  </data>
+  <data name="Settings_Paths_UseSubfolderPattern" xml:space="preserve">
+    <value>Create subfolders using pattern</value>
+  </data>
+  <data name="Settings_Paths_Pattern" xml:space="preserve">
+    <value>Pattern:</value>
+  </data>
+  <data name="Settings_Paths_PatternExample" xml:space="preserve">
+    <value>Example: 2025-01</value>
+  </data>
+  <data name="Settings_WatchFolders_Title" xml:space="preserve">
+    <value>Watch folders</value>
+  </data>
+  <data name="Settings_WatchFolders_Description" xml:space="preserve">
+    <value>Monitor folders for new files and run file upload workflows automatically.</value>
+  </data>
+  <data name="Settings_WatchFolders_ConfiguredFolders" xml:space="preserve">
+    <value>Configured folders</value>
+  </data>
+  <data name="Settings_WatchFolders_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Settings_WatchFolders_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Settings_WatchFolders_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Workflow" xml:space="preserve">
+    <value>Workflow</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Subfolders" xml:space="preserve">
+    <value>Subfolders</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_MoveToScreenshots" xml:space="preserve">
+    <value>Move to Screenshots</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_MovToMp4" xml:space="preserve">
+    <value>MOV to MP4</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Title" xml:space="preserve">
+    <value>Watch Folder Service/Daemon</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Description" xml:space="preserve">
+    <value>Run watch-folder monitoring in a dedicated background service/daemon using your existing settings.</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Scope" xml:space="preserve">
+    <value>Scope:</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_StartAtStartup" xml:space="preserve">
+    <value>Start daemon at startup</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Settings_Integration_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Settings_Integration_ShowTrayIcon" xml:space="preserve">
+    <value>Show tray icon</value>
+  </data>
+  <data name="Settings_Integration_StartMinimized" xml:space="preserve">
+    <value>Start minimized to tray</value>
+  </data>
+  <data name="Settings_Integration_RememberMainWindowSize" xml:space="preserve">
+    <value>Remember main window size</value>
+  </data>
+  <data name="Settings_Integration_RememberMainWindowPosition" xml:space="preserve">
+    <value>Remember main window position</value>
+  </data>
+  <data name="Settings_Integration_DesktopIntegration" xml:space="preserve">
+    <value>Desktop Integration</value>
+  </data>
+  <data name="Settings_Integration_RunAtStartup" xml:space="preserve">
+    <value>Run at system startup</value>
+  </data>
+  <data name="Settings_Integration_ContextMenu" xml:space="preserve">
+    <value>Add 'Upload with XerahS' to context menu</value>
+  </data>
+  <data name="Settings_Integration_ContextMenuToolTip" xml:space="preserve">
+    <value>Adds an option to upload files from the right-click context menu</value>
+  </data>
+  <data name="Settings_Integration_SendToMenu" xml:space="preserve">
+    <value>Add to 'Send To' menu</value>
+  </data>
+  <data name="Settings_Integration_SendToMenuToolTip" xml:space="preserve">
+    <value>Adds XerahS to the 'Send To' menu for quick file access</value>
+  </data>
+  <data name="Settings_Integration_SendToRememberedChoices" xml:space="preserve">
+    <value>Send-to remembered choices</value>
+  </data>
+  <data name="Settings_Integration_ClearSendToChoices" xml:space="preserve">
+    <value>Clear remembered Send-to choices</value>
+  </data>
+  <data name="Settings_Integration_SendToDefaultPolicies" xml:space="preserve">
+    <value>Send-to default policies</value>
+  </data>
+  <data name="Settings_Integration_FolderPolicy" xml:space="preserve">
+    <value>Folder policy:</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicy" xml:space="preserve">
+    <value>Image batch policy:</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
+    <value>Batch confirm threshold:</value>
+  </data>
+  <data name="Settings_Integration_Clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="Settings_Integration_ClipboardViewer" xml:space="preserve">
+    <value>Monitor clipboard and auto-show Clipboard Viewer</value>
+  </data>
+  <data name="Settings_Integration_ClipboardViewerToolTip" xml:space="preserve">
+    <value>When enabled, automatically opens the Clipboard Viewer when new content is copied to the clipboard</value>
+  </data>
+  <data name="Settings_Integration_FileAssociations" xml:space="preserve">
+    <value>File Associations</value>
+  </data>
+  <data name="Settings_Integration_AssociateXsdp" xml:space="preserve">
+    <value>Associate .xsdp files with this application</value>
+  </data>
+  <data name="Settings_Integration_AssociateXsdpToolTip" xml:space="preserve">
+    <value>Allows double-clicking .xsdp plugin packages to install them</value>
+  </data>
+  <data name="Settings_Integration_Note" xml:space="preserve">
+    <value>Note: Some integration features require platform-specific support and may not be available on all systems.</value>
+  </data>
+  <data name="Settings_CapturePalette_Title" xml:space="preserve">
+    <value>Capture Command Palette</value>
+  </data>
+  <data name="Settings_CapturePalette_Description" xml:space="preserve">
+    <value>Open a searchable overlay for configured capture and recording workflows.</value>
+  </data>
+  <data name="Settings_CapturePalette_Enable" xml:space="preserve">
+    <value>Enable Capture Command Palette</value>
+  </data>
+  <data name="Settings_Shortcut" xml:space="preserve">
+    <value>Shortcut:</value>
+  </data>
+  <data name="Settings_TestShortcut" xml:space="preserve">
+    <value>Test Shortcut</value>
+  </data>
+  <data name="Settings_Assistant_Title" xml:space="preserve">
+    <value>Assistant</value>
+  </data>
+  <data name="Settings_Assistant_Description" xml:space="preserve">
+    <value>Use a local-first command overlay for XerahS history and capture actions.</value>
+  </data>
+  <data name="Settings_Assistant_Enable" xml:space="preserve">
+    <value>Enable XerahS Assistant</value>
+  </data>
+  <data name="Settings_Assistant_SaveHistory" xml:space="preserve">
+    <value>Save assistant command history</value>
+  </data>
+  <data name="Settings_Assistant_AIProvider" xml:space="preserve">
+    <value>AI Provider</value>
+  </data>
+  <data name="Settings_Assistant_Provider" xml:space="preserve">
+    <value>Provider:</value>
+  </data>
+  <data name="Settings_Assistant_Model" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="Settings_Assistant_ModelIdPlaceholder" xml:space="preserve">
+    <value>Model ID</value>
+  </data>
+  <data name="Settings_Assistant_BaseUrl" xml:space="preserve">
+    <value>Base URL:</value>
+  </data>
+  <data name="Settings_Assistant_ApiKey" xml:space="preserve">
+    <value>API key:</value>
+  </data>
+  <data name="Settings_Assistant_ApiKeyPlaceholder" xml:space="preserve">
+    <value>Stored in the XerahS secret store</value>
+  </data>
+  <data name="Settings_Assistant_SaveProvider" xml:space="preserve">
+    <value>Save Provider</value>
+  </data>
+  <data name="Settings_Assistant_Validate" xml:space="preserve">
+    <value>Validate</value>
+  </data>
+  <data name="Settings_Assistant_RemoveKey" xml:space="preserve">
+    <value>Remove Key</value>
+  </data>
+  <data name="Settings_Mcp_Title" xml:space="preserve">
+    <value>MCP Server</value>
+  </data>
+  <data name="Settings_Mcp_Description" xml:space="preserve">
+    <value>Use the dedicated xerahs-mcp executable to expose XerahS over the Model Context Protocol.</value>
+  </data>
+  <data name="Settings_Mcp_ManifestUrl" xml:space="preserve">
+    <value>Manifest URL:</value>
+  </data>
+  <data name="Settings_Mcp_CopyApiKey" xml:space="preserve">
+    <value>Copy API Key</value>
+  </data>
+  <data name="Settings_Mcp_GenerateApiKey" xml:space="preserve">
+    <value>Generate or Regenerate API Key</value>
+  </data>
+  <data name="Settings_Mcp_CopyManifestUrl" xml:space="preserve">
+    <value>Copy Manifest URL</value>
+  </data>
+  <data name="Settings_Mcp_HttpTransportNote" xml:space="preserve">
+    <value>HTTP transport requires the bearer token above. If no key exists, the MCP runtime also generates one automatically on first launch.</value>
+  </data>
+  <data name="Settings_History_Title" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Settings_History_SaveTasks" xml:space="preserve">
+    <value>Save captured/uploaded items to history</value>
+  </data>
+  <data name="Settings_History_OnlySaveWithUrl" xml:space="preserve">
+    <value>Only save items with URL</value>
+  </data>
+  <data name="Settings_History_ScreenshotSearch" xml:space="preserve">
+    <value>Make screenshots searchable</value>
+  </data>
+  <data name="Settings_History_ScreenshotSearchNote" xml:space="preserve">
+    <value>Reads text in new screenshots locally so History and Assistant search can find screenshots by visible words.</value>
+  </data>
+  <data name="Settings_RecentTasks_Title" xml:space="preserve">
+    <value>Recent Tasks</value>
+  </data>
+  <data name="Settings_RecentTasks_Save" xml:space="preserve">
+    <value>Save recent tasks</value>
+  </data>
+  <data name="Settings_RecentTasks_MaxCount" xml:space="preserve">
+    <value>Maximum recent tasks:</value>
+  </data>
+  <data name="Settings_RecentTasks_DisplayOptions" xml:space="preserve">
+    <value>Display Options</value>
+  </data>
+  <data name="Settings_RecentTasks_ShowInMainWindow" xml:space="preserve">
+    <value>Show recent tasks in main window</value>
+  </data>
+  <data name="Settings_RecentTasks_ShowInTrayMenu" xml:space="preserve">
+    <value>Show recent tasks in tray menu</value>
+  </data>
+  <data name="Settings_RecentTasks_MostRecentFirst" xml:space="preserve">
+    <value>Show most recent first in tray menu</value>
+  </data>
+  <data name="Settings_Proxy_Title" xml:space="preserve">
+    <value>Proxy Configuration</value>
+  </data>
+  <data name="Settings_Proxy_Method" xml:space="preserve">
+    <value>Proxy method:</value>
+  </data>
+  <data name="Settings_Proxy_MethodDescription" xml:space="preserve">
+    <value>Configure how network requests should be proxied. Changes apply immediately to all uploads.</value>
+  </data>
+  <data name="Settings_Proxy_Server" xml:space="preserve">
+    <value>Proxy Server</value>
+  </data>
+  <data name="Settings_Proxy_Host" xml:space="preserve">
+    <value>Host:</value>
+  </data>
+  <data name="Settings_Proxy_Port" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="Settings_Proxy_Authentication" xml:space="preserve">
+    <value>Authentication (Optional)</value>
+  </data>
+  <data name="Settings_Proxy_Username" xml:space="preserve">
+    <value>Username:</value>
+  </data>
+  <data name="Settings_Proxy_UsernamePlaceholder" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="Settings_Proxy_Password" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="Settings_Proxy_PasswordPlaceholder" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="Settings_Proxy_AuthNote" xml:space="preserve">
+    <value>Leave username and password blank if your proxy does not require authentication.</value>
+  </data>
+  <data name="Settings_Advanced_CaptureEngine" xml:space="preserve">
+    <value>Capture Engine</value>
+  </data>
+  <data name="Settings_Advanced_UseModernCapture" xml:space="preserve">
+    <value>Use Modern Screen Capture (Direct3D11 on Windows, XDG Portal on Linux). Requires restart.</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelector" xml:space="preserve">
+    <value>macOS Region Selector</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelectorDescription" xml:space="preserve">
+    <value>Choose one selector for macOS interactive region capture so the native crosshair and XerahS overlay are not shown in the same workflow.</value>
+  </data>
+  <data name="Settings_RegionSelector" xml:space="preserve">
+    <value>Region selector:</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelectorNote" xml:space="preserve">
+    <value>This is the default for macOS workflows and capture tools. Workflows set to Automatic follow this value.</value>
+  </data>
+  <data name="Settings_Advanced_PlayMacCaptureSound" xml:space="preserve">
+    <value>Play native macOS capture sound</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRegionSelector" xml:space="preserve">
+    <value>Linux Region Selector</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRegionSelectorDescription" xml:space="preserve">
+    <value>Choose which selector XerahS should prefer for Linux interactive region selection.</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackend" xml:space="preserve">
+    <value>Linux Recording Backend</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackendDescription" xml:space="preserve">
+    <value>Choose which recording backend XerahS should prefer for Linux screen recording workflows.</value>
+  </data>
+  <data name="Settings_Advanced_RecordingBackend" xml:space="preserve">
+    <value>Recording backend:</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackendNote" xml:space="preserve">
+    <value>Automatic prefers native or portal-backed recording when available and falls back to FFmpeg when needed.</value>
+  </data>
+  <data name="Settings_Advanced_LinuxClipboard" xml:space="preserve">
+    <value>Linux Clipboard</value>
+  </data>
+  <data name="Settings_Advanced_PersistClipboard" xml:space="preserve">
+    <value>Keep clipboard contents after XerahS exits (Wayland: uses wl-copy)</value>
+  </data>
+  <data name="Settings_Advanced_LinuxClipboardNote" xml:space="preserve">
+    <value>Background workflows (CLI, watch-folder daemon) need wl-clipboard or xclip. The .deb and .rpm packages recommend these tools.</value>
+  </data>
+  <data name="Settings_Advanced_WaylandPortalServices" xml:space="preserve">
+    <value>Wayland Portal Services</value>
+  </data>
+  <data name="Settings_Advanced_UseWaylandPortalServices" xml:space="preserve">
+    <value>Use Wayland portal services for hotkeys, input capture, and open-uri integration. Requires restart.</value>
+  </data>
+  <data name="Settings_Advanced_WaylandPortalServicesNote" xml:space="preserve">
+    <value>This setting controls portal-backed desktop integration on Wayland. It does not choose the Linux screenshot region selector or recording backend.</value>
+  </data>
+  <data name="Settings_Advanced_ApplicationConfiguration" xml:space="preserve">
+    <value>Application Configuration</value>
+  </data>
 </root>

@@ -1021,4 +1021,460 @@
   <data name="WatchFolder_UnknownWorkflow" xml:space="preserve">
     <value>Неизвестный рабочий процесс</value>
   </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="Settings_Tab_Paths" xml:space="preserve">
+    <value>Пути</value>
+  </data>
+  <data name="Settings_Tab_WatchFolders" xml:space="preserve">
+    <value>Отслеживаемые папки</value>
+  </data>
+  <data name="Settings_Tab_Integration" xml:space="preserve">
+    <value>Интеграция</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Settings_Tab_Proxy" xml:space="preserve">
+    <value>Прокси</value>
+  </data>
+  <data name="Settings_Tab_Advanced" xml:space="preserve">
+    <value>Дополнительно</value>
+  </data>
+  <data name="Settings_Theme_Title" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="Settings_Theme_ApplicationTheme" xml:space="preserve">
+    <value>Тема приложения:</value>
+  </data>
+  <data name="Settings_Theme_Language" xml:space="preserve">
+    <value>Язык:</value>
+  </data>
+  <data name="Settings_Theme_LanguageRestartNote" xml:space="preserve">
+    <value>Изменение языка вступает в силу после перезапуска XerahS.</value>
+  </data>
+  <data name="Settings_Theme_SystemDefaultNote" xml:space="preserve">
+    <value>«Системная тема» использует светлую или тёмную тему, заданную в операционной системе.</value>
+  </data>
+  <data name="Settings_Updates_Title" xml:space="preserve">
+    <value>Обновления</value>
+  </data>
+  <data name="Settings_Updates_AutoCheck" xml:space="preserve">
+    <value>Автоматически проверять обновления</value>
+  </data>
+  <data name="Settings_Updates_UpdateChannel" xml:space="preserve">
+    <value>Канал обновлений:</value>
+  </data>
+  <data name="Settings_Updates_PreReleaseSource" xml:space="preserve">
+    <value>Источник предварительных версий:</value>
+  </data>
+  <data name="Settings_Updates_CustomSource" xml:space="preserve">
+    <value>Свой источник:</value>
+  </data>
+  <data name="Settings_Updates_CustomSourcePlaceholder" xml:space="preserve">
+    <value>Владелец GitHub или владелец/репозиторий</value>
+  </data>
+  <data name="Settings_Notifications_Title" xml:space="preserve">
+    <value>Уведомления</value>
+  </data>
+  <data name="Settings_Notifications_DisableWindow" xml:space="preserve">
+    <value>Отключить окно уведомлений</value>
+  </data>
+  <data name="Settings_Notifications_DisableWindowToolTip" xml:space="preserve">
+    <value>Отключает всплывающее уведомление в углу экрана, которое обычно появляется после завершения задачи (например, «Задача завершена», «Загрузка завершена»). Захват, загрузка и другие действия выполняются как обычно.</value>
+  </data>
+  <data name="Settings_TrayIcon_Title" xml:space="preserve">
+    <value>Значок в трее</value>
+  </data>
+  <data name="Settings_TrayIcon_ShowProgress" xml:space="preserve">
+    <value>Показывать прогресс на значке в трее</value>
+  </data>
+  <data name="Settings_TrayIcon_UseWhiteIcon" xml:space="preserve">
+    <value>Использовать одноцветный белый значок в трее</value>
+  </data>
+  <data name="Settings_TrayIcon_UseWhiteIconToolTip" xml:space="preserve">
+    <value>Использовать простой монохромный контурный значок в трее вместо полноцветного. Рекомендуется в macOS и Linux, где системные панели тёмные; в Windows включается по желанию. В GNOME требуется расширение AppIndicator.</value>
+  </data>
+  <data name="Settings_TrayIcon_ClickActions" xml:space="preserve">
+    <value>Действия по щелчку</value>
+  </data>
+  <data name="Settings_TrayIcon_LeftClick" xml:space="preserve">
+    <value>Левый щелчок:</value>
+  </data>
+  <data name="Settings_TrayIcon_DoubleClick" xml:space="preserve">
+    <value>Двойной щелчок:</value>
+  </data>
+  <data name="Settings_TrayIcon_MiddleClick" xml:space="preserve">
+    <value>Средний щелчок:</value>
+  </data>
+  <data name="Settings_Taskbar_Title" xml:space="preserve">
+    <value>Панель задач</value>
+  </data>
+  <data name="Settings_Taskbar_ShowProgress" xml:space="preserve">
+    <value>Показывать прогресс на панели задач</value>
+  </data>
+  <data name="Settings_Paths_ScreenshotsFolder" xml:space="preserve">
+    <value>Папка скриншотов</value>
+  </data>
+  <data name="Settings_Paths_UseCustomScreenshotsPath" xml:space="preserve">
+    <value>Использовать свой путь для скриншотов</value>
+  </data>
+  <data name="Settings_Paths_ScreenshotsPathPlaceholder" xml:space="preserve">
+    <value>Путь к папке скриншотов</value>
+  </data>
+  <data name="Settings_Paths_BrowseScreenshotsToolTip" xml:space="preserve">
+    <value>Выбрать папку скриншотов</value>
+  </data>
+  <data name="Settings_Paths_SubfolderPattern" xml:space="preserve">
+    <value>Шаблон подпапок</value>
+  </data>
+  <data name="Settings_Paths_UseSubfolderPattern" xml:space="preserve">
+    <value>Создавать подпапки по шаблону</value>
+  </data>
+  <data name="Settings_Paths_Pattern" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="Settings_Paths_PatternExample" xml:space="preserve">
+    <value>Пример: 2025-01</value>
+  </data>
+  <data name="Settings_WatchFolders_Title" xml:space="preserve">
+    <value>Отслеживаемые папки</value>
+  </data>
+  <data name="Settings_WatchFolders_Description" xml:space="preserve">
+    <value>Отслеживайте папки на появление новых файлов и автоматически запускайте рабочие процессы загрузки.</value>
+  </data>
+  <data name="Settings_WatchFolders_ConfiguredFolders" xml:space="preserve">
+    <value>Настроенные папки</value>
+  </data>
+  <data name="Settings_WatchFolders_Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Settings_WatchFolders_Edit" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="Settings_WatchFolders_Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Enabled" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Workflow" xml:space="preserve">
+    <value>Рабочий процесс</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Filter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_Subfolders" xml:space="preserve">
+    <value>Подпапки</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_MoveToScreenshots" xml:space="preserve">
+    <value>Перемещать в скриншоты</value>
+  </data>
+  <data name="Settings_WatchFolders_Column_MovToMp4" xml:space="preserve">
+    <value>MOV в MP4</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Title" xml:space="preserve">
+    <value>Служба/демон отслеживаемых папок</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Description" xml:space="preserve">
+    <value>Запуск мониторинга отслеживаемых папок в отдельной фоновой службе/демоне с использованием текущих настроек.</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Scope" xml:space="preserve">
+    <value>Область:</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_StartAtStartup" xml:space="preserve">
+    <value>Запускать демон при старте</value>
+  </data>
+  <data name="Settings_WatchFolderDaemon_Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Settings_Integration_System" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="Settings_Integration_ShowTrayIcon" xml:space="preserve">
+    <value>Показывать значок в трее</value>
+  </data>
+  <data name="Settings_Integration_StartMinimized" xml:space="preserve">
+    <value>Запускать свёрнутым в трей</value>
+  </data>
+  <data name="Settings_Integration_RememberMainWindowSize" xml:space="preserve">
+    <value>Запоминать размер главного окна</value>
+  </data>
+  <data name="Settings_Integration_RememberMainWindowPosition" xml:space="preserve">
+    <value>Запоминать положение главного окна</value>
+  </data>
+  <data name="Settings_Integration_DesktopIntegration" xml:space="preserve">
+    <value>Интеграция с рабочим столом</value>
+  </data>
+  <data name="Settings_Integration_RunAtStartup" xml:space="preserve">
+    <value>Запускать при входе в систему</value>
+  </data>
+  <data name="Settings_Integration_ContextMenu" xml:space="preserve">
+    <value>Добавить «Загрузить с XerahS» в контекстное меню</value>
+  </data>
+  <data name="Settings_Integration_ContextMenuToolTip" xml:space="preserve">
+    <value>Добавляет возможность загружать файлы из контекстного меню правой кнопки мыши</value>
+  </data>
+  <data name="Settings_Integration_SendToMenu" xml:space="preserve">
+    <value>Добавить в меню «Отправить»</value>
+  </data>
+  <data name="Settings_Integration_SendToMenuToolTip" xml:space="preserve">
+    <value>Добавляет XerahS в меню «Отправить» для быстрого доступа к файлам</value>
+  </data>
+  <data name="Settings_Integration_SendToRememberedChoices" xml:space="preserve">
+    <value>Запомненные варианты «Отправить»</value>
+  </data>
+  <data name="Settings_Integration_ClearSendToChoices" xml:space="preserve">
+    <value>Очистить запомненные варианты «Отправить»</value>
+  </data>
+  <data name="Settings_Integration_SendToDefaultPolicies" xml:space="preserve">
+    <value>Политики «Отправить» по умолчанию</value>
+  </data>
+  <data name="Settings_Integration_FolderPolicy" xml:space="preserve">
+    <value>Политика для папок:</value>
+  </data>
+  <data name="Settings_Integration_ImageBatchPolicy" xml:space="preserve">
+    <value>Политика пакетов изображений:</value>
+  </data>
+  <data name="Settings_Integration_BatchConfirmThreshold" xml:space="preserve">
+    <value>Порог подтверждения пакета:</value>
+  </data>
+  <data name="Settings_Integration_Clipboard" xml:space="preserve">
+    <value>Буфер обмена</value>
+  </data>
+  <data name="Settings_Integration_ClipboardViewer" xml:space="preserve">
+    <value>Отслеживать буфер обмена и автоматически показывать просмотр буфера обмена</value>
+  </data>
+  <data name="Settings_Integration_ClipboardViewerToolTip" xml:space="preserve">
+    <value>При включении автоматически открывает просмотр буфера обмена при копировании нового содержимого</value>
+  </data>
+  <data name="Settings_Integration_FileAssociations" xml:space="preserve">
+    <value>Сопоставления файлов</value>
+  </data>
+  <data name="Settings_Integration_AssociateXsdp" xml:space="preserve">
+    <value>Связать файлы .xsdp с этим приложением</value>
+  </data>
+  <data name="Settings_Integration_AssociateXsdpToolTip" xml:space="preserve">
+    <value>Позволяет устанавливать пакеты плагинов .xsdp двойным щелчком</value>
+  </data>
+  <data name="Settings_Integration_Note" xml:space="preserve">
+    <value>Примечание: некоторые функции интеграции требуют поддержки конкретной платформы и могут быть недоступны во всех системах.</value>
+  </data>
+  <data name="Settings_CapturePalette_Title" xml:space="preserve">
+    <value>Палитра команд захвата</value>
+  </data>
+  <data name="Settings_CapturePalette_Description" xml:space="preserve">
+    <value>Открывает поисковое окно для настроенных рабочих процессов захвата и записи.</value>
+  </data>
+  <data name="Settings_CapturePalette_Enable" xml:space="preserve">
+    <value>Включить палитру команд захвата</value>
+  </data>
+  <data name="Settings_Shortcut" xml:space="preserve">
+    <value>Сочетание клавиш:</value>
+  </data>
+  <data name="Settings_TestShortcut" xml:space="preserve">
+    <value>Проверить сочетание</value>
+  </data>
+  <data name="Settings_Assistant_Title" xml:space="preserve">
+    <value>Ассистент</value>
+  </data>
+  <data name="Settings_Assistant_Description" xml:space="preserve">
+    <value>Использует локальное командное окно для истории XerahS и действий захвата.</value>
+  </data>
+  <data name="Settings_Assistant_Enable" xml:space="preserve">
+    <value>Включить ассистента XerahS</value>
+  </data>
+  <data name="Settings_Assistant_SaveHistory" xml:space="preserve">
+    <value>Сохранять историю команд ассистента</value>
+  </data>
+  <data name="Settings_Assistant_AIProvider" xml:space="preserve">
+    <value>ИИ-провайдер</value>
+  </data>
+  <data name="Settings_Assistant_Provider" xml:space="preserve">
+    <value>Провайдер:</value>
+  </data>
+  <data name="Settings_Assistant_Model" xml:space="preserve">
+    <value>Модель:</value>
+  </data>
+  <data name="Settings_Assistant_ModelIdPlaceholder" xml:space="preserve">
+    <value>ID модели</value>
+  </data>
+  <data name="Settings_Assistant_BaseUrl" xml:space="preserve">
+    <value>Базовый URL:</value>
+  </data>
+  <data name="Settings_Assistant_ApiKey" xml:space="preserve">
+    <value>Ключ API:</value>
+  </data>
+  <data name="Settings_Assistant_ApiKeyPlaceholder" xml:space="preserve">
+    <value>Хранится в секретном хранилище XerahS</value>
+  </data>
+  <data name="Settings_Assistant_SaveProvider" xml:space="preserve">
+    <value>Сохранить провайдера</value>
+  </data>
+  <data name="Settings_Assistant_Validate" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="Settings_Assistant_RemoveKey" xml:space="preserve">
+    <value>Удалить ключ</value>
+  </data>
+  <data name="Settings_Mcp_Title" xml:space="preserve">
+    <value>MCP-сервер</value>
+  </data>
+  <data name="Settings_Mcp_Description" xml:space="preserve">
+    <value>Используйте отдельный исполняемый файл xerahs-mcp, чтобы предоставить XerahS через Model Context Protocol.</value>
+  </data>
+  <data name="Settings_Mcp_ManifestUrl" xml:space="preserve">
+    <value>URL манифеста:</value>
+  </data>
+  <data name="Settings_Mcp_CopyApiKey" xml:space="preserve">
+    <value>Скопировать ключ API</value>
+  </data>
+  <data name="Settings_Mcp_GenerateApiKey" xml:space="preserve">
+    <value>Создать или пересоздать ключ API</value>
+  </data>
+  <data name="Settings_Mcp_CopyManifestUrl" xml:space="preserve">
+    <value>Скопировать URL манифеста</value>
+  </data>
+  <data name="Settings_Mcp_HttpTransportNote" xml:space="preserve">
+    <value>Для HTTP-транспорта требуется токен-носитель, указанный выше. Если ключа нет, среда MCP также создаёт его автоматически при первом запуске.</value>
+  </data>
+  <data name="Settings_History_Title" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Settings_History_SaveTasks" xml:space="preserve">
+    <value>Сохранять захваченные/загруженные элементы в историю</value>
+  </data>
+  <data name="Settings_History_OnlySaveWithUrl" xml:space="preserve">
+    <value>Сохранять только элементы с URL</value>
+  </data>
+  <data name="Settings_History_ScreenshotSearch" xml:space="preserve">
+    <value>Сделать скриншоты доступными для поиска</value>
+  </data>
+  <data name="Settings_History_ScreenshotSearchNote" xml:space="preserve">
+    <value>Локально считывает текст в новых скриншотах, чтобы поиск в истории и ассистенте мог находить скриншоты по видимым словам.</value>
+  </data>
+  <data name="Settings_RecentTasks_Title" xml:space="preserve">
+    <value>Недавние задачи</value>
+  </data>
+  <data name="Settings_RecentTasks_Save" xml:space="preserve">
+    <value>Сохранять недавние задачи</value>
+  </data>
+  <data name="Settings_RecentTasks_MaxCount" xml:space="preserve">
+    <value>Максимум недавних задач:</value>
+  </data>
+  <data name="Settings_RecentTasks_DisplayOptions" xml:space="preserve">
+    <value>Параметры отображения</value>
+  </data>
+  <data name="Settings_RecentTasks_ShowInMainWindow" xml:space="preserve">
+    <value>Показывать недавние задачи в главном окне</value>
+  </data>
+  <data name="Settings_RecentTasks_ShowInTrayMenu" xml:space="preserve">
+    <value>Показывать недавние задачи в меню трея</value>
+  </data>
+  <data name="Settings_RecentTasks_MostRecentFirst" xml:space="preserve">
+    <value>Показывать последние первыми в меню трея</value>
+  </data>
+  <data name="Settings_Proxy_Title" xml:space="preserve">
+    <value>Настройка прокси</value>
+  </data>
+  <data name="Settings_Proxy_Method" xml:space="preserve">
+    <value>Метод прокси:</value>
+  </data>
+  <data name="Settings_Proxy_MethodDescription" xml:space="preserve">
+    <value>Настройте, как должны проксироваться сетевые запросы. Изменения применяются сразу ко всем загрузкам.</value>
+  </data>
+  <data name="Settings_Proxy_Server" xml:space="preserve">
+    <value>Прокси-сервер</value>
+  </data>
+  <data name="Settings_Proxy_Host" xml:space="preserve">
+    <value>Хост:</value>
+  </data>
+  <data name="Settings_Proxy_Port" xml:space="preserve">
+    <value>Порт:</value>
+  </data>
+  <data name="Settings_Proxy_Authentication" xml:space="preserve">
+    <value>Аутентификация (необязательно)</value>
+  </data>
+  <data name="Settings_Proxy_Username" xml:space="preserve">
+    <value>Имя пользователя:</value>
+  </data>
+  <data name="Settings_Proxy_UsernamePlaceholder" xml:space="preserve">
+    <value>имя пользователя</value>
+  </data>
+  <data name="Settings_Proxy_Password" xml:space="preserve">
+    <value>Пароль:</value>
+  </data>
+  <data name="Settings_Proxy_PasswordPlaceholder" xml:space="preserve">
+    <value>пароль</value>
+  </data>
+  <data name="Settings_Proxy_AuthNote" xml:space="preserve">
+    <value>Оставьте имя пользователя и пароль пустыми, если ваш прокси не требует аутентификации.</value>
+  </data>
+  <data name="Settings_Advanced_CaptureEngine" xml:space="preserve">
+    <value>Механизм захвата</value>
+  </data>
+  <data name="Settings_Advanced_UseModernCapture" xml:space="preserve">
+    <value>Использовать современный захват экрана (Direct3D11 в Windows, портал XDG в Linux). Требуется перезапуск.</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelector" xml:space="preserve">
+    <value>Выбор области в macOS</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelectorDescription" xml:space="preserve">
+    <value>Выберите один способ выбора области для интерактивного захвата в macOS, чтобы системное перекрестие и оверлей XerahS не показывались в одном рабочем процессе.</value>
+  </data>
+  <data name="Settings_RegionSelector" xml:space="preserve">
+    <value>Выбор области:</value>
+  </data>
+  <data name="Settings_Advanced_MacRegionSelectorNote" xml:space="preserve">
+    <value>Это значение по умолчанию для рабочих процессов и инструментов захвата в macOS. Рабочие процессы со значением «Автоматически» используют его.</value>
+  </data>
+  <data name="Settings_Advanced_PlayMacCaptureSound" xml:space="preserve">
+    <value>Воспроизводить системный звук захвата macOS</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRegionSelector" xml:space="preserve">
+    <value>Выбор области в Linux</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRegionSelectorDescription" xml:space="preserve">
+    <value>Выберите, какой способ выбора области XerahS должен предпочитать для интерактивного выбора области в Linux.</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackend" xml:space="preserve">
+    <value>Бэкенд записи в Linux</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackendDescription" xml:space="preserve">
+    <value>Выберите, какой бэкенд записи XerahS должен предпочитать для рабочих процессов записи экрана в Linux.</value>
+  </data>
+  <data name="Settings_Advanced_RecordingBackend" xml:space="preserve">
+    <value>Бэкенд записи:</value>
+  </data>
+  <data name="Settings_Advanced_LinuxRecordingBackendNote" xml:space="preserve">
+    <value>Автоматический режим предпочитает нативную или портал-запись, когда она доступна, и использует FFmpeg при необходимости.</value>
+  </data>
+  <data name="Settings_Advanced_LinuxClipboard" xml:space="preserve">
+    <value>Буфер обмена в Linux</value>
+  </data>
+  <data name="Settings_Advanced_PersistClipboard" xml:space="preserve">
+    <value>Сохранять содержимое буфера обмена после выхода из XerahS (Wayland: используется wl-copy)</value>
+  </data>
+  <data name="Settings_Advanced_LinuxClipboardNote" xml:space="preserve">
+    <value>Фоновым рабочим процессам (CLI, демону отслеживаемых папок) нужны wl-clipboard или xclip. Пакеты .deb и .rpm рекомендуют эти инструменты.</value>
+  </data>
+  <data name="Settings_Advanced_WaylandPortalServices" xml:space="preserve">
+    <value>Портальные службы Wayland</value>
+  </data>
+  <data name="Settings_Advanced_UseWaylandPortalServices" xml:space="preserve">
+    <value>Использовать портальные службы Wayland для горячих клавиш, захвата ввода и интеграции open-uri. Требуется перезапуск.</value>
+  </data>
+  <data name="Settings_Advanced_WaylandPortalServicesNote" xml:space="preserve">
+    <value>Эта настройка управляет интеграцией с рабочим столом через порталы на Wayland. Она не выбирает способ выбора области скриншотов или бэкенд записи в Linux.</value>
+  </data>
+  <data name="Settings_Advanced_ApplicationConfiguration" xml:space="preserve">
+    <value>Конфигурация приложения</value>
+  </data>
 </root>
