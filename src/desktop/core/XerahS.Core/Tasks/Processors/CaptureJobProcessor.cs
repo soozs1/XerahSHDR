@@ -115,7 +115,7 @@ namespace XerahS.Core.Tasks.Processors
 
             void DisposeRetainedFp16Source()
             {
-                if (retainFp16 && !ReferenceEquals(fp16Source, info.Metadata.Image))
+                if (retainFp16 && !ReferenceEquals(fp16Source, info.Metadata!.Image))
                 {
                     fp16Source.Dispose();
                     retainFp16 = false;
@@ -253,7 +253,7 @@ namespace XerahS.Core.Tasks.Processors
                 }
                 else
                 {
-                    saveBitmap = info.Metadata.Image!;
+                    saveBitmap = info.Metadata!.Image!;
                 }
 
                 try
@@ -283,11 +283,11 @@ namespace XerahS.Core.Tasks.Processors
 
                     // The clipboard cannot hold HDR; if no tonemap was requested, fall back to the
                     // already-8-bit working image (or the fp16 source, which the clipboard helper clamps).
-                    clipboardBitmap = ownedClipboard ?? info.Metadata.Image!;
+                    clipboardBitmap = ownedClipboard ?? info.Metadata!.Image!;
                 }
                 else
                 {
-                    clipboardBitmap = info.Metadata.Image!;
+                    clipboardBitmap = info.Metadata!.Image!;
                 }
 
                 if (PlatformServices.IsInitialized)
