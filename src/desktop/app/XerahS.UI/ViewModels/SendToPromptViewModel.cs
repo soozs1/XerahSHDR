@@ -142,7 +142,7 @@ public partial class SendToPromptViewModel : ViewModelBase
 
     public bool ShowBatchThreshold => SelectedBatchExecutionPolicy == SendToBatchExecutionPolicy.ConfirmBeforeOpeningMoreThanThreshold;
 
-    public string RememberChoiceText => $"Remember this choice for {SendToPolicyResolver.FormatRememberScope(RememberScope)}";
+    public string RememberChoiceText => XerahS.Common.Resources.GetString("SendToPrompt_RememberChoiceText", SendToPolicyResolver.FormatRememberScope(RememberScope));
 
     public string FolderPolicySummaryText => _selection.HasFolders
         ? SelectedFolderPolicy switch
@@ -207,9 +207,9 @@ public partial class SendToPromptViewModel : ViewModelBase
         ? $"Open Upload Content using the selected folder policy. {FolderPolicySummaryText}"
         : "Open Upload Content and review the sent items before uploading.";
 
-    public string ImageEditorDescription => "Open each sent image in the image editor.";
+    public string ImageEditorDescription => XerahS.Common.Resources.GetString("SendToPrompt_ImageEditorDescription");
 
-    public string PinToScreenDescription => "Pin each sent image directly to the desktop.";
+    public string PinToScreenDescription => XerahS.Common.Resources.GetString("SendToPrompt_PinToScreenDescription");
 
     public string IndexActionDescription => _selection.Kind == SendToSelectionKind.Mixed
         ? "Run folder indexing for the sent folder items only."

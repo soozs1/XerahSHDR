@@ -66,4 +66,13 @@
   <data name="SendToBatchPolicy_ConfirmLabel" xml:space="preserve">
     <value>Vor dem Öffnen von mehr als dem Schwellenwert bestätigen</value>
   </data>
+  <data name="SendToPrompt_ImageEditorDescription" xml:space="preserve">
+    <value>Jedes gesendete Bild im Bildeditor öffnen.</value>
+  </data>
+  <data name="SendToPrompt_PinToScreenDescription" xml:space="preserve">
+    <value>Jedes gesendete Bild direkt auf dem Desktop anheften.</value>
+  </data>
+  <data name="SendToPrompt_RememberChoiceText" xml:space="preserve">
+    <value>Diese Auswahl für {0} merken</value>
+  </data>
 </root>
