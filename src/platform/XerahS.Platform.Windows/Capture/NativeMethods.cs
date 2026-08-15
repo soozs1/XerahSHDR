@@ -97,3 +97,13 @@ internal static class NativeMethods
 
     internal const uint MONITORINFOF_PRIMARY = 1;
 }
+
+/// <summary>
+/// Monitor DPI type for the GetDpiForMonitor API.
+/// </summary>
+internal enum MonitorDpiType
+{
+    MDT_EFFECTIVE_DPI = 0,
+    MDT_ANGULAR_DPI = 1,
+    MDT_RAW_DPI = 2
+}
