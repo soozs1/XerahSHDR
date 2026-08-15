@@ -13,7 +13,7 @@ Supersedes: `HDR_CAPTURE_PLAN.md` §6.2 tonemapping math (the "peak-normalized" 
 - ✅ Phase 3 — `DrawMappedTextureToCanvas` handles F16 readback; `CaptureRectAsync` preserves F16 on crop.
 - ✅ Phase 4a — removed unused `peakNits`/`ClampPeak`/`Peak*` from `HdrTonemapper` and call sites.
 - ✅ Phase 4.5 — exposed PNG bit depth (`ImagePNGBitDepth`) in the Image Settings Quality card.
-- ⏳ Phase 4b — retire unused region backend (`WindowsRegionCaptureBackend` etc.) — pending (verify no consumers before deleting).
+- ✅ Phase 4b — retired unused Windows region backend + strategies (`WindowsRegionCaptureBackend`, `DxgiCaptureStrategy`, `WinRTCaptureStrategy`, `GdiCaptureStrategy`, Windows `ICaptureStrategy`).
 - ⏳ Phase 5 — full validation (`dotnet test` + manual HDR on/off) — pending.
 
 ---
