@@ -46,6 +46,9 @@ public class HdrTonemappingHookTests
     [TestCase(HdrToneMappingMode.TonemapReinhard, AfterCaptureTasks.SaveImageToFile, true)]
     [TestCase(HdrToneMappingMode.TonemapAces, AfterCaptureTasks.SaveImageToFile, true)]
     [TestCase(HdrToneMappingMode.TonemapAces, AfterCaptureTasks.CopyImageToClipboard, true)]
+    [TestCase(HdrToneMappingMode.TonemapBt2446C, AfterCaptureTasks.None, true)]
+    [TestCase(HdrToneMappingMode.TonemapBt2446C, AfterCaptureTasks.SaveImageToFile, true)]
+    [TestCase(HdrToneMappingMode.TonemapBt2446C, AfterCaptureTasks.CopyImageToClipboard, true)]
     [TestCase(HdrToneMappingMode.None, AfterCaptureTasks.CopyImageToClipboard, false)]
     [TestCase(HdrToneMappingMode.None, AfterCaptureTasks.UploadImageToHost, false)]
     public void ShouldTonemapToSdr_ReturnsExpected(HdrToneMappingMode mode, AfterCaptureTasks afterCaptureJob, bool expected)

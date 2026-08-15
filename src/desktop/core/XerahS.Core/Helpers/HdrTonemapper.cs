@@ -54,9 +54,26 @@ public static class HdrTonemapper
     // scRGB-linear capture: 1.0 == 80 cd/m² (HDR_CAPTURE_PLAN §4.2, TODO HDR-02).
     private const float ScRgbToNits = 80f;
 
-    // White-preservation exponent applied after peak normalization so SDR white (80 nits at a
-    // 1000-nit peak) is not crushed by the Reinhard/ACES rolloff (HDR_CAPTURE_PLAN TODO HDR-02).
+    // Gamma lift applied to the white-normalized signal. Because scRGB is already normalized to
+    // SDR reference white (1.0 == 80 cd/m²), Reinhard/ACES can operate on it directly without
+    // first dividing by the HDR display peak; doing so was crushing SDR white to ~8% of full scale.
     private const float WhitePreservationGamma = 0.5f;
+
+    // ITU-R BT.2446 Method C (forward) constants. The curve is defined against the BT.2446
+    // reference white (203 nits); the output is re-anchored below so SDR white maps to 1.0.
+    private const float Bt2446ReferenceWhiteNits = 203f;
+    private const float Bt2446LinearLength = 0.58535f;
+    private const float Bt2446K1 = 0.83802f;
+    private const float Bt2446K3 = 0.74204f;
+
+    private static readonly float Bt2446Knee = Bt2446LinearLength / Bt2446K1;
+    private static readonly float Bt2446K2 = Bt2446LinearLength * (1f - Bt2446K3);
+    private static readonly float Bt2446K4 = Bt2446LinearLength - (Bt2446LinearLength * (1f - Bt2446K3)) * MathF.Log(1f - Bt2446K3);
+
+    // scRGB → BT.2446 signal at SDR reference white (80 nits). 80/203 sits in the linear segment,
+    // so this is simply the normalized value scaled by the linear strength.
+    private static readonly float Bt2446SdrWhiteNormalized = ScRgbToNits / Bt2446ReferenceWhiteNits;
+    private static readonly float Bt2446SdrWhiteCurve = Bt2446SdrWhiteNormalized * Bt2446K1;
 
     /// <summary>
     /// SMPTE ST 2084 (PQ) EOTF: normalized code value V → absolute luminance in cd/m².
@@ -157,14 +174,14 @@ public static class HdrTonemapper
 
     /// <summary>
     /// Decides whether an HDR (fp16) capture must be converted to 8-bit SDR before the
-    /// after-capture pipeline runs (HDR_CAPTURE_PLAN §6.3). Explicit Reinhard/ACES always
-    /// tonemap; None never does; Auto tonemaps iff any SDR-only step is selected.
+    /// after-capture pipeline runs (HDR_CAPTURE_PLAN §6.3). Explicit Reinhard/ACES/BT.2446 C
+    /// always tonemap; None never does; Auto tonemaps iff any SDR-only step is selected.
     /// </summary>
     internal static bool ShouldTonemapToSdr(HdrToneMappingMode mode, AfterCaptureTasks afterCaptureJob)
     {
         return mode switch
         {
-            HdrToneMappingMode.TonemapReinhard or HdrToneMappingMode.TonemapAces => true,
+            HdrToneMappingMode.TonemapReinhard or HdrToneMappingMode.TonemapAces or HdrToneMappingMode.TonemapBt2446C => true,
             HdrToneMappingMode.None => false,
             _ => (afterCaptureJob & SdrOnlyAfterCaptureTasks) != 0 // Auto
         };
@@ -172,9 +189,10 @@ public static class HdrTonemapper
 
     /// <summary>
     /// Tonemaps an RgbaF16 bitmap (scRGB-linear, 1.0 == 80 cd/m²) to 8-bit Bgra8888 (premul).
-    /// Pixels are converted to nits (×80), normalized by <paramref name="peakNits"/> and
-    /// compressed by the selected curve (HDR_CAPTURE_PLAN §6.2). Returns null for any non-F16
-    /// input. Auto falls back to the default Reinhard curve; None only clamps.
+    /// scRGB is scene-referred and already normalized to SDR reference white, so the tone curves
+    /// operate on it directly and only compress the HDR range above 1.0 (HDR_CAPTURE_PLAN §6.2).
+    /// Returns null for any non-F16 input. Auto falls back to the default Reinhard curve; None
+    /// only clamps. <paramref name="peakNits"/> is retained for API compatibility but is unused.
     /// </summary>
     public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode, float peakNits = PeakDefaultNits)
     {
@@ -182,8 +200,6 @@ public static class HdrTonemapper
         {
             return null;
         }
-
-        peakNits = ClampPeak(peakNits);
 
         int width = hdrBitmap.Width;
         int height = hdrBitmap.Height;
@@ -220,9 +236,10 @@ public static class HdrTonemapper
                     {
                         float mapped = mode switch
                         {
-                            HdrToneMappingMode.TonemapAces => TonemapAcesNormalized(lum, peakNits),
+                            HdrToneMappingMode.TonemapAces => TonemapAcesNormalized(lum),
+                            HdrToneMappingMode.TonemapBt2446C => TonemapBt2446C(lum),
                             HdrToneMappingMode.None => lum,
-                            _ => TonemapReinhardNormalized(lum, peakNits) // Auto falls back to the default Reinhard curve
+                            _ => TonemapReinhardNormalized(lum) // Auto falls back to the default Reinhard curve
                         };
                         scale = mapped / lum;
                     }
@@ -244,22 +261,45 @@ public static class HdrTonemapper
     }
 
     /// <summary>
-    /// Peak-normalized Reinhard with white preservation: Ln = L·80/peak; Ld = Ln/(1+Ln); sqrt(Ld).
+    /// White-normalized Reinhard: scRGB is already normalized to SDR white (1.0 == 80 cd/m²), so
+    /// Ld = sqrt(L/(1+L)) keeps SDR white bright and rolls off only the HDR range above 1.0.
     /// </summary>
-    private static float TonemapReinhardNormalized(float luminanceScRgb, float peakNits)
+    private static float TonemapReinhardNormalized(float luminanceScRgb)
     {
-        float normalized = luminanceScRgb * ScRgbToNits / peakNits;
+        float normalized = MathF.Max(luminanceScRgb, 0f);
         float mapped = normalized / (1f + normalized);
         return MathF.Pow(mapped, WhitePreservationGamma);
     }
 
     /// <summary>
-    /// Peak-normalized ACES with white preservation: Ln = L·80/peak; Ld = ACES(sqrt(Ln)).
+    /// White-normalized ACES: Ld = ACES(sqrt(L)) with scRGB 1.0 (80 nits) landing near display white.
     /// </summary>
-    private static float TonemapAcesNormalized(float luminanceScRgb, float peakNits)
+    private static float TonemapAcesNormalized(float luminanceScRgb)
     {
-        float normalized = luminanceScRgb * ScRgbToNits / peakNits;
+        float normalized = MathF.Max(luminanceScRgb, 0f);
         return TonemapAces(MathF.Pow(normalized, WhitePreservationGamma));
+    }
+
+    /// <summary>
+    /// ITU-R BT.2446 Method C HDR→SDR tone curve. Takes linear scRGB luminance (1.0 == 80 cd/m²)
+    /// and returns display-linear SDR. The signal is normalized to BT.2446 reference white
+    /// (203 nits) and compressed by a linear segment + logarithmic shoulder, then re-anchored so
+    /// SDR white (80 nits) maps to 1.0; HDR highlights roll above 1.0 and clamp on encode.
+    /// </summary>
+    public static float TonemapBt2446C(float luminanceScRgb)
+    {
+        if (!float.IsFinite(luminanceScRgb))
+        {
+            return 0f;
+        }
+
+        float normalized = MathF.Max(luminanceScRgb, 0f) * ScRgbToNits / Bt2446ReferenceWhiteNits;
+
+        float toneMapped = normalized < Bt2446Knee
+            ? normalized * Bt2446K1
+            : MathF.Log(normalized / Bt2446Knee - Bt2446K3) * Bt2446K2 + Bt2446K4;
+
+        return MathF.Max(toneMapped / Bt2446SdrWhiteCurve, 0f);
     }
 
     private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)

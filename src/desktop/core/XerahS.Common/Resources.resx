@@ -3304,6 +3304,12 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
     <value>ACES</value>
   </data>
+  <data name="HdrToneMappingMode_TonemapBt2446C" xml:space="preserve">
+    <value>BT.2446 C</value>
+  </data>
+  <data name="TaskSettings_HdrPreview" xml:space="preserve">
+    <value>Preview (HDR → SDR)</value>
+  </data>
   <data name="TaskSettings_HdrSection" xml:space="preserve">
     <value>HDR</value>
   </data>

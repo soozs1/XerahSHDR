@@ -165,6 +165,43 @@ public class HdrTonemapperTests
     }
 
     // ──────────────────────────────────────────────────────────────────────
+    // TonemapBt2446C
+    // ──────────────────────────────────────────────────────────────────────
+
+    [Test]
+    public void TonemapBt2446C_Black_IsZero()
+    {
+        Assert.That(HdrTonemapper.TonemapBt2446C(0f), Is.EqualTo(0f).Within(1e-6f));
+    }
+
+    [Test]
+    public void TonemapBt2446C_SdrWhite_MapsToWhite()
+    {
+        // 1.0 scRGB == 80 nits == SDR reference white; the curve is re-anchored to 1.0.
+        Assert.That(HdrTonemapper.TonemapBt2446C(1f), Is.EqualTo(1f).Within(0.001f));
+    }
+
+    [Test]
+    public void TonemapBt2446C_HighLuminance_RollsAboveWhite()
+    {
+        // 12.5 scRGB == 1000 nits must exceed SDR white; the encoder clamps it to white.
+        Assert.That(HdrTonemapper.TonemapBt2446C(12.5f), Is.GreaterThan(1f));
+    }
+
+    [Test]
+    public void TonemapBt2446C_IsMonotonic()
+    {
+        float previous = 0f;
+
+        for (float linear = 0f; linear <= 125f; linear += 1f)
+        {
+            float mapped = HdrTonemapper.TonemapBt2446C(linear);
+            Assert.That(mapped, Is.GreaterThanOrEqualTo(previous));
+            previous = mapped;
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
     // ClampPeak
     // ──────────────────────────────────────────────────────────────────────
 
@@ -195,7 +232,7 @@ public class HdrTonemapperTests
     [Test]
     public void TonemapToBgra8888_Reinhard_MeetsNumericCriteria()
     {
-        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (125f, 125f, 125f, 1f));
+        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (4f, 4f, 4f, 1f));
         using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
 
         Assert.That(result, Is.Not.Null);
@@ -208,12 +245,12 @@ public class HdrTonemapperTests
 
         Assert.Multiple(() =>
         {
-            // SDR white (1.0 scRGB = 80 nits) must stay bright, not crushed by the 1000-nit normalization.
+            // SDR white (1.0 scRGB = 80 nits) must stay bright, not crushed by HDR peak normalization.
             Assert.That(white.r, Is.InRange(128, 255));
             Assert.That(white.g, Is.InRange(128, 255));
             Assert.That(white.b, Is.InRange(128, 255));
 
-            // HDR peak (125 scRGB = 10000 nits) must be visibly compressed below 255.
+            // HDR highlight (4 scRGB = 320 nits) must be visibly compressed below 255.
             Assert.That(peak.r, Is.InRange(200, 254));
             Assert.That(peak.g, Is.InRange(200, 254));
             Assert.That(peak.b, Is.InRange(200, 254));
@@ -234,7 +271,7 @@ public class HdrTonemapperTests
     [Test]
     public void TonemapToBgra8888_Aces_MeetsNumericCriteria()
     {
-        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (125f, 125f, 125f, 1f));
+        using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (4f, 4f, 4f, 1f));
         using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapAces, 1000f);
 
         Assert.That(result, Is.Not.Null);
@@ -249,7 +286,7 @@ public class HdrTonemapperTests
             Assert.That(white.g, Is.InRange(128, 255));
             Assert.That(white.b, Is.InRange(128, 255));
 
-            // HDR peak (125 scRGB = 10000 nits) must be visibly compressed below 255.
+            // HDR highlight (4 scRGB = 320 nits) must be visibly compressed below 255.
             Assert.That(peak.r, Is.InRange(200, 254));
             Assert.That(peak.g, Is.InRange(200, 254));
             Assert.That(peak.b, Is.InRange(200, 254));
@@ -262,6 +299,37 @@ public class HdrTonemapperTests
             Assert.That(white.g, Is.EqualTo(white.b));
             Assert.That(peak.r, Is.EqualTo(peak.g));
             Assert.That(peak.g, Is.EqualTo(peak.b));
+        });
+    }
+
+    [Test]
+    public void TonemapToBgra8888_Bt2446C_MeetsNumericCriteria()
+    {
+        using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (1f, 1f, 1f, 1f));
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapBt2446C, 1000f);
+
+        Assert.That(result, Is.Not.Null);
+
+        (byte b, byte g, byte r, byte a) mid = ReadPixel(result, 0);
+        (byte b, byte g, byte r, byte a) white = ReadPixel(result, 1);
+
+        Assert.Multiple(() =>
+        {
+            // SDR midtone (0.5 scRGB = 40 nits) must stay visible and not be crushed.
+            Assert.That(mid.r, Is.InRange(128, 235));
+            Assert.That(mid.g, Is.InRange(128, 235));
+            Assert.That(mid.b, Is.InRange(128, 235));
+
+            // SDR white (1.0 scRGB = 80 nits) maps to full white.
+            Assert.That(white.r, Is.InRange(235, 255));
+            Assert.That(white.g, Is.InRange(235, 255));
+            Assert.That(white.b, Is.InRange(235, 255));
+
+            Assert.That(white.r, Is.GreaterThan(mid.r));
+            Assert.That(mid.r, Is.EqualTo(mid.g));
+            Assert.That(mid.g, Is.EqualTo(mid.b));
+            Assert.That(white.r, Is.EqualTo(white.g));
+            Assert.That(white.g, Is.EqualTo(white.b));
         });
     }
 

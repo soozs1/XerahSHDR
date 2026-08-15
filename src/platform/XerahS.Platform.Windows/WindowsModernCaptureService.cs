@@ -276,7 +276,7 @@ namespace XerahS.Platform.Windows
             int minX = int.MaxValue, minY = int.MaxValue;
             int maxX = int.MinValue, maxY = int.MinValue;
 
-            foreach (var (output, adapter, bounds, _, _, _) in outputs)
+            foreach (var (output, adapter, bounds, _, _, _, _) in outputs)
             {
                 minX = Math.Min(minX, bounds.Left);
                 minY = Math.Min(minY, bounds.Top);
@@ -289,10 +289,9 @@ namespace XerahS.Platform.Windows
 
             if (totalWidth <= 0 || totalHeight <= 0) return null;
 
-            // Create combined bitmap
-            var combinedBitmap = new SKBitmap(totalWidth, totalHeight, SKColorType.Bgra8888, SKAlphaType.Premul);
-            using var canvas = new SKCanvas(combinedBitmap);
-            canvas.Clear(SKColors.Black);
+            // The combined bitmap is created after duplication setup so its color type reflects the
+            // ACTUAL duplication modes (an HDR output whose driver rejects fp16 falls back to 8-bit).
+            SKBitmap? combinedBitmap = null;
 
             // Group outputs by adapter to share ID3D11Device
             var outputsByAdapter = outputs.GroupBy(x => x.Adapter).ToList();
@@ -304,7 +303,8 @@ namespace XerahS.Platform.Windows
                 System.Drawing.Rectangle Bounds,
                 ModeRotation Rotation,
                 string DeviceName,
-                ModeRotation DxgiRotation)>();
+                ModeRotation DxgiRotation,
+                bool IsHdr)>();
             var devicesToDispose = new List<ID3D11Device>();
             int capturedOutputCount = 0;
 
@@ -325,13 +325,13 @@ namespace XerahS.Platform.Windows
 
                     // using var deviceContext = device.ImmediateContext; // REMOVED: Premature disposal causes NRE later
 
-                    foreach (var (output, _, bounds, rotation, deviceName, dxgiRotation) in group)
+                    foreach (var (output, _, bounds, rotation, deviceName, dxgiRotation, _) in group)
                     {
                         try
                         {
-                            // Duplicate output
-                            var duplication = output.DuplicateOutput(device);
-                            activeDuplications.Add((duplication, device, bounds, rotation, deviceName, dxgiRotation));
+                            // Duplicate output; HDR outputs request fp16 scRGB with an 8-bit fallback.
+                            var duplication = DxgiHdrDuplicationHelper.CreateDuplication(output, device, out bool isHdr);
+                            activeDuplications.Add((duplication, device, bounds, rotation, deviceName, dxgiRotation, isHdr));
                         }
                         catch (Exception ex)
                         {
@@ -341,6 +341,16 @@ namespace XerahS.Platform.Windows
                     }
                 }
 
+                // Create the combined bitmap now that the actual duplication modes are known.
+                // When any output is HDR, use an fp16 scRGB surface so HDR outputs can contribute
+                // values above 1.0; SDR outputs drawn onto it are converted by Skia.
+                bool anyHdr = activeDuplications.Any(d => d.IsHdr);
+                combinedBitmap = anyHdr
+                    ? new SKBitmap(totalWidth, totalHeight, SKColorType.RgbaF16, SKAlphaType.Premul, SKColorSpace.CreateSrgbLinear())
+                    : new SKBitmap(totalWidth, totalHeight, SKColorType.Bgra8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb());
+                using var canvas = new SKCanvas(combinedBitmap);
+                canvas.Clear(SKColors.Black);
+
                 // 2. Wait for next frame (important for first capture initialization)
                 // Doing this ONCE creates a small delay that allows all duplications to accumulate a frame
                 if (activeDuplications.Count > 0)
@@ -349,7 +359,7 @@ namespace XerahS.Platform.Windows
                 }
 
                 // 3. Acquire & Process Frames
-                foreach (var (duplication, device, bounds, rotation, deviceName, dxgiRotation) in activeDuplications)
+                foreach (var (duplication, device, bounds, rotation, deviceName, dxgiRotation, isHdr) in activeDuplications)
                 {
                     bool frameAcquired = false;
                     try
@@ -411,6 +421,7 @@ namespace XerahS.Platform.Windows
                                         bounds.Width,
                                         bounds.Height,
                                         rotation,
+                                        isHdr,
                                         canvas);
                                 }
                                 finally
@@ -444,6 +455,11 @@ namespace XerahS.Platform.Windows
             finally
             {
                 foreach (var d in devicesToDispose) d.Dispose();
+            }
+
+            if (combinedBitmap == null)
+            {
+                return null; // No output could be duplicated; caller will fall back to GDI.
             }
 
             if (DxgiFrameAcquisitionHelper.ShouldFallbackToGdi(activeDuplications.Count, capturedOutputCount))
@@ -520,21 +536,22 @@ namespace XerahS.Platform.Windows
             int destWidth,
             int destHeight,
             ModeRotation rotation,
+            bool isHdr,
             SKCanvas canvas)
         {
-            // Create a temporary SKBitmap wrapping the data
-            // Note: We cannot wrap directly because SKBitmap doesn't support strided data easily without copy or specialized installPixels
-            // For simplicity and safety (handling pitch), we copy row by row to a temp bitmap
-
-            using var sourceBitmap = new SKBitmap(sourceWidth, sourceHeight, SKColorType.Bgra8888, SKAlphaType.Premul);
+            // Create a temporary SKBitmap wrapping the data.
+            // Note: We cannot wrap directly because SKBitmap doesn't support strided data easily
+            // without copy or specialized installPixels; copy row by row into a temp bitmap.
+            using var sourceBitmap = DxgiHdrDuplicationHelper.CreateReadbackBitmap(sourceWidth, sourceHeight, isHdr);
             var destPixels = sourceBitmap.GetPixels();
             int srcPitch = (int)dataBox.RowPitch;
-            int bytesPerRow = sourceWidth * 4;
+            int destStride = sourceBitmap.RowBytes;
+            int bytesPerRow = sourceWidth * DxgiHdrDuplicationHelper.BytesPerPixel(isHdr);
             BgraRowCopyHelper.CopyRows(
                 dataBox.DataPointer,
                 srcPitch,
                 destPixels,
-                bytesPerRow,
+                destStride,
                 bytesPerRow,
                 sourceHeight);
 
@@ -574,7 +591,8 @@ namespace XerahS.Platform.Windows
             System.Drawing.Rectangle Bounds,
             ModeRotation Rotation,
             string DeviceName,
-            ModeRotation DxgiRotation)>
+            ModeRotation DxgiRotation,
+            bool IsHdr)>
             EnumerateOutputs(IDXGIFactory1 factory)
         {
             var outputs = new System.Collections.Generic.List<(
@@ -583,7 +601,8 @@ namespace XerahS.Platform.Windows
                 System.Drawing.Rectangle,
                 ModeRotation,
                 string,
-                ModeRotation)>();
+                ModeRotation,
+                bool)>();
 
             for (uint adapterIndex = 0; factory.EnumAdapters1(adapterIndex, out var adapter).Success; adapterIndex++)
             {
@@ -621,7 +640,7 @@ namespace XerahS.Platform.Windows
                             $"CaptureFullScreenDxgi: Rotation override for {outputDesc.DeviceName}. DisplaySettings={effectiveRotation}, DXGI={dxgiRotation}");
                     }
 
-                    outputs.Add((output1, adapter, bounds, effectiveRotation, outputDesc.DeviceName, dxgiRotation));
+                    outputs.Add((output1, adapter, bounds, effectiveRotation, outputDesc.DeviceName, dxgiRotation, DxgiHdrDuplicationHelper.IsOutputHdr(output1)));
                     output.Dispose();
                 }
 

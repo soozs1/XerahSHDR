@@ -100,6 +100,7 @@ namespace XerahS.Core.Tasks.Processors
             // independently so their modes can differ (HDR_CAPTURE_PLAN §6.3).
             SKBitmap fp16Source = info.Metadata.Image; // non-null (checked above)
             bool isHdr = fp16Source.ColorType == SKColorType.RgbaF16;
+            DebugHelper.WriteLine($"[HDR] ProcessAsync: ColorType={fp16Source.ColorType}, isHdr={isHdr}");
 
             AfterCaptureTasks generalSdrTasks =
                 AfterCaptureTasks.ShowAfterCaptureWindow |

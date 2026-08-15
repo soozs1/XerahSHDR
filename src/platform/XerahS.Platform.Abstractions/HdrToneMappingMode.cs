@@ -36,6 +36,7 @@ namespace XerahS.Common
         None = 0,
         Auto = 1,
         TonemapReinhard = 2,
-        TonemapAces = 3
+        TonemapAces = 3,
+        TonemapBt2446C = 4
     }
 }

@@ -95,6 +95,14 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                     </Grid>
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="{local:Localize TaskSettings_HdrPreview}" FontWeight="SemiBold"/>
+                                        <Image Source="{Binding HdrPreviewBitmap}"
+                                               Width="440" Height="96"
+                                               Stretch="Fill"
+                                               HorizontalAlignment="Left"
+                                               AutomationProperties.Name="HDR Tone Mapping Preview"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
