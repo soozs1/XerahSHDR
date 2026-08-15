@@ -34,6 +34,16 @@
                                         <TextBlock Grid.Column="0" Text="JPEG Quality:" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="2" Value="{Binding ImageJPEGQuality}" Minimum="0" Maximum="100" Increment="1" MinWidth="120" HorizontalAlignment="Stretch" AutomationProperties.Name="JPEG Quality"/>
                                     </Grid>
+                                    <Grid ColumnDefinitions="Auto, 16, *">
+                                        <TextBlock Grid.Column="0" Text="PNG bit depth:" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="2" ItemsSource="{Binding PngBitDepthOptions}" SelectedItem="{Binding ImagePNGBitDepth}" HorizontalAlignment="Stretch" AutomationProperties.Name="PNG Bit Depth">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="x:Object">
+                                                    <TextBlock Text="{Binding ., Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Grid>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

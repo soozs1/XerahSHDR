@@ -3307,6 +3307,12 @@ Dadurch wird die Datei dauerhaft aus dem Remote-Speicher entfernt. Dies kann nic
   <data name="HdrToneMappingMode_TonemapBt2446C" xml:space="preserve">
     <value>BT.2446 C</value>
   </data>
+  <data name="PNGBitDepth_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="PNGBitDepth_Bit16" xml:space="preserve">
+    <value>16-Bit</value>
+  </data>
   <data name="TaskSettings_HdrPreview" xml:space="preserve">
     <value>Vorschau (HDR → SDR)</value>
   </data>

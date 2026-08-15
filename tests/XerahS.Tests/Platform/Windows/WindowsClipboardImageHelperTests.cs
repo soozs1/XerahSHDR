@@ -120,7 +120,7 @@ public class WindowsClipboardImageHelperTests
     public void BuildDibV5_FromTonemappedF16Bitmap_WritesValid32BppHeader()
     {
         using var hdrBitmap = MakeF16Bitmap((1.0f, 1.0f, 1.0f, 1.0f), (10.0f, 5.0f, 2.0f, 1.0f));
-        using SKBitmap? tonemapped = HdrTonemapper.TonemapToBgra8888(hdrBitmap, HdrToneMappingMode.TonemapReinhard, 1000f);
+        using SKBitmap? tonemapped = HdrTonemapper.TonemapToBgra8888(hdrBitmap, HdrToneMappingMode.TonemapReinhard);
 
         Assert.That(tonemapped, Is.Not.Null);
 

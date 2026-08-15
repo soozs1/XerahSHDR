@@ -8,6 +8,10 @@
 (reflection + runtime probes, see §2.4)
 **Related**: `docs/ROADMAP.md` §"HDR Capture (Planned)" (L84–94), `docs/architecture/xerahs_architecture_map.md`
 
+> **Note (2026-08-15):** The §6.2 tonemapping math in this document (peak-normalized
+> Reinhard/ACES) is superseded. The implemented, correct behavior is white-anchored (scRGB
+> `1.0 == 80 cd/m²`). See `HDR_CAPTURE_REFACTOR_ROADMAP.md`.
+
 ## Execution status
 
 | Phase | Verdict | Notes |

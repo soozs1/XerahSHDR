@@ -241,7 +241,7 @@ public class WindowsClipboardService : IClipboardService
                 SKBitmap? sdrCopy;
                 try
                 {
-                    sdrCopy = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapReinhard, 1000f);
+                    sdrCopy = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapReinhard);
                 }
                 catch
                 {

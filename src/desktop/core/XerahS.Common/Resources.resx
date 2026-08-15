@@ -3307,6 +3307,12 @@ This will permanently remove the file from the remote storage. This cannot be un
   <data name="HdrToneMappingMode_TonemapBt2446C" xml:space="preserve">
     <value>BT.2446 C</value>
   </data>
+  <data name="PNGBitDepth_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="PNGBitDepth_Bit16" xml:space="preserve">
+    <value>16-bit</value>
+  </data>
   <data name="TaskSettings_HdrPreview" xml:space="preserve">
     <value>Preview (HDR → SDR)</value>
   </data>

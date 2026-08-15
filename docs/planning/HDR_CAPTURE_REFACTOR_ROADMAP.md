@@ -10,8 +10,10 @@ Supersedes: `HDR_CAPTURE_PLAN.md` §6.2 tonemapping math (the "peak-normalized" 
 
 - ✅ Phase 1 — `DxgiHdrDuplicationHelper` created; `DxgiCaptureStrategy` delegates to it.
 - ✅ Phase 2 — `WindowsModernCaptureService.CaptureFullScreenDxgi` uses fp16 duplication + `RgbaF16` combined bitmap when HDR.
-- ✅ Phase 3 — `DrawMappedTextureToCanvas` handles F16 readback. Cursor composition left unchanged (needs visual verification).
-- ⏳ Phase 4 — cleanup (retire unused region backend, remove `peakNits`/`ClampPeak`) — pending manual verification.
+- ✅ Phase 3 — `DrawMappedTextureToCanvas` handles F16 readback; `CaptureRectAsync` preserves F16 on crop.
+- ✅ Phase 4a — removed unused `peakNits`/`ClampPeak`/`Peak*` from `HdrTonemapper` and call sites.
+- ✅ Phase 4.5 — exposed PNG bit depth (`ImagePNGBitDepth`) in the Image Settings Quality card.
+- ⏳ Phase 4b — retire unused region backend (`WindowsRegionCaptureBackend` etc.) — pending (verify no consumers before deleting).
 - ⏳ Phase 5 — full validation (`dotnet test` + manual HDR on/off) — pending.
 
 ---
@@ -168,6 +170,17 @@ that the cursor is not blown out/clamped when composited onto F16.
   (keep `PeakDefaultNits` only if still needed by a default).
 - Update `HDR_CAPTURE_PLAN.md` §6.2/§6.5 references to the white-anchored curves
   or link to this roadmap.
+
+### Phase 4.5 — Expose PNG bit depth (HDR-quality save)
+
+The save pipeline already honors `TaskSettingsImage.ImagePNGBitDepth == PNGBitDepth.Bit16`
+(16-bit PNG), but the value was never exposed in the UI.
+
+- Add `ImagePNGBitDepth` + `PngBitDepthOptions` to `TaskSettingsViewModel.Image.cs`.
+- Add a "PNG bit depth" selector to the Quality card in `TaskImageSettingsPanel.axaml`.
+- Localize `PNGBitDepth_Default` / `PNGBitDepth_Bit16`.
+- Clarify: "save HDR quality" = `ImageHdrSaveToneMapping == None` (keep fp16 → 16-bit PNG)
+  and/or `ImagePNGBitDepth == Bit16` (force 16-bit PNG).
 
 ### Phase 5 — Validation
 - `dotnet test XerahS-develop/tests/XerahS.Tests --filter HdrToneMapping`

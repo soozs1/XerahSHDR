@@ -68,8 +68,7 @@ namespace XerahS.Core.Tasks.Processors
                 return false;
             }
 
-            // TODO HDR-03: use real display peak from MonitorInfo/OutputDescription1
-            SKBitmap? sdr = HdrTonemapper.TonemapToBgra8888(image, mode, peakNits: 1000f);
+            SKBitmap? sdr = HdrTonemapper.TonemapToBgra8888(image, mode);
             if (sdr == null)
             {
                 return false;
@@ -243,7 +242,7 @@ namespace XerahS.Core.Tasks.Processors
                     var saveMode = settings.ImageSettings.ImageHdrSaveToneMapping;
                     if (HdrTonemapper.ShouldTonemapToSdr(saveMode, AfterCaptureTasks.SaveImageToFile))
                     {
-                        ownedSave = HdrTonemapper.TonemapToBgra8888(fp16Source, saveMode, peakNits: 1000f);
+                        ownedSave = HdrTonemapper.TonemapToBgra8888(fp16Source, saveMode);
                         saveBitmap = ownedSave ?? fp16Source;
                     }
                     else
@@ -279,7 +278,7 @@ namespace XerahS.Core.Tasks.Processors
                     var clipboardMode = settings.ImageSettings.ImageHdrClipboardToneMapping;
                     if (HdrTonemapper.ShouldTonemapToSdr(clipboardMode, AfterCaptureTasks.CopyImageToClipboard))
                     {
-                        ownedClipboard = HdrTonemapper.TonemapToBgra8888(fp16Source, clipboardMode, peakNits: 1000f);
+                        ownedClipboard = HdrTonemapper.TonemapToBgra8888(fp16Source, clipboardMode);
                     }
 
                     // The clipboard cannot hold HDR; if no tonemap was requested, fall back to the

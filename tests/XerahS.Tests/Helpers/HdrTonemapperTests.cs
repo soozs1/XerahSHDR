@@ -202,22 +202,6 @@ public class HdrTonemapperTests
     }
 
     // ──────────────────────────────────────────────────────────────────────
-    // ClampPeak
-    // ──────────────────────────────────────────────────────────────────────
-
-    [TestCase(0f, 1000f)]
-    [TestCase(float.NaN, 1000f)]
-    [TestCase(float.PositiveInfinity, 1000f)]
-    [TestCase(float.NegativeInfinity, 1000f)]
-    [TestCase(50f, 80f)]
-    [TestCase(50000f, 10000f)]
-    [TestCase(1000f, 1000f)]
-    public void ClampPeak_ReturnsSaneRange(float peak, float expected)
-    {
-        Assert.That(HdrTonemapper.ClampPeak(peak), Is.EqualTo(expected));
-    }
-
-    // ──────────────────────────────────────────────────────────────────────
     // TonemapToBgra8888
     // ──────────────────────────────────────────────────────────────────────
 
@@ -233,7 +217,7 @@ public class HdrTonemapperTests
     public void TonemapToBgra8888_Reinhard_MeetsNumericCriteria()
     {
         using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (4f, 4f, 4f, 1f));
-        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.ColorType, Is.EqualTo(SKColorType.Bgra8888));
@@ -272,7 +256,7 @@ public class HdrTonemapperTests
     public void TonemapToBgra8888_Aces_MeetsNumericCriteria()
     {
         using var hdr = MakeF16Bitmap((1f, 1f, 1f, 1f), (4f, 4f, 4f, 1f));
-        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapAces, 1000f);
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapAces);
 
         Assert.That(result, Is.Not.Null);
 
@@ -306,7 +290,7 @@ public class HdrTonemapperTests
     public void TonemapToBgra8888_Bt2446C_MeetsNumericCriteria()
     {
         using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (1f, 1f, 1f, 1f));
-        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapBt2446C, 1000f);
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapBt2446C);
 
         Assert.That(result, Is.Not.Null);
 
@@ -337,8 +321,8 @@ public class HdrTonemapperTests
     public void TonemapToBgra8888_IsDeterministic()
     {
         using var hdr = MakeF16Bitmap((0.5f, 0.25f, 0.125f, 1f), (125f, 1f, 0.5f, 1f));
-        using var first = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
-        using var second = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+        using var first = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard);
+        using var second = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard);
 
         Assert.That(first, Is.Not.Null);
         Assert.That(second, Is.Not.Null);
@@ -352,7 +336,7 @@ public class HdrTonemapperTests
             (float.NaN, float.NaN, float.NaN, 1f),
             (float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity, 1f),
             (-1f, -1f, -1f, 1f));
-        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard, 1000f);
+        using var result = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapReinhard);
 
         Assert.That(result, Is.Not.Null);
 

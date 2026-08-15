@@ -46,11 +46,6 @@ public static class HdrTonemapper
     // sRGB piecewise transfer breakpoint
     private const float SrgbLinearSegmentMax = 0.0031308f;
 
-    // Display peak bounds (HDR_CAPTURE_PLAN §6.2 item 3)
-    private const float PeakDefaultNits = 1000f;
-    private const float PeakMinNits = 80f;
-    private const float PeakMaxNits = 10000f;
-
     // scRGB-linear capture: 1.0 == 80 cd/m² (HDR_CAPTURE_PLAN §4.2, TODO HDR-02).
     private const float ScRgbToNits = 80f;
 
@@ -149,19 +144,6 @@ public static class HdrTonemapper
         return Math.Clamp(result, 0f, 1f);
     }
 
-    /// <summary>
-    /// Clamps a display peak (cd/m²) to (80, 10000); rejects 0/NaN/Inf with fallback 1000 (HDR_CAPTURE_PLAN §6.2 item 3).
-    /// </summary>
-    public static float ClampPeak(float peak)
-    {
-        if (!float.IsFinite(peak) || peak <= 0f)
-        {
-            return PeakDefaultNits;
-        }
-
-        return Math.Clamp(peak, PeakMinNits, PeakMaxNits);
-    }
-
     // After-capture steps that require an 8-bit SDR image. With Auto, an HDR (fp16) capture is
     // tonemapped iff any of these is selected; SaveImageToFile alone keeps fp16 so the 16-bit PNG
     // path is preserved (HDR_CAPTURE_PLAN §6.3/§6.5).
@@ -192,9 +174,9 @@ public static class HdrTonemapper
     /// scRGB is scene-referred and already normalized to SDR reference white, so the tone curves
     /// operate on it directly and only compress the HDR range above 1.0 (HDR_CAPTURE_PLAN §6.2).
     /// Returns null for any non-F16 input. Auto falls back to the default Reinhard curve; None
-    /// only clamps. <paramref name="peakNits"/> is retained for API compatibility but is unused.
+    /// only clamps.
     /// </summary>
-    public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode, float peakNits = PeakDefaultNits)
+    public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode)
     {
         if (hdrBitmap is null || hdrBitmap.ColorType != SKColorType.RgbaF16)
         {

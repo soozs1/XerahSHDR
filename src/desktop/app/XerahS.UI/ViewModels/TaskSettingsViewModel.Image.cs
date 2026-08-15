@@ -63,6 +63,22 @@ namespace XerahS.UI.ViewModels
             }
         }
 
+        public IReadOnlyList<PNGBitDepth> PngBitDepthOptions { get; } =
+            new[] { PNGBitDepth.Default, PNGBitDepth.Bit16 };
+
+        public PNGBitDepth ImagePNGBitDepth
+        {
+            get => _settings.ImageSettings.ImagePNGBitDepth;
+            set
+            {
+                if (_settings.ImageSettings.ImagePNGBitDepth != value)
+                {
+                    _settings.ImageSettings.ImagePNGBitDepth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public int ThumbnailWidth
         {
             get => _settings.ImageSettings.ThumbnailWidth;
@@ -169,7 +185,7 @@ namespace XerahS.UI.ViewModels
         private Bitmap? BuildHdrPreview()
         {
             using var source = CreateHdrPreviewSource();
-            using var sdr = HdrTonemapper.TonemapToBgra8888(source, ImageHdrToneMapping, peakNits: 1000f);
+            using var sdr = HdrTonemapper.TonemapToBgra8888(source, ImageHdrToneMapping);
             return sdr != null ? BitmapConversionHelpers.ToAvaloniBitmap(sdr) : null;
         }
 
