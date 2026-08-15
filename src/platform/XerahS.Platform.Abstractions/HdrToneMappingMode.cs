@@ -34,6 +34,7 @@ namespace XerahS.Common
     public enum HdrToneMappingMode // Localized
     {
         None = 0,
+        // Retained for settings backward compatibility; no longer selectable in the UI.
         Auto = 1,
         TonemapReinhard = 2,
         TonemapAces = 3,

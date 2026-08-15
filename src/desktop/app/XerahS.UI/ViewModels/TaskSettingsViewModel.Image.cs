@@ -132,7 +132,7 @@ namespace XerahS.UI.ViewModels
         }
 
         public IReadOnlyList<HdrToneMappingMode> HdrToneMappingOptions =>
-            Enum.GetValues<HdrToneMappingMode>();
+            Array.FindAll(Enum.GetValues<HdrToneMappingMode>(), m => m != HdrToneMappingMode.Auto);
 
         private Bitmap? _hdrPreviewBitmap;
 

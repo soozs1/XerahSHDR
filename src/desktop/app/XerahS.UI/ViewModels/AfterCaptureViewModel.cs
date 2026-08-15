@@ -55,7 +55,8 @@ public partial class AfterCaptureViewModel : ViewModelBase
     /// <summary>
     /// Selectable HDR tone-mapping modes for the After Capture window (HDR_CAPTURE_PLAN §6.4).
     /// </summary>
-    public static IReadOnlyList<HdrToneMappingMode> ToneMappingOptions => Enum.GetValues<HdrToneMappingMode>();
+    public static IReadOnlyList<HdrToneMappingMode> ToneMappingOptions =>
+        Array.FindAll(Enum.GetValues<HdrToneMappingMode>(), m => m != HdrToneMappingMode.Auto);
 
     public bool Cancelled { get; private set; } = true;
 

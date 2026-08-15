@@ -246,16 +246,16 @@ public class TaskSettingsImage
     /// <summary>
     /// HDR tonemapping applied when an HDR (fp16) capture must be converted to SDR.
     /// </summary>
-    public HdrToneMappingMode ImageHdrToneMapping = HdrToneMappingMode.Auto;
+    public HdrToneMappingMode ImageHdrToneMapping = HdrToneMappingMode.TonemapReinhard;
     /// <summary>
-    /// HDR tonemapping applied specifically when saving an HDR capture to a file. Auto keeps
-    /// fp16 (16-bit PNG) when saving alone; explicit modes force an SDR conversion.
+    /// HDR tonemapping applied specifically when saving an HDR capture to a file. All non-None
+    /// modes keep fp16 (16-bit PNG) when saving alone and only convert to SDR for SDR-only steps.
     /// </summary>
-    public HdrToneMappingMode ImageHdrSaveToneMapping = HdrToneMappingMode.Auto;
+    public HdrToneMappingMode ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapReinhard;
     /// <summary>
     /// HDR tonemapping applied specifically when copying an HDR capture to the clipboard.
     /// </summary>
-    public HdrToneMappingMode ImageHdrClipboardToneMapping = HdrToneMappingMode.Auto;
+    public HdrToneMappingMode ImageHdrClipboardToneMapping = HdrToneMappingMode.TonemapReinhard;
     public FileExistAction FileExistAction = FileExistAction.Ask;
 
     #endregion Image / General

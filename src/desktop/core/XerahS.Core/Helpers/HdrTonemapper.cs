@@ -156,25 +156,21 @@ public static class HdrTonemapper
 
     /// <summary>
     /// Decides whether an HDR (fp16) capture must be converted to 8-bit SDR before the
-    /// after-capture pipeline runs (HDR_CAPTURE_PLAN §6.3). Explicit Reinhard/ACES/BT.2446 C
-    /// always tonemap; None never does; Auto tonemaps iff any SDR-only step is selected.
+    /// after-capture pipeline runs (HDR_CAPTURE_PLAN §6.3). None never tonemaps; every other
+    /// mode tonemaps only when an SDR-only step is selected, so SDR content is never needlessly
+    /// tonemapped when the destination can carry HDR.
     /// </summary>
     internal static bool ShouldTonemapToSdr(HdrToneMappingMode mode, AfterCaptureTasks afterCaptureJob)
     {
-        return mode switch
-        {
-            HdrToneMappingMode.TonemapReinhard or HdrToneMappingMode.TonemapAces or HdrToneMappingMode.TonemapBt2446C => true,
-            HdrToneMappingMode.None => false,
-            _ => (afterCaptureJob & SdrOnlyAfterCaptureTasks) != 0 // Auto
-        };
+        return mode != HdrToneMappingMode.None
+            && (afterCaptureJob & SdrOnlyAfterCaptureTasks) != 0;
     }
 
     /// <summary>
     /// Tonemaps an RgbaF16 bitmap (scRGB-linear, 1.0 == 80 cd/m²) to 8-bit Bgra8888 (premul).
     /// scRGB is scene-referred and already normalized to SDR reference white, so the tone curves
     /// operate on it directly and only compress the HDR range above 1.0 (HDR_CAPTURE_PLAN §6.2).
-    /// Returns null for any non-F16 input. Auto falls back to the default Reinhard curve; None
-    /// only clamps.
+    /// Returns null for any non-F16 input. None only clamps; every other mode applies its curve.
     /// </summary>
     public static SKBitmap? TonemapToBgra8888(SKBitmap hdrBitmap, HdrToneMappingMode mode)
     {
@@ -218,10 +214,11 @@ public static class HdrTonemapper
                     {
                         float mapped = mode switch
                         {
+                            HdrToneMappingMode.TonemapReinhard => TonemapReinhardNormalized(lum),
                             HdrToneMappingMode.TonemapAces => TonemapAcesNormalized(lum),
                             HdrToneMappingMode.TonemapBt2446C => TonemapBt2446C(lum),
                             HdrToneMappingMode.None => lum,
-                            _ => TonemapReinhardNormalized(lum) // Auto falls back to the default Reinhard curve
+                            _ => TonemapReinhardNormalized(lum) // legacy Auto
                         };
                         scale = mapped / lum;
                     }

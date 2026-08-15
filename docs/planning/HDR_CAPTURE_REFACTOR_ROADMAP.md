@@ -14,6 +14,7 @@ Supersedes: `HDR_CAPTURE_PLAN.md` §6.2 tonemapping math (the "peak-normalized" 
 - ✅ Phase 4a — removed unused `peakNits`/`ClampPeak`/`Peak*` from `HdrTonemapper` and call sites.
 - ✅ Phase 4.5 — exposed PNG bit depth (`ImagePNGBitDepth`) in the Image Settings Quality card.
 - ✅ Phase 4b — retired unused Windows region backend + strategies (`WindowsRegionCaptureBackend`, `DxgiCaptureStrategy`, `WinRTCaptureStrategy`, `GdiCaptureStrategy`, Windows `ICaptureStrategy`).
+- ✅ Auto retired — all explicit tonemap modes now apply only for SDR-only tasks; `Auto` kept as a legacy enum value and hidden from UI.
 - ⏳ Phase 5 — full validation (`dotnet test` + manual HDR on/off) — pending.
 
 ---
