@@ -130,7 +130,10 @@ namespace XerahS.Platform.Windows
                     if (!TryCreateDxgiCropRect(rect, virtualBounds, fullBitmap.Width, fullBitmap.Height, out var cropRect))
                         return null;
 
-                    var cropped = new SKBitmap(cropRect.Width, cropRect.Height);
+                    var cropped = DxgiHdrDuplicationHelper.CreateReadbackBitmap(
+                        cropRect.Width,
+                        cropRect.Height,
+                        fullBitmap.ColorType == SKColorType.RgbaF16);
                     using var canvas = new SKCanvas(cropped);
                     canvas.DrawBitmap(fullBitmap, cropRect, new SKRect(0, 0, cropRect.Width, cropRect.Height), SKSamplingOptions.Default);
                     return cropped;
