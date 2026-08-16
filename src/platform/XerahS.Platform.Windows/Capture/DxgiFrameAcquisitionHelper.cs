@@ -7,12 +7,12 @@ internal static class DxgiFrameAcquisitionHelper
     private const int ZeroFrameSampleGridSize = 16;
 
     /// <summary>
-    /// Maximum number of non-zero grid samples a frame may contain and still be treated as
+    /// maximum number of non-zero grid samples a frame may contain and still be treated as
     /// "effectively black". DWM composites the mouse cursor into duplication frames, so the
     /// first frame after DuplicateOutput can be an uninitialized black buffer with only the
     /// cursor lit; the cursor covers at most a handful of the 16x16 sample points, while a
     /// real desktop always lights up far more. Treating such frames as black makes the capture
-    /// retry them instead of saving a "black screen with cursor" image (HDR_CAPTURE_PLAN §4.5).
+    /// retry them instead of saving a "black screen with cursor" image.
     /// </summary>
     private const int MaxEffectivelyBlackSamples = 4;
 

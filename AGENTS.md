@@ -52,6 +52,7 @@
    - `ShareX.VideoEditor/scripts/ensure-webui-deps.mjs` hashes `process.platform` into the deps stamp, so the stamp is per-platform and switching platforms forces a fresh `npm ci` (which then trips on the foreign symlinks).
    - When switching build platforms, delete `ShareX.VideoEditor/frontend/node_modules` first (use `find ShareX.VideoEditor/frontend/node_modules -depth -delete` in a script; bare `rm -rf` with globs is blocked in this environment), then let the target platform's npm recreate it.
    - `<BuildWebUI>false</BuildWebUI>` in `ShareX.VideoEditor/backend/ShareX.VideoEditor.csproj` skips the npm steps and is safe only when `ShareX.VideoEditor/frontend/dist` is already built.
+   - **Native Windows build** (from the repo root on Windows): `dotnet build XerahS.sln -m:1 -p:nodeReuse=false -p:UseSharedCompilation=false`. This is the only command that builds the full `net10.0-windows10.0.26100.0` solution; `src/desktop/XerahS.sln` is the Linux/WSL-scope desktop subset. From WSL use `~/.dotnet/dotnet` and never run a full `dotnet test` of `tests/XerahS.Tests` right before a Windows build unless the VideoEditor `node_modules` is cleaned afterwards (see above).
 
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
