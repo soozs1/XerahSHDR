@@ -275,16 +275,18 @@ a GDI 8-bit ARGB cursor onto the bitmap via `canvas.DrawBitmap`. On an F16 canva
 
 | Candidate | Status | Evidence / plan |
 |-----------|--------|-----------------|
-| **16-bit PNG** | ✅ **Works today** | Runtime probe: `SKImage.FromBitmap(RgbaF16).Encode(SKEncodedImageFormat.Png, 100)` emits IHDR `bitDepth=16, colorType=6` (RGBA) + `iCCP` (linear sRGB profile) + `sBIT`. Same for `Rgba16161616` and `Rgba1010102` sources. No new dependency, no encoder code. |
+| **16-bit PNG** | ✅ **Works today** | Runtime probe: `SKImage.FromBitmap(RgbaF16).Encode(SKEncodedImageFormat.Png, 100)` emits IHDR `bitDepth=16, colorType=6` (RGBA) + `iCCP` (linear sRGB profile) + `sBIT`. Same for `Rgba16161616` and `Rgba1010102` sources. No new dependency, no encoder code. **2026-08-16 change:** fp16 captures are converted to *display-referred* sRGB samples (`Rgba16161616` + sRGB chunk, no iCCP) before encode, because writing the raw scRGB-linear values made standard viewers render the file too dark (see §5.2). |
 | AVIF | ❌ Encoder unavailable in SkiaSharp | `SKEncodedImageFormat.Avif` exists in the enum but `Encode(Avif, …)` returns `null` at runtime in 4.151 (decode-only). Would need an FFmpeg encode job (`FFmpegDownloader` exists at `src/desktop/core/XerahS.Common/FFmpegDownloader.cs`; download path used by `TaskSettingsViewModel.FFmpeg.cs` L176+) or a native libavif wrapper. Real HDR10 container (PQ/2020, 10-bit) — stretch goal. **Security constraint (SEC-07/SEC-08): any FFmpeg encode job MUST reuse the pinned `FFmpegDownloader` (SHA-256-verified download) and build arguments via `ProcessArgumentQuoter`/`ArgumentList` — never a raw `Process.Start` with interpolated args.** |
 | JPEG XR | ❌ Not in SkiaSharp | No encoder/decoder in SkiaSharp. Dropped. |
 | JPEG XL | ❌ Encoder unavailable | Enum has `Jpegxl` but `Encode` returns `null` in 4.151. Dropped for now. |
 
-**Recommendation**: Phase 2 default = **16-bit PNG** for "true HDR" saves. It preserves the
-fp16 values and the linear extended-range content; caveat: it is *not* a standard HDR10 display
-container (PNG has no PQ/BT.2020 chunk standard, so most viewers render it as linear sRGB or
-sRGB-gamma). It is the honest, dependency-free HDR-preserving format today. AVIF-via-FFmpeg is
-the follow-up if true HDR10 files are required.
+**Recommendation**: Phase 2 default = **16-bit PNG** for HDR saves. The saved PNG is 16-bit per
+channel and **sRGB-encoded (display-referred)**: fp16 scRGB-linear values are converted with the
+sRGB OETF before encoding, so standard viewers render the image correctly (raw linear samples
+showed the image too dark — the root cause of the 2026-08-16 report). Highlights above SDR white
+(1.0) clamp to white, matching the "None (no tone curve)" semantics. Caveat: the file is therefore
+*not* an HDR10/PQ container; true extended-range preservation would require AVIF-via-FFmpeg as a
+follow-up.
 
 ### 5.2 Save-path changes
 
@@ -297,6 +299,11 @@ the follow-up if true HDR10 files are required.
   1. Do **not** route HDR bitmaps through the JPEG/GIF/WEBP branches (they clamp to 8-bit);
      force PNG for `RgbaF16` input regardless of `ImageFormat` (or tonemap first — see Phase 3).
   2. Honor `PNGBitDepth.Bit16` by converting SDR sources to `Rgba16161616`/`RgbaF16` before encode.
+  3. For `RgbaF16` input, convert the scRGB-linear samples to sRGB-encoded `Rgba16161616` first
+     (`ImageHelpers.ConvertLinearF16ToSrgb16`, color-managed `SKImage.ReadPixels`): writing raw
+     linear values made the PNG render too dark in standard viewers and Windows reported the file
+     as 32-bit (the linear iCCP is applied/lost on decode). The file stays 16-bit but becomes
+     display-referred, so it renders like the on-screen image.
 - `ImageHelpers.SaveBitmap` (`src/desktop/core/XerahS.Common/Helpers/ImageHelpers.cs` L51–63):
   same `Encode` path — no change needed for fp16→PNG; verify `GetEncodedFormat` mapping (L263–275)
   stays PNG for `.png`.
@@ -405,7 +412,7 @@ are selected; the "auto" mode does exactly that.
 
 | Action | Default |
 |--------|---------|
-| Save to file (HDR monitor) | keep HDR → 16-bit PNG (Auto) |
+| Save to file (HDR monitor) | sRGB-encoded 16-bit PNG (None/`Auto`; no tone curve — OETF only, highlights clamp to white) |
 | Copy to clipboard | tonemap to SDR (Auto) |
 | Open in editor / preview / effects | tonemap to SDR (Auto) |
 | Upload | follows the image format; if format is 8-bit → tonemap first (note: 16-bit PNG upload is rejected or re-encoded by some hosts — compatibility, see RISK-07) |

@@ -40,8 +40,11 @@ namespace XerahS.Tests.Helpers;
 public class HdrPngPixelFidelityTests
 {
     [Test]
-    public void F16Bitmap_SavedAsBit16Png_PreservesPixelValues()
+    public void F16Bitmap_SavedAsBit16Png_DisplaysCorrectly()
     {
+        // Regression guard for the 2026-08-16 report "16-bit PNG looks darker than reality":
+        // raw scRGB-linear samples written verbatim to a PNG render too dark in standard viewers.
+        // The encoder must convert linear -> sRGB (display-referred) while keeping 16-bit depth.
         using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (1f, 1f, 1f, 1f), (0.2f, 0.2f, 0.2f, 1f));
 
         using var stream = TaskHelpers.SaveImageAsStream(hdr, EImageFormat.PNG, PNGBitDepth.Bit16);
@@ -50,19 +53,34 @@ public class HdrPngPixelFidelityTests
 
         // IHDR bit depth must be 16 for the HDR path.
         Assert.That(bytes[24], Is.EqualTo(16), "PNG IHDR bit depth");
+        // sRGB chunk, not a linear iCCP profile: samples are display-referred.
+        Assert.That(HasChunk(bytes, "sRGB"), Is.True, "PNG must carry the sRGB chunk");
+        Assert.That(HasChunk(bytes, "iCCP"), Is.False, "PNG must not carry a linear iCCP profile");
 
-        using var codec = SKCodec.Create(SKData.CreateCopy(bytes));
-        Assert.That(codec, Is.Not.Null);
+        // A plain 8-bit decode must show the sRGB-encoded values (what any viewer renders):
+        // linear 0.5 -> 188, linear 1.0 -> 255, linear 0.2 -> 124.
+        using var decoded = SKBitmap.Decode(SKData.CreateCopy(bytes));
+        Assert.That(decoded, Is.Not.Null);
+        Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(1), "linear 0.5 must decode to sRGB 188");
+        Assert.That(decoded.GetPixel(1, 0).Red, Is.EqualTo(255), "linear 1.0 must decode to sRGB 255");
+        Assert.That(decoded.GetPixel(2, 0).Red, Is.EqualTo(124).Within(1), "linear 0.2 must decode to sRGB 124");
+    }
 
-        using var decoded = new SKBitmap(new SKImageInfo(
-            codec!.Info.Width, codec.Info.Height, SKColorType.RgbaF16, SKAlphaType.Unpremul));
-        var result = codec.GetPixels(decoded.Info, decoded.GetPixels());
-        Assert.That(result, Is.EqualTo(SKCodecResult.Success));
+    [Test]
+    public void F16Bitmap_UntaggedColorSpace_SavedAsBit16Png_DisplaysCorrectly()
+    {
+        // Untagged fp16 buffers are still linear scRGB in the capture pipeline; the encoder must
+        // apply the sRGB OETF even when Skia cannot infer the source transfer function.
+        using var hdr = MakeF16Bitmap(new[] { (0.5f, 0.5f, 0.5f, 1f) }, null);
 
-        Span<byte> span = decoded.GetPixelSpan();
-        AssertHalf(span, 0, 0.5f);
-        AssertHalf(span, 1, 1f);
-        AssertHalf(span, 2, 0.2f);
+        using var stream = TaskHelpers.SaveImageAsStream(hdr, EImageFormat.PNG, PNGBitDepth.Bit16);
+        Assert.That(stream, Is.Not.Null);
+        var bytes = stream!.ToArray();
+        Assert.That(bytes[24], Is.EqualTo(16), "PNG IHDR bit depth");
+
+        using var decoded = SKBitmap.Decode(SKData.CreateCopy(bytes));
+        Assert.That(decoded, Is.Not.Null);
+        Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(1), "untagged linear 0.5 must decode to sRGB 188");
     }
 
     [Test]
@@ -98,8 +116,13 @@ public class HdrPngPixelFidelityTests
 
     private static SKBitmap MakeF16Bitmap(params (float R, float G, float B, float A)[] pixels)
     {
+        return MakeF16Bitmap(pixels, SKColorSpace.CreateSrgbLinear());
+    }
+
+    private static SKBitmap MakeF16Bitmap((float R, float G, float B, float A)[] pixels, SKColorSpace? colorSpace)
+    {
         var bitmap = new SKBitmap(new SKImageInfo(
-            pixels.Length, 1, SKColorType.RgbaF16, SKAlphaType.Premul, SKColorSpace.CreateSrgbLinear()));
+            pixels.Length, 1, SKColorType.RgbaF16, SKAlphaType.Premul, colorSpace));
         Span<byte> span = bitmap.GetPixelSpan();
         for (int i = 0; i < pixels.Length; i++)
         {
@@ -112,28 +135,25 @@ public class HdrPngPixelFidelityTests
         return bitmap;
     }
 
-    private static void AssertHalf(ReadOnlySpan<byte> span, int pixelIndex, float expected)
+    private static bool HasChunk(byte[] png, string chunkName)
     {
-        int offset = pixelIndex * 8;
-        for (int c = 0; c < 3; c++)
+        int pos = 8;
+        while (pos + 8 <= png.Length)
         {
-            float actual = ReadHalf(span, offset + c * 2);
-            Assert.That(actual, Is.EqualTo(expected).Within(1e-3f), $"pixel {pixelIndex} channel {c}");
+            uint len = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(pos, 4));
+            string name = System.Text.Encoding.ASCII.GetString(png, pos + 4, 4);
+            if (name == chunkName)
+            {
+                return true;
+            }
+            pos += 12 + (int)len;
         }
-
-        float alpha = ReadHalf(span, offset + 6);
-        Assert.That(alpha, Is.EqualTo(1f).Within(1e-3f), $"pixel {pixelIndex} alpha");
+        return false;
     }
 
     private static void WriteHalf(Span<byte> span, int offset, float value)
     {
         ushort bits = BitConverter.HalfToUInt16Bits((Half)value);
         BinaryPrimitives.WriteUInt16LittleEndian(span.Slice(offset, 2), bits);
-    }
-
-    private static float ReadHalf(ReadOnlySpan<byte> span, int offset)
-    {
-        ushort bits = BinaryPrimitives.ReadUInt16LittleEndian(span.Slice(offset, 2));
-        return (float)BitConverter.UInt16BitsToHalf(bits);
     }
 }

@@ -597,7 +597,14 @@ public static partial class TaskHelpers
             {
                 imageFormat = EImageFormat.PNG;
 
-                if (!isHdrInput)
+                if (isHdrInput)
+                {
+                    // HDR (fp16 scRGB-linear) input: encode display-referred sRGB samples so the
+                    // PNG renders correctly in standard viewers (raw linear values render too dark).
+                    converted = ImageHelpers.ConvertLinearF16ToSrgb16(bmp);
+                    source = converted ?? bmp;
+                }
+                else
                 {
                     // Widen SDR pixels to 16-bit sRGB so the PNG encoder emits bitDepth=16
                     // while preserving the encoded appearance.

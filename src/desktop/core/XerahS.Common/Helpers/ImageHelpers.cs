@@ -68,11 +68,21 @@ public static class ImageHelpers
         SKBitmap? converted = null;
         try
         {
-            if (write16BitPng && bitmap.ColorType != SKColorType.RgbaF16)
+            if (write16BitPng)
             {
-                // Widen SDR pixels to 16-bit sRGB so the encoder emits bitDepth=16
-                // while preserving the encoded appearance.
-                converted = bitmap.Copy(SKColorType.Rgba16161616);
+                if (bitmap.ColorType == SKColorType.RgbaF16)
+                {
+                    // HDR (fp16 scRGB-linear) input: encode display-referred sRGB samples so the
+                    // PNG renders correctly in standard viewers. Writing the raw linear values
+                    // made most viewers show the image too dark (HDR_CAPTURE_PLAN §5.1 caveat).
+                    converted = ConvertLinearF16ToSrgb16(bitmap);
+                }
+                else
+                {
+                    // Widen SDR pixels to 16-bit sRGB so the encoder emits bitDepth=16
+                    // while preserving the encoded appearance.
+                    converted = bitmap.Copy(SKColorType.Rgba16161616);
+                }
             }
 
             using SKImage image = SKImage.FromBitmap(converted ?? bitmap);
@@ -83,6 +93,62 @@ public static class ImageHelpers
         finally
         {
             converted?.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Converts an RgbaF16 (scRGB-linear, 1.0 == SDR white) bitmap into an sRGB-encoded 16-bit
+    /// bitmap (Rgba16161616, premul, sRGB) using Skia's color-managed pipeline. PNG samples are
+    /// display-referred, so encoding linear scRGB values verbatim renders too dark in standard
+    /// viewers; applying the sRGB OETF here fixes the appearance while keeping 16-bit precision.
+    /// Values above 1.0 clamp to SDR white, matching the "no tone curve" (None) semantics.
+    /// Returns null for any non-F16 input or when the conversion fails.
+    /// </summary>
+    public static SKBitmap? ConvertLinearF16ToSrgb16(SKBitmap hdrBitmap)
+    {
+        if (hdrBitmap is null || hdrBitmap.ColorType != SKColorType.RgbaF16)
+        {
+            return null;
+        }
+
+        var dstInfo = new SKImageInfo(
+            hdrBitmap.Width,
+            hdrBitmap.Height,
+            SKColorType.Rgba16161616,
+            SKAlphaType.Premul,
+            SKColorSpace.CreateSrgb());
+
+        SKBitmap? taggedCopy = null;
+        if (hdrBitmap.ColorSpace is null)
+        {
+            // Untagged fp16 buffers are linear scRGB in this pipeline; re-tag a raw copy so
+            // Skia's color-managed conversion applies the linear -> sRGB transfer function.
+            // Same dimensions/color type => identical RowBytes, so this is a plain byte copy.
+            taggedCopy = new SKBitmap(new SKImageInfo(
+                hdrBitmap.Width,
+                hdrBitmap.Height,
+                SKColorType.RgbaF16,
+                hdrBitmap.AlphaType,
+                SKColorSpace.CreateSrgbLinear()));
+            hdrBitmap.GetPixelSpan().CopyTo(taggedCopy.GetPixelSpan());
+            hdrBitmap = taggedCopy;
+        }
+
+        try
+        {
+            using SKImage image = SKImage.FromBitmap(hdrBitmap);
+            var converted = new SKBitmap(dstInfo);
+            if (image.ReadPixels(dstInfo, converted.GetPixels(), converted.RowBytes))
+            {
+                return converted;
+            }
+
+            converted.Dispose();
+            return null;
+        }
+        finally
+        {
+            taggedCopy?.Dispose();
         }
     }
 
