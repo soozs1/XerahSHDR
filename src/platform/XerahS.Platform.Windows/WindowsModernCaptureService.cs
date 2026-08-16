@@ -375,7 +375,7 @@ namespace XerahS.Platform.Windows
                         {
                             // Later attempts wait longer for the desktop to produce a real frame.
                             int timeoutMs = attempt == 0 ? 250 : 500;
-                            var acquireResult = duplication.AcquireNextFrame(timeoutMs, out var frameInfo, out var desktopResource);
+                            var acquireResult = duplication.AcquireNextFrame((uint)timeoutMs, out var frameInfo, out var desktopResource);
 
                             if (DxgiFrameAcquisitionHelper.ShouldRetryFrameAcquisition(acquireResult.Success, desktopResource != null))
                             {
@@ -424,7 +424,7 @@ namespace XerahS.Platform.Windows
                                         dataBox.DataPointer,
                                         (int)sourceDesc.Width,
                                         (int)sourceDesc.Height,
-                                        dataBox.RowPitch,
+                                        (int)dataBox.RowPitch,
                                         DxgiHdrDuplicationHelper.BytesPerPixel(isHdr)))
                                     {
                                         if (attempt < DxgiFrameAcquisitionHelper.MaxZeroFrameRetries)
