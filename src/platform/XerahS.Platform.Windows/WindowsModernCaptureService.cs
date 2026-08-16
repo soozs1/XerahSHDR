@@ -367,23 +367,29 @@ namespace XerahS.Platform.Windows
                     bool frameAcquired = false;
                     try
                     {
-                        var acquireResult = duplication.AcquireNextFrame(250, out var frameInfo, out var desktopResource);
-
-                        if (DxgiFrameAcquisitionHelper.ShouldRetryFrameAcquisition(acquireResult.Success, desktopResource != null))
+                        // The first frame right after DuplicateOutput can be an uninitialized
+                        // all-black buffer (observed with fp16/HDR duplication), which previously
+                        // produced a "black screen with cursor" capture. Retry a few times before
+                        // giving up on this output so the caller can fall back to GDI.
+                        for (int attempt = 0; attempt <= DxgiFrameAcquisitionHelper.MaxZeroFrameRetries; attempt++)
                         {
-                            if (acquireResult.Success)
+                            // Later attempts wait longer for the desktop to produce a real frame.
+                            int timeoutMs = attempt == 0 ? 250 : 500;
+                            var acquireResult = duplication.AcquireNextFrame(timeoutMs, out var frameInfo, out var desktopResource);
+
+                            if (DxgiFrameAcquisitionHelper.ShouldRetryFrameAcquisition(acquireResult.Success, desktopResource != null))
                             {
-                                ReleaseFrameQuietly(duplication);
+                                if (acquireResult.Success)
+                                {
+                                    ReleaseFrameQuietly(duplication);
+                                }
+
+                                desktopResource?.Dispose();
+                                continue;
                             }
 
-                            desktopResource?.Dispose();
-                            acquireResult = duplication.AcquireNextFrame(500, out frameInfo, out desktopResource);
-                        }
+                            frameAcquired = acquireResult.Success;
 
-                        frameAcquired = acquireResult.Success;
-
-                        if (DxgiFrameAcquisitionHelper.IsUsableFrame(acquireResult.Success, desktopResource != null))
-                        {
                             using (var resource = desktopResource!)
                             {
                                 using var desktopTex = resource.QueryInterface<ID3D11Texture2D>();
@@ -414,6 +420,27 @@ namespace XerahS.Platform.Windows
                                 var dataBox = device.ImmediateContext.Map(staging, 0, MapMode.Read);
                                 try
                                 {
+                                    if (DxgiFrameAcquisitionHelper.IsZeroFrame(
+                                        dataBox.DataPointer,
+                                        (int)sourceDesc.Width,
+                                        (int)sourceDesc.Height,
+                                        dataBox.RowPitch,
+                                        DxgiHdrDuplicationHelper.BytesPerPixel(isHdr)))
+                                    {
+                                        if (attempt < DxgiFrameAcquisitionHelper.MaxZeroFrameRetries)
+                                        {
+                                            XerahS.Common.DebugHelper.WriteLine(
+                                                $"CaptureFullScreenDxgi: Output {deviceName} returned an all-black frame (attempt {attempt + 1}); retrying.");
+                                            ReleaseFrameQuietly(duplication);
+                                            System.Threading.Thread.Sleep(33);
+                                            continue;
+                                        }
+
+                                        XerahS.Common.DebugHelper.WriteLine(
+                                            $"CaptureFullScreenDxgi: Output {deviceName} returned an all-black frame after {DxgiFrameAcquisitionHelper.MaxZeroFrameRetries + 1} attempts; skipping output.");
+                                        break;
+                                    }
+
                                     // Draw to combined bitmap, applying output rotation correction.
                                     DrawMappedTextureToCanvas(
                                         dataBox,
@@ -426,18 +453,16 @@ namespace XerahS.Platform.Windows
                                         rotation,
                                         isHdr,
                                         canvas);
+
+                                    capturedOutputCount++;
                                 }
                                 finally
                                 {
                                     device.ImmediateContext.Unmap(staging, 0);
                                 }
-
-                                capturedOutputCount++;
                             }
-                        }
-                        else
-                        {
-                            XerahS.Common.DebugHelper.WriteLine($"CaptureFullScreenDxgi: AcquireFrame failed or timed out after retry.");
+
+                            break; // Frame processed successfully; stop retrying.
                         }
                     }
                     catch (Exception ex)

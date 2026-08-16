@@ -37,6 +37,16 @@
    - Do not create competing instruction sets. Keep shared workflow rules in [Universal Agent Workflow](developers/guidelines/AGENT_WORKFLOW.md) and keep compatibility shims thin.
    - Record durable lessons in [Lessons Learnt](developers/lessons-learnt/general.md) or the nearest topic-specific lessons file.
 
+6. **Search Tool Restrictions (known agent hangs — do not violate)**
+   - **Forbidden**: the structured grep/search tool over all C# sources with alternation-heavy or escaped-bracket regexes. Confirmed to hang the agent (2026-08-15, reproduced twice):
+     - `{"include_pattern": "**/*.cs", "regex": "ShowAfterCaptureWindowAsync|AfterCaptureViewModel|AfterCaptureWindow"}`
+     - `{"regex": "\\[HDR\\] ProcessAsync"}` (escaped square brackets)
+   - **Required alternative**: plain terminal grep scoped to a concrete directory with one simple literal pattern, e.g. `grep -rn "AfterCaptureWindow" src/desktop/app/XerahS.UI/ViewModels/` or `grep -rn -F "[HDR] ProcessAsync" src/desktop/core/XerahS.Core/Tasks/`.
+
+7. **Commit After Major Changes**
+   - Commit promptly after any major change, especially once its correctness has been verified by a build or tests. Uncommitted work is fragile: working-tree-only changes can be lost silently (deleted/restored folders, cleanup), so never end a session with a significant verified fix sitting uncommitted.
+   - A local commit is always safe and reversible and does not require push permission.
+
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
 - Create or update GitHub issues only when the user explicitly asks for it.
