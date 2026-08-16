@@ -420,7 +420,7 @@ namespace XerahS.Platform.Windows
                                 var dataBox = device.ImmediateContext.Map(staging, 0, MapMode.Read);
                                 try
                                 {
-                                    if (DxgiFrameAcquisitionHelper.IsZeroFrame(
+                                    if (DxgiFrameAcquisitionHelper.IsEffectivelyBlackFrame(
                                         dataBox.DataPointer,
                                         (int)sourceDesc.Width,
                                         (int)sourceDesc.Height,
@@ -430,14 +430,14 @@ namespace XerahS.Platform.Windows
                                         if (attempt < DxgiFrameAcquisitionHelper.MaxZeroFrameRetries)
                                         {
                                             XerahS.Common.DebugHelper.WriteLine(
-                                                $"CaptureFullScreenDxgi: Output {deviceName} returned an all-black frame (attempt {attempt + 1}); retrying.");
+                                                $"CaptureFullScreenDxgi: Output {deviceName} returned an effectively-black frame (attempt {attempt + 1}); retrying.");
                                             ReleaseFrameQuietly(duplication);
                                             System.Threading.Thread.Sleep(33);
                                             continue;
                                         }
 
                                         XerahS.Common.DebugHelper.WriteLine(
-                                            $"CaptureFullScreenDxgi: Output {deviceName} returned an all-black frame after {DxgiFrameAcquisitionHelper.MaxZeroFrameRetries + 1} attempts; skipping output.");
+                                            $"CaptureFullScreenDxgi: Output {deviceName} returned an effectively-black frame after {DxgiFrameAcquisitionHelper.MaxZeroFrameRetries + 1} attempts; skipping output.");
                                         break;
                                     }
 
