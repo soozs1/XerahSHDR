@@ -47,6 +47,12 @@
    - Commit promptly after any major change, especially once its correctness has been verified by a build or tests. Uncommitted work is fragile: working-tree-only changes can be lost silently (deleted/restored folders, cleanup), so never end a session with a significant verified fix sitting uncommitted.
    - A local commit is always safe and reversible and does not require push permission.
 
+8. **Cross-Platform Build Hygiene (shared Windows/WSL tree)**
+   - Never alternate full builds between WSL and native Windows on the same working tree. `ShareX.VideoEditor/frontend/node_modules` created by one platform's npm breaks the other platform's `npm ci` with `ENOTEMPTY` (MSB3077 in `ShareX.VideoEditor.csproj`): WSL npm writes POSIX symlinks into `node_modules/.bin/` (jiti, nanoid, rolldown, tsc, tsserver, vite) that Windows `fs.rmdir` cannot delete.
+   - `ShareX.VideoEditor/scripts/ensure-webui-deps.mjs` hashes `process.platform` into the deps stamp, so the stamp is per-platform and switching platforms forces a fresh `npm ci` (which then trips on the foreign symlinks).
+   - When switching build platforms, delete `ShareX.VideoEditor/frontend/node_modules` first (use `find ShareX.VideoEditor/frontend/node_modules -depth -delete` in a script; bare `rm -rf` with globs is blocked in this environment), then let the target platform's npm recreate it.
+   - `<BuildWebUI>false</BuildWebUI>` in `ShareX.VideoEditor/backend/ShareX.VideoEditor.csproj` skips the npm steps and is safe only when `ShareX.VideoEditor/frontend/dist` is already built.
+
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
 - Create or update GitHub issues only when the user explicitly asks for it.
