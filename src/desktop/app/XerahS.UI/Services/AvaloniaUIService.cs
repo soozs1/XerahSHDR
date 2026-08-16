@@ -166,8 +166,17 @@ namespace XerahS.UI.Services
                 // Wire up SaveRequested / SaveAsRequested for standalone editor window
                 Func<SkiaSharp.SKBitmap?> getSnapshot = () =>
                     editorWindow.FindControl<EditorView>("EditorViewControl")?.GetSnapshot();
-                MainViewModelHelper.WireSaveRequested(editorViewModel, getSnapshot, () => editorWindow);
-                MainViewModelHelper.WireSaveAsRequested(editorViewModel, getSnapshot, () => editorWindow);
+                Func<SkiaSharp.SKBitmap?> getSource = () =>
+                    editorWindow.FindControl<EditorView>("EditorViewControl")?.GetSource();
+
+                // The host owns save handling here; without these flags the EditorView's internal
+                // handlers would also run and overwrite the depth/tone-aware file with an 8-bit
+                // snapshot (breaking 16-bit HDR saves and duplicating the Save-As dialog).
+                editorViewModel.HasHostSaveHandler = true;
+                editorViewModel.HasHostSaveAsHandler = true;
+
+                MainViewModelHelper.WireSaveRequested(editorViewModel, getSnapshot, () => editorWindow, getSource);
+                MainViewModelHelper.WireSaveAsRequested(editorViewModel, getSnapshot, () => editorWindow, getSource);
                 MainViewModelHelper.WirePinRequested(editorViewModel, getSnapshot);
 
                 // Set DataContext BEFORE initializing preview so bindings update correctly

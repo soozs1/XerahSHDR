@@ -237,6 +237,11 @@ public class TaskSettingsImage
     #region Image / General
 
     public EImageFormat ImageFormat = EImageFormat.PNG;
+    /// <summary>
+    /// PNG bit depth, now expressed as output content: "SDR" (Default) forces HDR captures to be
+    /// saved as 8-bit SDR (tonemapped when needed); "SDR+HDR" (Bit16) keeps HDR captures as
+    /// 16-bit PNG and saves SDR captures as 16-bit sRGB PNG.
+    /// </summary>
     public PNGBitDepth ImagePNGBitDepth = PNGBitDepth.Default;
     public int ImageJPEGQuality = 90;
     public GIFQuality ImageGIFQuality = GIFQuality.Default;
@@ -248,8 +253,10 @@ public class TaskSettingsImage
     /// </summary>
     public HdrToneMappingMode ImageHdrToneMapping = HdrToneMappingMode.TonemapReinhard;
     /// <summary>
-    /// HDR tonemapping applied specifically when saving an HDR capture to a file. All non-None
-    /// modes keep fp16 (16-bit PNG) when saving alone and only convert to SDR for SDR-only steps.
+    /// HDR tonemapping applied when an HDR capture must be saved as SDR (PNG depth = "SDR").
+    /// None saves the image "as is" (linear values clamp at SDR white, no tone curve); every
+    /// other mode applies its HDR→SDR curve. With depth "SDR+HDR" the fp16 data is kept and this
+    /// setting does not apply.
     /// </summary>
     public HdrToneMappingMode ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapReinhard;
     /// <summary>

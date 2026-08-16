@@ -29,7 +29,10 @@ using ShareX.ImageEditor.Core.Editor;
 using ShareX.ImageEditor.Core.Persistence;
 using ShareX.ImageEditor.Presentation.ViewModels;
 using SkiaSharp;
+using System.Buffers.Binary;
 using System.Reflection;
+using XerahS.Common;
+using XerahS.Core;
 using XerahS.UI.Services;
 
 namespace XerahS.Tests.Editor;
@@ -56,7 +59,7 @@ public class MainViewModelHelperSaveTests
                 var bitmap = new SKBitmap(1, 1);
                 bitmap.Erase(SKColors.CadetBlue);
                 return bitmap;
-            }, path);
+            }, null, path);
 
             var savedBytes = await File.ReadAllBytesAsync(path);
             Assert.That(savedBytes.Length, Is.LessThan(8192));
@@ -110,7 +113,7 @@ public class MainViewModelHelperSaveTests
                     var bitmap = new SKBitmap(1, 1);
                     bitmap.Erase(SKColors.CadetBlue);
                     return bitmap;
-                }, path);
+                }, null, path);
             });
 
             Assert.That(File.Exists(path), Is.True, "The image write should have completed before sidecar persistence failed.");
@@ -131,12 +134,148 @@ public class MainViewModelHelperSaveTests
         }
     }
 
-    private static Task InvokeSaveToPathAsync(MainViewModel viewModel, Func<SKBitmap?> snapshotFactory, string path)
+    [Test]
+    public async Task SaveToPathAsync_HdrSource_SdrDepth_WritesTonemapped8BitPng()
+    {
+        // Design: "SDR" depth forces an HDR→SDR conversion on save (method = selected filter,
+        // None = as-is/clamp). The saved PNG must be 8-bit and contain sRGB-encoded values:
+        // linear 0.5 -> 188, linear 0.25 -> 137 when read by a standard viewer.
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        TaskSettings? previous = null;
+
+        try
+        {
+            var settings = new TaskSettings
+            {
+                ImageSettings = new TaskSettingsImage
+                {
+                    ImagePNGBitDepth = PNGBitDepth.Default,
+                    ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapReinhard
+                }
+            };
+            previous = SwapDefaultTaskSettings(settings);
+
+            var viewModel = new MainViewModel { IsDirty = true };
+            using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (0.25f, 0.25f, 0.25f, 1f));
+
+            await InvokeSaveToPathAsync(viewModel, () => null, () => hdr.Copy(), path);
+
+            var savedBytes = await File.ReadAllBytesAsync(path);
+            Assert.That(savedBytes[24], Is.EqualTo(8), "SDR depth must write an 8-bit PNG");
+
+            using var decoded = SKBitmap.Decode(SKData.CreateCopy(savedBytes));
+            Assert.That(decoded, Is.Not.Null);
+            Assert.That(decoded!.GetPixel(0, 0).Red, Is.GreaterThan(0), "tonemapped pixel must not be black");
+        }
+        finally
+        {
+            RestoreDefaultTaskSettings(previous);
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Test]
+    public async Task SaveToPathAsync_HdrSource_Bit16Depth_Writes16BitHdrPng()
+    {
+        // Design: "SDR+HDR" depth keeps HDR content and writes the 16-bit sRGB PNG "as is"
+        // (no tone curve, values > 1.0 clamp at SDR white).
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        TaskSettings? previous = null;
+
+        try
+        {
+            var settings = new TaskSettings
+            {
+                ImageSettings = new TaskSettingsImage
+                {
+                    ImagePNGBitDepth = PNGBitDepth.Bit16,
+                    ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapReinhard
+                }
+            };
+            previous = SwapDefaultTaskSettings(settings);
+
+            var viewModel = new MainViewModel { IsDirty = true };
+            using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (1f, 1f, 1f, 1f));
+
+            await InvokeSaveToPathAsync(viewModel, () => null, () => hdr.Copy(), path);
+
+            var savedBytes = await File.ReadAllBytesAsync(path);
+            Assert.That(savedBytes[24], Is.EqualTo(16), "SDR+HDR depth must write a 16-bit PNG");
+            Assert.That(HasChunk(savedBytes, "sRGB"), Is.True, "PNG must carry the sRGB chunk");
+
+            using var decoded = SKBitmap.Decode(SKData.CreateCopy(savedBytes));
+            Assert.That(decoded, Is.Not.Null);
+            // linear 0.5 -> sRGB 188; linear 1.0 -> sRGB 255 (display-referred, not dark).
+            Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(1));
+            Assert.That(decoded.GetPixel(1, 0).Red, Is.EqualTo(255));
+        }
+        finally
+        {
+            RestoreDefaultTaskSettings(previous);
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    private static TaskSettings? SwapDefaultTaskSettings(TaskSettings settings)
+    {
+        var property = typeof(SettingsManager).GetProperty("DefaultTaskSettings", BindingFlags.Static | BindingFlags.Public)
+            ?? throw new MissingMemberException(nameof(SettingsManager), "DefaultTaskSettings");
+        var previous = (TaskSettings?)property.GetValue(null);
+        property.SetValue(null, settings);
+        return previous;
+    }
+
+    private static void RestoreDefaultTaskSettings(TaskSettings? previous)
+    {
+        var property = typeof(SettingsManager).GetProperty("DefaultTaskSettings", BindingFlags.Static | BindingFlags.Public)
+            ?? throw new MissingMemberException(nameof(SettingsManager), "DefaultTaskSettings");
+        property.SetValue(null, previous ?? new TaskSettings { Job = WorkflowType.None });
+    }
+
+    private static SKBitmap MakeF16Bitmap(params (float R, float G, float B, float A)[] pixels)
+    {
+        var bitmap = new SKBitmap(new SKImageInfo(
+            pixels.Length, 1, SKColorType.RgbaF16, SKAlphaType.Premul, SKColorSpace.CreateSrgbLinear()));
+        Span<byte> span = bitmap.GetPixelSpan();
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            int offset = i * 8;
+            WriteHalf(span, offset, pixels[i].R);
+            WriteHalf(span, offset + 2, pixels[i].G);
+            WriteHalf(span, offset + 4, pixels[i].B);
+            WriteHalf(span, offset + 6, pixels[i].A);
+        }
+        return bitmap;
+    }
+
+    private static void WriteHalf(Span<byte> span, int offset, float value)
+    {
+        ushort bits = BitConverter.HalfToUInt16Bits((Half)value);
+        BinaryPrimitives.WriteUInt16LittleEndian(span.Slice(offset, 2), bits);
+    }
+
+    private static bool HasChunk(byte[] png, string chunkName)
+    {
+        int pos = 8;
+        while (pos + 8 <= png.Length)
+        {
+            uint len = BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(pos, 4));
+            string name = System.Text.Encoding.ASCII.GetString(png, pos + 4, 4);
+            if (name == chunkName)
+            {
+                return true;
+            }
+            pos += 12 + (int)len;
+        }
+        return false;
+    }
+
+    private static Task InvokeSaveToPathAsync(MainViewModel viewModel, Func<SKBitmap?> snapshotFactory, Func<SKBitmap?>? sourceFactory, string path)
     {
         var method = typeof(MainViewModelHelper).GetMethod("SaveToPathAsync", BindingFlags.NonPublic | BindingFlags.Static)
             ?? throw new MissingMethodException(nameof(MainViewModelHelper), "SaveToPathAsync");
 
-        return (Task)(method.Invoke(null, new object?[] { viewModel, snapshotFactory, path })
+        return (Task)(method.Invoke(null, new object?[] { viewModel, snapshotFactory, sourceFactory, path })
             ?? throw new InvalidOperationException("SaveToPathAsync returned null."));
     }
 }

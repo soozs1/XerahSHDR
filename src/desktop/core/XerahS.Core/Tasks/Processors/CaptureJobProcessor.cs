@@ -239,10 +239,12 @@ namespace XerahS.Core.Tasks.Processors
 
                 if (isHdr)
                 {
-                    var saveMode = settings.ImageSettings.ImageHdrSaveToneMapping;
-                    if (HdrTonemapper.ShouldTonemapToSdr(saveMode, AfterCaptureTasks.SaveImageToFile))
+                    // The PNG depth setting decides the saved content: "SDR" forces an HDR→SDR
+                    // conversion using the selected method (None = as-is/clamp), "SDR+HDR" keeps
+                    // the fp16 data so the 16-bit PNG path is preserved.
+                    if (settings.ImageSettings.ImagePNGBitDepth != PNGBitDepth.Bit16)
                     {
-                        ownedSave = HdrTonemapper.TonemapToBgra8888(fp16Source, saveMode);
+                        ownedSave = HdrTonemapper.TonemapToBgra8888(fp16Source, settings.ImageSettings.ImageHdrSaveToneMapping);
                         saveBitmap = ownedSave ?? fp16Source;
                     }
                     else

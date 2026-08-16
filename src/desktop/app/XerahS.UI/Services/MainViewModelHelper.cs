@@ -32,6 +32,7 @@ using System.IO;
 using XerahS.Bootstrap;
 using XerahS.Common;
 using XerahS.Core;
+using XerahS.Core.Helpers;
 
 namespace XerahS.UI.Services;
 
@@ -66,18 +67,22 @@ public static class MainViewModelHelper
 
     /// <summary>
     /// Wires up the SaveRequested event to overwrite the last saved path, or falls back to SaveAs.
+    /// getSource returns the working source image (may be HDR/RgbaF16) so the save path can honor
+    /// the PNG depth and HDR tone-mapping settings instead of encoding the 8-bit preview.
     /// </summary>
-    public static void WireSaveRequested(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot = null, Func<Window?>? getWindow = null)
+    public static void WireSaveRequested(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot = null, Func<Window?>? getWindow = null, Func<SKBitmap?>? getSource = null)
     {
-        viewModel.SaveRequested += () => HandleSaveRequestedAsync(viewModel, getEditedSnapshot, getWindow);
+        viewModel.SaveRequested += () => HandleSaveRequestedAsync(viewModel, getEditedSnapshot, getWindow, getSource);
     }
 
     /// <summary>
     /// Wires up the SaveAsRequested event to show a save file dialog and save to the chosen path.
+    /// getSource returns the working source image (may be HDR/RgbaF16) so the save path can honor
+    /// the PNG depth and HDR tone-mapping settings instead of encoding the 8-bit preview.
     /// </summary>
-    public static void WireSaveAsRequested(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot = null, Func<Window?>? getWindow = null)
+    public static void WireSaveAsRequested(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot = null, Func<Window?>? getWindow = null, Func<SKBitmap?>? getSource = null)
     {
-        viewModel.SaveAsRequested += () => HandleSaveAsRequestedAsync(viewModel, getEditedSnapshot, getWindow);
+        viewModel.SaveAsRequested += () => HandleSaveAsRequestedAsync(viewModel, getEditedSnapshot, getWindow, getSource);
     }
 
     /// <summary>
@@ -92,17 +97,17 @@ public static class MainViewModelHelper
         };
     }
 
-    private static async Task<string?> HandleSaveRequestedAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<Window?>? getWindow)
+    private static async Task<string?> HandleSaveRequestedAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<Window?>? getWindow, Func<SKBitmap?>? getSource)
     {
         DebugHelper.WriteLine("MainViewModelHelper: SaveRequested received");
         try
         {
             if (!string.IsNullOrEmpty(viewModel.ImageFilePath))
             {
-                return await SaveToPathAsync(viewModel, getEditedSnapshot, viewModel.ImageFilePath);
+                return await SaveToPathAsync(viewModel, getEditedSnapshot, getSource, viewModel.ImageFilePath);
             }
 
-            return await HandleSaveAsRequestedAsync(viewModel, getEditedSnapshot, getWindow);
+            return await HandleSaveAsRequestedAsync(viewModel, getEditedSnapshot, getWindow, getSource);
         }
         catch (Exception ex)
         {
@@ -114,7 +119,7 @@ public static class MainViewModelHelper
 
     private static readonly HashSet<MainViewModel> _saveAsInProgress = new();
 
-    private static async Task<string?> HandleSaveAsRequestedAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<Window?>? getWindow)
+    private static async Task<string?> HandleSaveAsRequestedAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<Window?>? getWindow, Func<SKBitmap?>? getSource)
     {
         // Guard against re-entry (e.g. double-click or keyboard repeat triggering the dialog twice)
         if (!_saveAsInProgress.Add(viewModel))
@@ -158,7 +163,7 @@ public static class MainViewModelHelper
                 return null;
             }
 
-            return await SaveToPathAsync(viewModel, getEditedSnapshot, path);
+            return await SaveToPathAsync(viewModel, getEditedSnapshot, getSource, path);
         }
         catch (Exception ex)
         {
@@ -172,42 +177,101 @@ public static class MainViewModelHelper
         }
     }
 
-    private static async Task<string?> SaveToPathAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, string path)
+    private static async Task<string?> SaveToPathAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<SKBitmap?>? getSource, string path)
     {
-        SKBitmap? bitmap = getEditedSnapshot?.Invoke();
-        if (bitmap == null && viewModel.PreviewImage != null)
-            bitmap = BitmapConversionHelpers.ToSKBitmap(viewModel.PreviewImage);
+        // The PNG depth setting decides the saved content for an HDR (fp16) source:
+        // - "SDR" (Default): force an HDR→SDR conversion using the selected tone-mapping method
+        //   (None = save "as is", i.e. clamp at SDR white with no tone curve).
+        // - "SDR+HDR" (Bit16): keep the HDR data and write the 16-bit sRGB PNG as-is.
+        var imageSettings = SettingsManager.DefaultTaskSettings?.ImageSettings;
+        bool sdrOnlyOutput = imageSettings?.ImagePNGBitDepth != PNGBitDepth.Bit16;
+        HdrToneMappingMode hdrSaveMode = imageSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapReinhard;
 
-        if (bitmap == null)
-        {
-            DebugHelper.WriteLine("MainViewModelHelper: SaveToPath — no image to save.");
-            return null;
-        }
+        SKBitmap? source = null;
+        SKBitmap? tonemapped = null;
+        SKBitmap? fallback = null;
+        SKBitmap? bitmap = null;
 
-        Exception? imageSaveError = null;
         try
         {
-            using (bitmap)
+            source = getSource?.Invoke();
+            bool isHdrSource = source != null && source.ColorType == SKColorType.RgbaF16;
+
+            if (isHdrSource)
             {
-                var ext = Path.GetExtension(path).ToLowerInvariant();
-                var format = ext is ".jpg" or ".jpeg" ? SKEncodedImageFormat.Jpeg : SKEncodedImageFormat.Png;
-                int quality = format == SKEncodedImageFormat.Jpeg ? 95 : 100;
-                using var data = bitmap.Encode(format, quality);
-                using var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
-                data.SaveTo(stream);
+                if (!sdrOnlyOutput)
+                {
+                    // SDR+HDR depth: keep the fp16 source; ImageHelpers.SaveBitmap below writes it
+                    // as a 16-bit sRGB PNG without applying a tone curve.
+                    bitmap = source;
+                }
+                else
+                {
+                    // SDR depth: tonemap HDR→SDR. None passes the linear values through unchanged
+                    // (they clamp at SDR white), every other mode applies its tone curve.
+                    tonemapped = HdrTonemapper.TonemapToBgra8888(source!, hdrSaveMode);
+                    if (tonemapped != null)
+                    {
+                        bitmap = tonemapped;
+                    }
+                    else
+                    {
+                        DebugHelper.WriteLine("MainViewModelHelper: HDR→SDR tonemap failed; falling back to edited snapshot.");
+                        bitmap = fallback = GetSnapshotOrPreview();
+                    }
+                }
+            }
+            else
+            {
+                // SDR (or no) source: keep the WYSIWYG behavior — save the rendered snapshot,
+                // which includes any annotations.
+                bitmap = fallback = GetSnapshotOrPreview();
+            }
+
+            if (bitmap == null)
+            {
+                DebugHelper.WriteLine("MainViewModelHelper: SaveToPath — no image to save.");
+                return null;
+            }
+
+            Exception? imageSaveError = null;
+            try
+            {
+                if (isHdrSource && !sdrOnlyOutput)
+                {
+                    // 16-bit HDR "as is": converts fp16 linear → sRGB-encoded 16-bit PNG samples
+                    // (clamps values > 1.0 to SDR white, no tone curve) and forces the PNG format.
+                    ImageHelpers.SaveBitmap(bitmap, path, PNGBitDepth.Bit16);
+                }
+                else
+                {
+                    var ext = Path.GetExtension(path).ToLowerInvariant();
+                    var format = ext is ".jpg" or ".jpeg" ? SKEncodedImageFormat.Jpeg : SKEncodedImageFormat.Png;
+                    int quality = format == SKEncodedImageFormat.Jpeg ? 95 : 100;
+                    using var data = bitmap.Encode(format, quality);
+                    using var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+                    data.SaveTo(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                imageSaveError = ex;
+            }
+
+            if (imageSaveError != null)
+            {
+                DebugHelper.WriteLine($"MainViewModelHelper: Image save failed (file may be incomplete): {imageSaveError.Message}");
+                DebugHelper.WriteException(imageSaveError);
+                viewModel.IsDirty = true;
+                return null;
             }
         }
-        catch (Exception ex)
+        finally
         {
-            imageSaveError = ex;
-        }
-
-        if (imageSaveError != null)
-        {
-            DebugHelper.WriteLine($"MainViewModelHelper: Image save failed (file may be incomplete): {imageSaveError.Message}");
-            DebugHelper.WriteException(imageSaveError);
-            viewModel.IsDirty = true;
-            return null;
+            // bitmap aliases one of these; dispose each owned object exactly once.
+            fallback?.Dispose();
+            tonemapped?.Dispose();
+            source?.Dispose();
         }
 
         viewModel.ImageFilePath = path;
@@ -245,6 +309,14 @@ public static class MainViewModelHelper
         DebugHelper.WriteLine($"MainViewModelHelper: Image saved to '{path}'");
         viewModel.IsDirty = false;
         return path;
+
+        SKBitmap? GetSnapshotOrPreview()
+        {
+            var bmp = getEditedSnapshot?.Invoke();
+            if (bmp == null && viewModel.PreviewImage != null)
+                bmp = BitmapConversionHelpers.ToSKBitmap(viewModel.PreviewImage);
+            return bmp;
+        }
     }
 
     private static async Task HandleUploadRequestedAsync(MainViewModel viewModel, IDesktopTaskManager taskManager, Func<SKBitmap?>? getEditedSnapshot)

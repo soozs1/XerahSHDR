@@ -3308,10 +3308,10 @@
     <value>BT.2446 C</value>
   </data>
   <data name="PNGBitDepth_Default" xml:space="preserve">
-    <value>默认</value>
+    <value>SDR</value>
   </data>
   <data name="PNGBitDepth_Bit16" xml:space="preserve">
-    <value>16 位</value>
+    <value>SDR+HDR</value>
   </data>
   <data name="TaskSettings_HdrPreview" xml:space="preserve">
     <value>预览 (HDR → SDR)</value>
