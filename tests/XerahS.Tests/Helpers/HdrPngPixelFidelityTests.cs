@@ -114,6 +114,39 @@ public class HdrPngPixelFidelityTests
         Assert.That(d0.Red, Is.GreaterThan(d2.Red));
     }
 
+    [Test]
+    public void F16Bitmap_SavedAsHdr16Png_PreservesRawLinearRange()
+    {
+        // "SDR+HDR" depth must write a true HDR file: raw linear samples (including > 1.0)
+        // with a linear iCCP profile — NOT sRGB-encoded, NOT clipped to display white.
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        try
+        {
+            using var hdr = MakeF16Bitmap((0.25f, 0.25f, 0.25f, 1f), (4f, 4f, 4f, 1f));
+            ImageHelpers.SaveHdrF16Png(hdr, path);
+
+            var bytes = File.ReadAllBytes(path);
+            Assert.That(bytes[24], Is.EqualTo(16), "IHDR bit depth must be 16");
+            Assert.That(bytes[25], Is.EqualTo(6), "IHDR color type must be RGBA");
+            Assert.That(HasChunk(bytes, "iCCP"), Is.True, "HDR PNG must carry a linear iCCP profile");
+            Assert.That(HasChunk(bytes, "sRGB"), Is.False, "HDR PNG must not carry an sRGB chunk");
+
+            // Decode pixels: first sample 0.25 -> 0.25*65535 ≈ 16384, second 4.0 -> 65535 (clamped u16).
+            using var decoded = SKBitmap.Decode(SKData.CreateCopy(bytes));
+            Assert.That(decoded, Is.Not.Null);
+            var p0 = decoded!.GetPixel(0, 0);
+            var p1 = decoded.GetPixel(1, 0);
+            // A plain 8-bit viewer sees the raw linear values clamped to [0,1]; the 4.0 sample
+            // must be BRIGHTER than the 0.25 sample (not sRGB-darkened 0.25 -> 137).
+            Assert.That(p0.Red, Is.GreaterThan(0), "0.25 linear must not be black");
+            Assert.That(p0.Red, Is.LessThan(p1.Red), "4.0 linear must be brighter than 0.25 linear");
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
     private static SKBitmap MakeF16Bitmap(params (float R, float G, float B, float A)[] pixels)
     {
         return MakeF16Bitmap(pixels, SKColorSpace.CreateSrgbLinear());

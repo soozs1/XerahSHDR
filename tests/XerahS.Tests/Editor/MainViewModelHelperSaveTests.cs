@@ -177,8 +177,8 @@ public class MainViewModelHelperSaveTests
     [Test]
     public async Task SaveToPathAsync_HdrSource_Bit16Depth_Writes16BitHdrPng()
     {
-        // Design: "SDR+HDR" depth keeps HDR content and writes the 16-bit sRGB PNG "as is"
-        // (no tone curve, values > 1.0 clamp at SDR white).
+        // Design: "SDR+HDR" depth keeps HDR content and writes a true 16-bit HDR PNG: raw
+        // linear samples (including > 1.0) with a linear iCCP profile — not sRGB-encoded.
         string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
         TaskSettings? previous = null;
 
@@ -195,19 +195,20 @@ public class MainViewModelHelperSaveTests
             previous = SwapDefaultTaskSettings(settings);
 
             var viewModel = new MainViewModel { IsDirty = true };
-            using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (1f, 1f, 1f, 1f));
+            using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (4f, 4f, 4f, 1f));
 
             await InvokeSaveToPathAsync(viewModel, () => null, () => hdr.Copy(), path);
 
             var savedBytes = await File.ReadAllBytesAsync(path);
             Assert.That(savedBytes[24], Is.EqualTo(16), "SDR+HDR depth must write a 16-bit PNG");
-            Assert.That(HasChunk(savedBytes, "sRGB"), Is.True, "PNG must carry the sRGB chunk");
+            Assert.That(HasChunk(savedBytes, "iCCP"), Is.True, "HDR PNG must carry a linear iCCP profile");
+            Assert.That(HasChunk(savedBytes, "sRGB"), Is.False, "HDR PNG must not carry an sRGB chunk");
 
             using var decoded = SKBitmap.Decode(SKData.CreateCopy(savedBytes));
             Assert.That(decoded, Is.Not.Null);
-            // linear 0.5 -> sRGB 188; linear 1.0 -> sRGB 255 (display-referred, not dark).
-            Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(1));
-            Assert.That(decoded.GetPixel(1, 0).Red, Is.EqualTo(255));
+            // Raw linear values preserved: 4.0 sample must be brighter than 0.5 (not sRGB 188/137).
+            Assert.That(decoded!.GetPixel(1, 0).Red, Is.GreaterThan(decoded.GetPixel(0, 0).Red),
+                "HDR highlight must stay brighter than midtone (raw linear, not sRGB-encoded)");
         }
         finally
         {

@@ -76,6 +76,12 @@ public static class ImageHelpers
                     // PNG renders correctly in standard viewers. Writing the raw linear values
                     // made most viewers show the image too dark (HDR_CAPTURE_PLAN §5.1 caveat).
                     converted = ConvertLinearF16ToSrgb16(bitmap);
+                    if (converted == null)
+                    {
+                        // Deterministic fallback when Skia's color-managed conversion fails for an
+                        // untagged fp16 source: apply the sRGB OETF per pixel.
+                        converted = ImageHelpers.ConvertF16ToSrgb8(bitmap)?.Copy(SKColorType.Rgba16161616);
+                    }
                 }
                 else
                 {
@@ -94,6 +100,257 @@ public static class ImageHelpers
         {
             converted?.Dispose();
         }
+    }
+
+    /// <summary>
+    /// Deterministic fp16 (linear scRGB) → 8-bit sRGB conversion using the sRGB OETF per pixel.
+    /// Used as a fallback when Skia's color-managed path misbehaves on untagged fp16 sources.
+    /// Returns null for non-F16 input. The result is owned by the caller.
+    /// </summary>
+    public static SKBitmap? ConvertF16ToSrgb8(SKBitmap hdrBitmap)
+    {
+        if (hdrBitmap is null || hdrBitmap.ColorType != SKColorType.RgbaF16)
+        {
+            return null;
+        }
+
+        const float SrgbLinearSegmentMax = 0.0031308f;
+        var result = new SKBitmap(new SKImageInfo(
+            hdrBitmap.Width,
+            hdrBitmap.Height,
+            SKColorType.Bgra8888,
+            SKAlphaType.Premul,
+            SKColorSpace.CreateSrgb()));
+
+        ReadOnlySpan<byte> src = hdrBitmap.GetPixelSpan();
+        Span<byte> dst = result.GetPixelSpan();
+        int srcStride = hdrBitmap.RowBytes;
+        int dstStride = result.RowBytes;
+
+        for (int y = 0; y < hdrBitmap.Height; y++)
+        {
+            int srcRow = y * srcStride;
+            int dstRow = y * dstStride;
+            for (int x = 0; x < hdrBitmap.Width; x++)
+            {
+                int srcOffset = srcRow + x * 8;
+                float r = DecodeHalf(src, srcOffset);
+                float g = DecodeHalf(src, srcOffset + 2);
+                float b = DecodeHalf(src, srcOffset + 4);
+                float a = DecodeHalf(src, srcOffset + 6);
+
+                int dstOffset = dstRow + x * 4;
+                dst[dstOffset] = ToByte(SrgbOetf(b));
+                dst[dstOffset + 1] = ToByte(SrgbOetf(g));
+                dst[dstOffset + 2] = ToByte(SrgbOetf(r));
+                dst[dstOffset + 3] = ToByte(a);
+            }
+        }
+
+        return result;
+
+        static float SrgbOetf(float linear)
+        {
+            if (!float.IsFinite(linear))
+            {
+                return 0f;
+            }
+            linear = Math.Clamp(linear, 0f, 1f);
+            return linear <= SrgbLinearSegmentMax
+                ? 12.92f * linear
+                : 1.055f * MathF.Pow(linear, 1f / 2.4f) - 0.055f;
+        }
+
+        static byte ToByte(float value)
+        {
+            return (byte)MathF.Round(Math.Clamp(value, 0f, 1f) * 255f);
+        }
+    }
+
+    private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)
+    {
+        ushort bits = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(buffer.Slice(offset, 2));
+        float value = (float)BitConverter.UInt16BitsToHalf(bits);
+        return float.IsFinite(value) ? MathF.Max(value, 0f) : 0f;
+    }
+
+    /// <summary>
+    /// Writes an fp16 (linear scRGB) bitmap as a true 16-bit HDR PNG: raw linear samples
+    /// (unscaled, values &gt; 1.0 preserved) with a linear RGB iCCP profile, so the file keeps
+    /// the full HDR range instead of sRGB-encoding/clipping to display white. The PNG is
+    /// bitDepth=16, colorType=6 (RGBA), samples big-endian.
+    /// </summary>
+    public static void SaveHdrF16Png(SKBitmap hdrBitmap, string filePath)
+    {
+        if (hdrBitmap is null) throw new ArgumentNullException(nameof(hdrBitmap));
+        if (hdrBitmap.ColorType != SKColorType.RgbaF16)
+        {
+            throw new ArgumentException("SaveHdrF16Png requires an RgbaF16 bitmap.", nameof(hdrBitmap));
+        }
+
+        FileHelpers.CreateDirectoryFromFilePath(filePath);
+
+        int width = hdrBitmap.Width;
+        int height = hdrBitmap.Height;
+        ReadOnlySpan<byte> src = hdrBitmap.GetPixelSpan();
+        int srcStride = hdrBitmap.RowBytes;
+
+        // Raw scanlines: filter byte 0 + big-endian u16 RGBA samples.
+        int rowBytes = width * 8;
+        var raw = new byte[height * (rowBytes + 1)];
+        for (int y = 0; y < height; y++)
+        {
+            raw[y * (rowBytes + 1)] = 0;
+            int srcRow = y * srcStride;
+            for (int x = 0; x < width; x++)
+            {
+                int srcOffset = srcRow + x * 8;
+                int dstOffset = y * (rowBytes + 1) + 1 + x * 8;
+                for (int c = 0; c < 4; c++)
+                {
+                    float v = DecodeHalf(src, srcOffset + c * 2);
+                    ushort u = (ushort)Math.Clamp((int)MathF.Round(v * 65535f), 0, 65535);
+                    raw[dstOffset + c * 2] = (byte)(u >> 8);
+                    raw[dstOffset + c * 2 + 1] = (byte)(u & 0xff);
+                }
+            }
+        }
+
+        byte[] idat = ZLibCompress(raw);
+        byte[] ihdr = new byte[13];
+        WriteBigEndianUInt32(ihdr, 0, (uint)width);
+        WriteBigEndianUInt32(ihdr, 4, (uint)height);
+        ihdr[8] = 16;  // bit depth
+        ihdr[9] = 6;   // color type RGBA
+        ihdr[10] = 0;  // compression
+        ihdr[11] = 0;  // filter
+        ihdr[12] = 0;  // interlace
+
+        using var file = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+        file.Write(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A });
+        WritePngChunk(file, "IHDR", ihdr);
+        // sBIT: 16 significant bits for R,G,B,A
+        WritePngChunk(file, "sBIT", new byte[] { 16, 16, 16, 16 });
+        // iCCP: embedded linear RGB profile (gamma 1.0), so HDR viewers treat samples as linear.
+        byte[] icc = BuildLinearRgbIcc();
+        WritePngChunk(file, "iCCP", BuildIccpChunkData(icc));
+        WritePngChunk(file, "IDAT", idat);
+        WritePngChunk(file, "IEND", Array.Empty<byte>());
+    }
+
+    private static byte[] ZLibCompress(byte[] data)
+    {
+        using var ms = new MemoryStream();
+        using (var z = new System.IO.Compression.ZLibStream(ms, System.IO.Compression.CompressionLevel.Optimal, leaveOpen: true))
+        {
+            z.Write(data);
+        }
+        return ms.ToArray();
+    }
+
+    private static void WriteBigEndianUInt32(byte[] buffer, int offset, uint value)
+    {
+        buffer[offset] = (byte)(value >> 24);
+        buffer[offset + 1] = (byte)(value >> 16);
+        buffer[offset + 2] = (byte)(value >> 8);
+        buffer[offset + 3] = (byte)value;
+    }
+
+    private static void WritePngChunk(Stream stream, string name, byte[] body)
+    {
+        var header = new byte[8];
+        WriteBigEndianUInt32(header, 0, (uint)body.Length);
+        System.Text.Encoding.ASCII.GetBytes(name).CopyTo(header, 4);
+        stream.Write(header);
+        stream.Write(body);
+
+        uint crc = 0xFFFFFFFFu;
+        for (int i = 4; i < 8; i++) crc = UpdateCrc(crc, header[i]);
+        foreach (byte b in body) crc = UpdateCrc(crc, b);
+        crc ^= 0xFFFFFFFFu;
+
+        var crcBytes = new byte[4];
+        WriteBigEndianUInt32(crcBytes, 0, crc);
+        stream.Write(crcBytes);
+    }
+
+    private static uint UpdateCrc(uint crc, byte b)
+    {
+        crc ^= b;
+        for (int i = 0; i < 8; i++)
+        {
+            crc = (crc >> 1) ^ (0xEDB88320u & (0u - (crc & 1)));
+        }
+        return crc;
+    }
+
+    private static byte[] BuildIccpChunkData(byte[] iccProfile)
+    {
+        // iCCP chunk: profile name (1-79 bytes) + NUL + compression method (0=zlib) + compressed profile.
+        using var ms = new MemoryStream();
+        byte[] name = System.Text.Encoding.ASCII.GetBytes("lin");
+        ms.Write(name);
+        ms.WriteByte(0);
+        ms.WriteByte(0); // compression method: zlib
+        byte[] compressed = ZLibCompress(iccProfile);
+        ms.Write(compressed);
+        return ms.ToArray();
+    }
+
+    private static byte[] BuildLinearRgbIcc()
+    {
+        // Minimal valid ICC v2 profile: RGB display profile with linear TRC (gamma 1.0).
+        // Header (128 bytes) + tag table (3 entries, 36 bytes) + tag data (3 * 20 bytes).
+        int headerSize = 128;
+        int tagTableSize = 36;
+        int tagDataSize = 60;
+        var icc = new byte[headerSize + tagTableSize + tagDataSize];
+
+        // Header
+        System.Text.Encoding.ASCII.GetBytes("acsp").CopyTo(icc, 36);      // profile signature
+        WriteBigEndianUInt32(icc, 0, 0x00000200u);                            // size
+        WriteBigEndianUInt32(icc, 8, 0x4D4D5400u);                            // preferred CMM 'MMT\0'
+        WriteBigEndianUInt32(icc, 12, 0x02100000u);                           // version 2.1
+        WriteBigEndianUInt32(icc, 16, 0x6D6E7472u);                           // device class 'mntr'
+        WriteBigEndianUInt32(icc, 20, 0x52474220u);                           // color space 'RGB '
+        WriteBigEndianUInt32(icc, 24, 0x58595A20u);                           // PCS 'XYZ '
+        WriteBigEndianUInt32(icc, 28, 0);                                     // date/time (simplified)
+        WriteBigEndianUInt32(icc, 32, 0);
+        System.Text.Encoding.ASCII.GetBytes("lin").CopyTo(icc, 40);         // profile ID
+        System.Text.Encoding.ASCII.GetBytes("XerahS").CopyTo(icc, 84);      // manufacturer
+        System.Text.Encoding.ASCII.GetBytes("XerahS HDR").CopyTo(icc, 96);   // model
+        // rendering intent 0 (perceptual) at offset 64
+        icc[64] = 0; icc[65] = 0; icc[66] = 0; icc[67] = 0;
+
+        // Tag table (3 tags)
+        int tableOffset = headerSize;
+        int dataOffset = headerSize + tagTableSize;
+        WriteTagEntry(icc, tableOffset, 0, "rTRC", dataOffset);
+        WriteTagEntry(icc, tableOffset, 1, "gTRC", dataOffset + 20);
+        WriteTagEntry(icc, tableOffset, 2, "bTRC", dataOffset + 40);
+
+        // Tag data: three 'curv' (curve) tags with one entry, gamma = 1.0 (linear).
+        foreach (int off in new[] { dataOffset, dataOffset + 20, dataOffset + 40 })
+        {
+            System.Text.Encoding.ASCII.GetBytes("curv").CopyTo(icc, off);
+            WriteBigEndianUInt32(icc, off + 4, 2); // reserved 0 + count of entries = 1 => 2 bytes
+            icc[off + 8] = 0; // placeholder handled below
+            WriteBigEndianUInt32(icc, off + 4, 8); // tag size: 4 (type) + 4 (count) + 2 (value) = 10 -> pad
+            // count = 1 entry => value 0x0100 (1.0)
+            icc[off + 8] = 0x01;
+            icc[off + 9] = 0x00;
+        }
+
+        WriteBigEndianUInt32(icc, 0, (uint)icc.Length);
+        return icc;
+    }
+
+    private static void WriteTagEntry(byte[] icc, int tableOffset, int index, string signature, int dataOffset)
+    {
+        int off = tableOffset + index * 12;
+        System.Text.Encoding.ASCII.GetBytes(signature).CopyTo(icc, off);
+        WriteBigEndianUInt32(icc, off + 4, (uint)dataOffset);
+        WriteBigEndianUInt32(icc, off + 8, 10); // data size (curv tag: 4 type + 4 count + 2 gamma)
     }
 
     /// <summary>

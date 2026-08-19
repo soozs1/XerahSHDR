@@ -234,8 +234,18 @@ public partial class App : Application
                 }
                 return null;
             };
-            Services.MainViewModelHelper.WireSaveRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow);
-            Services.MainViewModelHelper.WireSaveAsRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow);
+            Func<SkiaSharp.SKBitmap?> getEmbeddedSource = () =>
+            {
+                if (desktop.MainWindow is Views.MainWindow mw)
+                {
+                    var contentFrame = mw.FindControl<ContentControl>("ContentFrame");
+                    if (contentFrame?.Content is EditorView ev)
+                        return ev.GetSource();
+                }
+                return null;
+            };
+            Services.MainViewModelHelper.WireSaveRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);
+            Services.MainViewModelHelper.WireSaveAsRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);
             Services.MainViewModelHelper.WirePinRequested(mainViewModel, getEmbeddedSnapshot);
 
             // Prepare for Silent Run
