@@ -223,7 +223,10 @@ public class MainViewModelHelperSaveTests
             ?? throw new MissingMemberException(nameof(SettingsManager), "DefaultTaskSettings");
         var previous = (TaskSettings?)property.GetValue(null);
         property.SetValue(null, settings);
-        return previous;
+        // Save path consults the last capture settings first (see MainViewModelHelper).
+        var previousCapture = MainViewModelHelper.LastCaptureTaskSettings;
+        MainViewModelHelper.LastCaptureTaskSettings = settings;
+        return previous; // restore both in RestoreDefaultTaskSettings via the captured values below
     }
 
     private static void RestoreDefaultTaskSettings(TaskSettings? previous)
@@ -231,6 +234,7 @@ public class MainViewModelHelperSaveTests
         var property = typeof(SettingsManager).GetProperty("DefaultTaskSettings", BindingFlags.Static | BindingFlags.Public)
             ?? throw new MissingMemberException(nameof(SettingsManager), "DefaultTaskSettings");
         property.SetValue(null, previous ?? new TaskSettings { Job = WorkflowType.None });
+        MainViewModelHelper.LastCaptureTaskSettings = previous;
     }
 
     private static SKBitmap MakeF16Bitmap(params (float R, float G, float B, float A)[] pixels)

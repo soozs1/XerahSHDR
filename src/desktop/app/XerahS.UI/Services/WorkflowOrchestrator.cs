@@ -32,6 +32,7 @@ using XerahS.Bootstrap;
 using XerahS.Common;
 using XerahS.Common.Helpers;
 using XerahS.Core;
+using XerahS.Core.Helpers;
 using XerahS.Platform.Abstractions;
 using XerahS.UI.Assistant;
 using XerahS.UI.CaptureCommandPalette;
@@ -312,9 +313,36 @@ public sealed class WorkflowOrchestrator : IWorkflowOrchestrator
             return;
         }
 
+        // Remember the settings that produced this capture. Save/Save-As from the preview must
+        // honor the SAME depth/tone settings (they live on the workflow, not in the global
+        // DefaultTaskSettings), otherwise the file written differs from the pipeline output.
+        if (task.Info.TaskSettings != null)
+        {
+            MainViewModelHelper.LastCaptureTaskSettings = task.Info.TaskSettings;
+        }
+
         int width = image.Width;
         int height = image.Height;
         SkiaSharp.SKBitmap? previewCopy = image.Copy();
+
+        // The preview must match what a Save with depth=SDR would write: tonemap fp16 the same
+        // way the file path does. SDR+HDR gets the plain sRGB view (raw HDR shown display-…).
+        if (previewCopy != null && previewCopy.ColorType == SkiaSharp.SKColorType.RgbaF16)
+        {
+            var imgSettings = (MainViewModelHelper.LastCaptureTaskSettings ?? XerahS.Core.SettingsManager.DefaultTaskSettings)?.ImageSettings;
+            bool sdrOnly = imgSettings?.ImagePNGBitDepth != XerahS.Common.PNGBitDepth.Bit16;
+            if (sdrOnly)
+            {
+                var toned = HdrTonemapper.TonemapToBgra8888(previewCopy,
+                    imgSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapReinhard);
+                if (toned != null)
+                {
+                    previewCopy.Dispose();
+                    previewCopy = toned;
+                }
+            }
+        }
+
         if (previewCopy == null || previewCopy.Handle == IntPtr.Zero)
         {
             previewCopy?.Dispose();

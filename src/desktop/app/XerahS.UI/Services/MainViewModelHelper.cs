@@ -42,6 +42,13 @@ namespace XerahS.UI.Services;
 public static class MainViewModelHelper
 {
     /// <summary>
+    /// TaskSettings of the most recently completed capture. Save/Save-As read the PNG depth and
+    /// HDR tone-mapping settings from here (matching what the pipeline wrote) instead of the
+    /// global DefaultTaskSettings, which users do not change when editing a workflow.
+    /// </summary>
+    public static TaskSettings? LastCaptureTaskSettings { get; set; }
+
+    /// <summary>
     /// Wires up the UploadRequested event to the XerahS upload pipeline.
     /// </summary>
     public static void WireUploadRequested(MainViewModel viewModel, IDesktopTaskManager taskManager, Func<SKBitmap?>? getEditedSnapshot = null)
@@ -183,9 +190,13 @@ public static class MainViewModelHelper
         // - "SDR" (Default): force an HDR→SDR conversion using the selected tone-mapping method
         //   (None = save "as is", i.e. clamp at SDR white with no tone curve).
         // - "SDR+HDR" (Bit16): keep the HDR data and write the 16-bit sRGB PNG as-is.
-        var imageSettings = SettingsManager.DefaultTaskSettings?.ImageSettings;
+        // Settings come from the workflow that produced the capture (LastCaptureTaskSettings),
+        // falling back to the global defaults — NOT from global-only defaults, which diverge
+        // from what the user sees in the workflow editor.
+        var imageSettings = (LastCaptureTaskSettings ?? SettingsManager.DefaultTaskSettings)?.ImageSettings;
         bool sdrOnlyOutput = imageSettings?.ImagePNGBitDepth != PNGBitDepth.Bit16;
         HdrToneMappingMode hdrSaveMode = imageSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapReinhard;
+        DebugHelper.WriteLine($"MainViewModelHelper: SaveToPath depth={imageSettings?.ImagePNGBitDepth}, hdrSaveMode={hdrSaveMode}");
 
         SKBitmap? source = null;
         SKBitmap? tonemapped = null;
