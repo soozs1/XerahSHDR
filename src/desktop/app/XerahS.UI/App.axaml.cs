@@ -242,6 +242,15 @@ public partial class App : Application
                 return mainViewModel.CreateSourceImageCopyForPersistence()
                     ?? getEmbeddedSnapshot();
             };
+
+            // The host owns save handling for the embedded editor in MainWindow, exactly like the
+            // standalone editor window. Without these flags EditorView's internal save handlers
+            // would ALSO run (InvokeRequestedHandlersAsync calls every subscriber) and overwrite
+            // the depth/tone-aware file with an 8-bit snapshot, which is why SDR+HDR saved as
+            // 32-bit despite the depth setting.
+            mainViewModel.HasHostSaveHandler = true;
+            mainViewModel.HasHostSaveAsHandler = true;
+
             Services.MainViewModelHelper.WireSaveRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);
             Services.MainViewModelHelper.WireSaveAsRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);
             Services.MainViewModelHelper.WirePinRequested(mainViewModel, getEmbeddedSnapshot);

@@ -170,6 +170,25 @@ public class HdrPngPixelFidelityTests
         }
     }
 
+    [Test]
+    public void F16Bitmap_ConvertToSrgb8_PreservesChannelOrder()
+    {
+        // Regression guard for the R↔B swap in the fp16→sRGB LUT conversion (yellow→cyan,
+        // red→blue). The conversion targets Bgra8888: byte0=B, byte1=G, byte2=R.
+        using var hdr = MakeF16Bitmap((1f, 0f, 0f, 1f), (0f, 1f, 0f, 1f), (0f, 0f, 1f, 1f), (1f, 1f, 0f, 1f));
+        using var sdr = ShareX.ImageEditor.Presentation.Rendering.BitmapConversionHelpers.ConvertF16ToSrgb8(hdr);
+        Assert.That(sdr, Is.Not.Null);
+
+        Assert.That(sdr!.GetPixel(0, 0).Red, Is.EqualTo(255).Within(2), "red pixel keeps red");
+        Assert.That(sdr.GetPixel(0, 0).Blue, Is.LessThan(8), "red pixel has no blue");
+        Assert.That(sdr.GetPixel(1, 0).Green, Is.EqualTo(255).Within(2), "green pixel keeps green");
+        Assert.That(sdr.GetPixel(2, 0).Blue, Is.EqualTo(255).Within(2), "blue pixel keeps blue");
+        Assert.That(sdr.GetPixel(2, 0).Red, Is.LessThan(8), "blue pixel has no red");
+        Assert.That(sdr.GetPixel(3, 0).Red, Is.GreaterThan(200), "yellow has strong red");
+        Assert.That(sdr.GetPixel(3, 0).Green, Is.GreaterThan(200), "yellow has strong green");
+        Assert.That(sdr.GetPixel(3, 0).Blue, Is.LessThan(100), "yellow has no blue");
+    }
+
     private static SKBitmap MakeF16Bitmap(params (float R, float G, float B, float A)[] pixels)
     {
         return MakeF16Bitmap(pixels, SKColorSpace.CreateSrgbLinear());
