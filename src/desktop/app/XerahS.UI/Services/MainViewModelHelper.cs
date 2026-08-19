@@ -209,6 +209,8 @@ public static class MainViewModelHelper
             bool isHdrSource = source != null && source.ColorType == SKColorType.RgbaF16;
             SavePathDebugDump.Info("source-from-getSource", source);
             SavePathDebugDump.Dump("1_source", source);
+            string sourceSig = SavePathDebugDump.Signature(source);
+            DebugHelper.WriteLine($"[SavePathDebug] source Sig: {sourceSig}; last preview Sig: {SavePathDebugDump.LastPreviewSignature}");
 
             if (isHdrSource)
             {

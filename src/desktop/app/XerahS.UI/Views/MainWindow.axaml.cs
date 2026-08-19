@@ -740,6 +740,12 @@ namespace XerahS.UI.Views
                         return;
                     }
 
+                    // TEMP HDR diagnostics: remember what the preview contained so a later Save-As
+                    // can be checked against the actual last capture.
+                    string sig = Services.SavePathDebugDump.Signature(previewCopy);
+                    Services.SavePathDebugDump.LastPreviewSignature = sig;
+                    XerahS.Common.DebugHelper.WriteLine($"[PreviewSig] navbar preview: {sig}");
+
                     // UpdatePreview takes ownership and can dispose the supplied bitmap during property-change handling.
                     vm.UpdatePreview(previewCopy);
                     XerahS.Common.DebugHelper.WriteLine($"Updated preview from navbar task completion: {width}x{height}");

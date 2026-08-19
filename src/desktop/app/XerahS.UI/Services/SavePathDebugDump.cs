@@ -38,6 +38,55 @@ public static class SavePathDebugDump
 {
     public static bool Enabled { get; } = true;
 
+    /// <summary>Last content signature logged by the preview pipeline, to detect a stale
+    /// (non-current-capture) source at Save-As time.</summary>
+    public static string? LastPreviewSignature { get; set; }
+
+    /// <summary>
+    /// Small deterministic content signature: mean of a few sampled pixels. Cheap and stable
+    /// within one frame, distinct across different frames.
+    /// </summary>
+    public static string Signature(SKBitmap? bitmap)
+    {
+        if (bitmap == null) return "<null>";
+        double sr = 0, sg = 0, sb = 0;
+        int n = 0;
+        int w = bitmap.Width, h = bitmap.Height;
+        Span<byte> span = bitmap.GetPixelSpan();
+        int stride = bitmap.RowBytes;
+        int step = Math.Max(1, Math.Max(w, h) / 40);
+        for (int y = 0; y < h; y += step)
+        {
+            for (int x = 0; x < w; x += step)
+            {
+                int o = y * stride + x;
+                if (bitmap.ColorType == SKColorType.RgbaF16)
+                {
+                    o *= 8;
+                    sr += DecodeClampedHalf(span, o);
+                    sg += DecodeClampedHalf(span, o + 2);
+                    sb += DecodeClampedHalf(span, o + 4);
+                }
+                else
+                {
+                    o *= 4;
+                    sr += span[o + 2] / 255.0; // BGRA -> R
+                    sg += span[o + 1] / 255.0;
+                    sb += span[o] / 255.0;
+                }
+                n++;
+            }
+        }
+        return n == 0 ? "<empty>" : $"{bitmap.Width}x{bitmap.Height} m={sr / n:F3},{sg / n:F3},{sb / n:F3} ct={bitmap.ColorType}";
+    }
+
+    private static double DecodeClampedHalf(ReadOnlySpan<byte> span, int offset)
+    {
+        ushort bits = (ushort)(span[offset] | (span[offset + 1] << 8));
+        float v = (float)BitConverter.UInt16BitsToHalf(bits);
+        return float.IsFinite(v) ? Math.Clamp(v, 0f, 1f) : 0f;
+    }
+
     private static string DumpDir
     {
         get
@@ -70,17 +119,21 @@ public static class SavePathDebugDump
             return;
         }
 
-        string name = $"{DateTime.Now:HHmmss}_{stage}.png";
-        string path = Path.Combine(DumpDir, name);
         try
         {
-            // Encode from whatever pixel layout the stage produced (sRGB-encode fp16 as-is so
-            // the dump is inspectable; channel order is preserved by Encode for the type).
-            using var data = bitmap.ColorType == SKColorType.RgbaF16
-                ? EncodeF16Preview(bitmap)
-                : bitmap.Encode(SKEncodedImageFormat.Png, 100);
+            if (bitmap.ColorType == SKColorType.RgbaF16)
+            {
+                // Preserve the exact raw samples so the dump can be replayed byte-for-byte.
+                string rawPath = Path.Combine(DumpDir, $"{DateTime.Now:HHmmss}_{stage}_raw16.png");
+                XerahS.Common.ImageHelpers.SaveHdrF16Png(bitmap, rawPath);
+                DebugHelper.WriteLine($"[SavePathDebug] dumped {stage} -> {rawPath}");
+                return;
+            }
+
+            using var data = bitmap.Encode(SKEncodedImageFormat.Png, 100);
             if (data != null)
             {
+                string path = Path.Combine(DumpDir, $"{DateTime.Now:HHmmss}_{stage}.png");
                 File.WriteAllBytes(path, data.ToArray());
                 DebugHelper.WriteLine($"[SavePathDebug] dumped {stage} -> {path}");
             }
@@ -91,41 +144,10 @@ public static class SavePathDebugDump
         }
     }
 
-    private static SKData? EncodeF16Preview(SKBitmap hdr)
-    {
-        // Simple linear->sRGB 8-bit conversion for inspection; channel order preserved.
-        using var sdr = new SKBitmap(new SKImageInfo(hdr.Width, hdr.Height, SKColorType.Bgra8888, SKAlphaType.Premul));
-        var src = hdr.GetPixelSpan();
-        var dst = sdr.GetPixelSpan();
-        int sw = hdr.RowBytes, dw = sdr.RowBytes;
-        for (int y = 0; y < hdr.Height; y++)
-        {
-            for (int x = 0; x < hdr.Width; x++)
-            {
-                float r = Math.Clamp(DecodeHalf(src, y * sw + x * 8), 0f, 1f);
-                float g = Math.Clamp(DecodeHalf(src, y * sw + x * 8 + 2), 0f, 1f);
-                float b = Math.Clamp(DecodeHalf(src, y * sw + x * 8 + 4), 0f, 1f);
-                dst[y * dw + x * 4] = ToByte(SrgbOetf(b));
-                dst[y * dw + x * 4 + 1] = ToByte(SrgbOetf(g));
-                dst[y * dw + x * 4 + 2] = ToByte(SrgbOetf(r));
-                dst[y * dw + x * 4 + 3] = 255;
-            }
-        }
-        return sdr.Encode(SKEncodedImageFormat.Png, 100);
-    }
-
     private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)
     {
         ushort bits = (ushort)(buffer[offset] | (buffer[offset + 1] << 8));
         float value = (float)BitConverter.UInt16BitsToHalf(bits);
         return float.IsFinite(value) ? MathF.Max(value, 0f) : 0f;
     }
-
-    private static float SrgbOetf(float linear)
-    {
-        if (linear <= 0.0031308f) return 12.92f * linear;
-        return 1.055f * MathF.Pow(linear, 1f / 2.4f) - 0.055f;
-    }
-
-    private static byte ToByte(float v) => (byte)MathF.Round(Math.Clamp(v, 0f, 1f) * 255f);
 }

@@ -350,6 +350,12 @@ public sealed class WorkflowOrchestrator : IWorkflowOrchestrator
             return;
         }
 
+        // TEMP HDR diagnostics: remember what the preview contained so a later Save-As
+        // can be checked against the actual last capture.
+        string sig = Services.SavePathDebugDump.Signature(previewCopy);
+        Services.SavePathDebugDump.LastPreviewSignature = sig;
+        DebugHelper.WriteLine($"[PreviewSig] orchestrator preview: {sig}");
+
         // UpdatePreview takes ownership and can dispose the supplied bitmap during property-change handling.
         viewModel.UpdatePreview(previewCopy);
         DebugHelper.WriteLine($"Updated preview from task completion: {width}x{height}");
