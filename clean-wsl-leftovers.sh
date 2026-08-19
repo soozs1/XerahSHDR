@@ -26,6 +26,18 @@
 set -u
 
 PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+
+# Normalize UNC paths used when the script is invoked from Windows on a network share
+# (\\wsl.localhost\Debian\home\XR\... or //wsl.localhost/Debian/home/XR/...):
+# drop the "wsl.localhost" and distro-name segments, keep the real WSL filesystem path.
+PROJECT_ROOT=$(printf '%s' "$PROJECT_ROOT" | sed 's|^//wsl\.localhost/[^/]*||')
+
+if [ ! -d "$PROJECT_ROOT" ] || [ ! -e "$PROJECT_ROOT/ShareX.VideoEditor/frontend/node_modules" ]; then
+    printf '\033[31m[ERR]\033[0m Cannot resolve project root (got %s).\n' "$PROJECT_ROOT"
+    printf 'Run this script from inside the repository, e.g.:  ./clean-wsl-leftovers.sh\n'
+    exit 2
+fi
+
 APPLY=0
 FORCE=0
 for arg in "$@"; do
