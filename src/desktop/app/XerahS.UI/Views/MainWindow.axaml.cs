@@ -721,6 +721,13 @@ namespace XerahS.UI.Views
             {
                 _taskManager?.TaskCompleted -= HandleTaskCompleted;
 
+                // Keep the Save/Save-As settings in sync with THIS capture (the navbar path does
+                // not go through WorkflowOrchestrator.OnTaskCompleted which normally records it).
+                if (task.Info?.TaskSettings != null)
+                {
+                    Services.MainViewModelHelper.LastCaptureTaskSettings = task.Info.TaskSettings;
+                }
+
                 if (task.Info?.Metadata?.Image is { } image && DataContext is MainViewModel vm)
                 {
                     int width = image.Width;

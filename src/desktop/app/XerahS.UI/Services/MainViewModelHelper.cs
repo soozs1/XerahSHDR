@@ -207,6 +207,8 @@ public static class MainViewModelHelper
         {
             source = getSource?.Invoke();
             bool isHdrSource = source != null && source.ColorType == SKColorType.RgbaF16;
+            SavePathDebugDump.Info("source-from-getSource", source);
+            SavePathDebugDump.Dump("1_source", source);
 
             if (isHdrSource)
             {
@@ -215,12 +217,15 @@ public static class MainViewModelHelper
                     // SDR+HDR depth: keep the fp16 source; ImageHelpers.SaveBitmap below writes it
                     // as a 16-bit sRGB PNG without applying a tone curve.
                     bitmap = source;
+                    SavePathDebugDump.Info("bitmap-fp16-kept", bitmap);
                 }
                 else
                 {
                     // SDR depth: tonemap HDR→SDR. None passes the linear values through unchanged
                     // (they clamp at SDR white), every other mode applies its tone curve.
                     tonemapped = HdrTonemapper.TonemapToBgra8888(source!, hdrSaveMode);
+                    SavePathDebugDump.Info("bitmap-tonemapped", tonemapped);
+                    SavePathDebugDump.Dump("2_tonemapped", tonemapped);
                     if (tonemapped != null)
                     {
                         bitmap = tonemapped;
@@ -229,6 +234,7 @@ public static class MainViewModelHelper
                     {
                         DebugHelper.WriteLine("MainViewModelHelper: HDR→SDR tonemap failed; falling back to edited snapshot.");
                         bitmap = fallback = GetSnapshotOrPreview();
+                        SavePathDebugDump.Info("bitmap-fallback-after-tonemap-fail", bitmap);
                     }
                 }
             }
@@ -237,6 +243,8 @@ public static class MainViewModelHelper
                 // SDR (or no) source: keep the WYSIWYG behavior — save the rendered snapshot,
                 // which includes any annotations.
                 bitmap = fallback = GetSnapshotOrPreview();
+                SavePathDebugDump.Info("bitmap-snapshot-or-preview", bitmap);
+                SavePathDebugDump.Dump("3_snapshot_or_preview", bitmap);
             }
 
             if (bitmap == null)
@@ -244,6 +252,7 @@ public static class MainViewModelHelper
                 DebugHelper.WriteLine("MainViewModelHelper: SaveToPath — no image to save.");
                 return null;
             }
+            SavePathDebugDump.Dump("4_final", bitmap);
 
             Exception? imageSaveError = null;
             try

@@ -501,6 +501,35 @@ namespace XerahS.Platform.Windows
             // Log success so the log file verifies DXGI (Vortice.Direct3D11/DXGI) was actually used
             XerahS.Common.DebugHelper.WriteLine($"Screen capture: DXGI Output Duplication succeeded ({combinedBitmap.Width}x{combinedBitmap.Height})");
 
+            // TEMP HDR diagnostics (2026-08-19): dump the RAW combined capture bitmap (fp16 scRGB
+            // when any output was HDR) so a fresh capture can be compared stage-by-stage against
+            // the preview/Save-As. Remove together with SavePathDebugDump.
+            try
+            {
+                XerahS.Common.DebugHelper.WriteLine($"[CaptureDump] combined: {combinedBitmap.Width}x{combinedBitmap.Height} ColorType={combinedBitmap.ColorType} ColorSpace={combinedBitmap.ColorSpace}");
+                string dumpDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "XerahS", "DebugDumps");
+                Directory.CreateDirectory(dumpDir);
+                if (combinedBitmap.ColorType == SkiaSharp.SKColorType.RgbaF16)
+                {
+                    // SaveHdrF16Png preserves the raw linear samples exactly (same writer as the 16-bit pipeline path).
+                    XerahS.Common.ImageHelpers.SaveHdrF16Png(combinedBitmap, Path.Combine(dumpDir, $"capture-raw-f16-{DateTime.Now:HHmmss}.png"));
+                }
+                else
+                {
+                    using var data = combinedBitmap.Encode(SkiaSharp.SKEncodedImageFormat.Png, 100);
+                    if (data != null)
+                    {
+                        File.WriteAllBytes(Path.Combine(dumpDir, $"capture-raw8-{DateTime.Now:HHmmss}.png"), data.ToArray());
+                    }
+                }
+            }
+            catch (Exception dumpEx)
+            {
+                XerahS.Common.DebugHelper.WriteLine($"[CaptureDump] failed: {dumpEx.Message}");
+            }
+
             // Draw cursor if requested (after DXGI capture which doesn't include cursor)
             if (drawCursor)
             {
