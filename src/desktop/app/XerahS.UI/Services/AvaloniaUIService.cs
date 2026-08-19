@@ -167,7 +167,11 @@ namespace XerahS.UI.Services
                 Func<SkiaSharp.SKBitmap?> getSnapshot = () =>
                     editorWindow.FindControl<EditorView>("EditorViewControl")?.GetSnapshot();
                 Func<SkiaSharp.SKBitmap?> getSource = () =>
-                    editorWindow.FindControl<EditorView>("EditorViewControl")?.GetSource();
+                    // The ViewModel's working source (fp16 for HDR) is authoritative for depth-aware
+                    // saving; the editor view's source image is an equal copy, but reaching the VM
+                    // keeps the Save path consistent with the loaded HDR content.
+                    editorViewModel.CreateSourceImageCopyForPersistence()
+                    ?? editorWindow.FindControl<EditorView>("EditorViewControl")?.GetSource();
 
                 // The host owns save handling here; without these flags the EditorView's internal
                 // handlers would also run and overwrite the depth/tone-aware file with an 8-bit

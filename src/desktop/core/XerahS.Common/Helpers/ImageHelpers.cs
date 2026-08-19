@@ -72,9 +72,19 @@ public static class ImageHelpers
             {
                 if (bitmap.ColorType == SKColorType.RgbaF16)
                 {
-                    // HDR (fp16 scRGB-linear) input: encode display-referred sRGB samples so the
-                    // PNG renders correctly in standard viewers. Writing the raw linear values
-                    // made most viewers show the image too dark (HDR_CAPTURE_PLAN §5.1 caveat).
+                    if (pngBitDepth == PNGBitDepth.Bit16)
+                    {
+                        // "SDR+HDR" depth: write a true HDR PNG — raw fp16 linear samples with a
+                        // linear iCCP profile (extended range preserved, no sRGB encoding, no
+                        // clipping to display white). Without this the sRGB-encoded 16-bit output
+                        // looked over-bright (highlights clipped to white) on HDR captures.
+                        SaveHdrF16Png(bitmap, filePath);
+                        return;
+                    }
+
+                    // "SDR" depth with an fp16 source should normally arrive already tonemapped
+                    // to 8-bit by the caller; if a raw fp16 reaches here, still write display-
+                    // referred sRGB samples so the PNG is not visibly dark.
                     converted = ConvertLinearF16ToSrgb16(bitmap);
                     if (converted == null)
                     {

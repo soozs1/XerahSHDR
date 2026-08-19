@@ -236,13 +236,11 @@ public partial class App : Application
             };
             Func<SkiaSharp.SKBitmap?> getEmbeddedSource = () =>
             {
-                if (desktop.MainWindow is Views.MainWindow mw)
-                {
-                    var contentFrame = mw.FindControl<ContentControl>("ContentFrame");
-                    if (contentFrame?.Content is EditorView ev)
-                        return ev.GetSource();
-                }
-                return null;
+                // Prefer the ViewModel's working source (fp16 for HDR captures) so Save/Save-As
+                // honors the PNG depth setting even when the editor tab is not open. The snapshot
+                // path is only used when no image is loaded at all.
+                return mainViewModel.CreateSourceImageCopyForPersistence()
+                    ?? getEmbeddedSnapshot();
             };
             Services.MainViewModelHelper.WireSaveRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);
             Services.MainViewModelHelper.WireSaveAsRequested(mainViewModel, getEmbeddedSnapshot, () => desktop.MainWindow, getEmbeddedSource);

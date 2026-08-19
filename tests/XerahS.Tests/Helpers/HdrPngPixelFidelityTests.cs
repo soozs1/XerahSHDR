@@ -115,6 +115,29 @@ public class HdrPngPixelFidelityTests
     }
 
     [Test]
+    public void SaveBitmap_HdrSource_Bit16File_WritesHdrIccpPng()
+    {
+        // The FILE path for "SDR+HDR" depth must produce a true HDR PNG (raw linear + iCCP),
+        // not sRGB-encoded output. The in-memory stream path (SaveImageAsStream, used for
+        // uploads) intentionally stays sRGB-encoded for web compatibility.
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        try
+        {
+            using var hdr = MakeF16Bitmap((0.5f, 0.5f, 0.5f, 1f), (4f, 4f, 4f, 1f));
+            ImageHelpers.SaveBitmap(hdr, path, PNGBitDepth.Bit16);
+
+            var bytes = File.ReadAllBytes(path);
+            Assert.That(bytes[24], Is.EqualTo(16), "file must be bit depth 16");
+            Assert.That(HasChunk(bytes, "iCCP"), Is.True, "file must carry the linear iCCP profile");
+            Assert.That(HasChunk(bytes, "sRGB"), Is.False, "file must not carry an sRGB chunk");
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Test]
     public void F16Bitmap_SavedAsHdr16Png_PreservesRawLinearRange()
     {
         // "SDR+HDR" depth must write a true HDR file: raw linear samples (including > 1.0)
