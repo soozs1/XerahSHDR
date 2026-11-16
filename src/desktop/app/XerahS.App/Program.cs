@@ -115,6 +115,16 @@ namespace XerahS.App
                 dh.WriteLine($"{XerahS.Common.AppResources.AppName} starting.");
                 dh.WriteLine("Running as first instance (single instance mode enabled).");
 
+                if (!string.IsNullOrWhiteSpace(_hdrSelfTestDirectory))
+                {
+                    dh.WriteLine($"[HDR] self-test mode requested: {_hdrSelfTestDirectory}");
+                }
+
+                if (!string.IsNullOrWhiteSpace(_hdrCaptureDirectory))
+                {
+                    dh.WriteLine($"[HDR] screen capture mode requested: {_hdrCaptureDirectory}");
+                }
+
                 var version = XerahS.Common.AppResources.Version;
                 dh.WriteLine($"Version: {version}");
 
@@ -849,6 +859,7 @@ namespace XerahS.App
             if (!string.IsNullOrWhiteSpace(_hdrSelfTestDirectory))
             {
                 string outputDir = _hdrSelfTestDirectory!;
+                XerahS.Common.DebugHelper.WriteLine($"[HDR] starting self-test, output: {outputDir}");
                 Avalonia.Threading.Dispatcher.UIThread.Post(async () =>
                 {
                     int exitCode = 1;
@@ -879,6 +890,7 @@ namespace XerahS.App
             if (!string.IsNullOrWhiteSpace(_hdrCaptureDirectory))
             {
                 string outputDir = _hdrCaptureDirectory!;
+                XerahS.Common.DebugHelper.WriteLine($"[HDR] starting screen capture, output: {outputDir}");
                 Avalonia.Threading.Dispatcher.UIThread.Post(async () =>
                 {
                     int exitCode = 1;
