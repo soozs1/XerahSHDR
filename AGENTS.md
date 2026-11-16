@@ -60,6 +60,14 @@
    - `<BuildWebUI>false</BuildWebUI>` in `ShareX.VideoEditor/backend/ShareX.VideoEditor.csproj` skips the npm steps and is safe only when `ShareX.VideoEditor/frontend/dist` is already built.
    - **Native Windows build** (from the repo root on Windows): `dotnet build XerahS.sln -m:1 -p:nodeReuse=false -p:UseSharedCompilation=false`. This is the only command that builds the full `net10.0-windows10.0.26100.0` solution; `src/desktop/XerahS.sln` is the Linux/WSL-scope desktop subset. From WSL use `~/.dotnet/dotnet` and never run a full `dotnet test` of `tests/XerahS.Tests` right before a Windows build unless the VideoEditor `node_modules` is cleaned afterwards (see above).
 
+9. **Automated HDR self-test (Windows, real capture)**
+   - Run the built app with `--hdr-self-test <outDir>` (or `--hdr-self-test=<outDir>`): `XerahS.exe --hdr-self-test C:\temp\hdr-selftest`. It shows a known-color test card, captures it through the real DXGI pipeline, and writes `report.txt` / `report.json` plus stage PNGs into the folder.
+   - Exit code **0 = PASS**, 1 = FAIL. Every failure line names the stage, e.g. `tonemap-TonemapBt2446C:stripe-red-keeps-R` or `saveas-hdr:bit-depth`.
+   - Prefer it over manual screenshots for any color/depth regression: it verifies channel order (red/green/blue/cyan/magenta/yellow stripes), neutral white/gray, tone-mapping clipping metrics, PNG bit depth/markers (8-bit SDR vs 16-bit linear iCCP), the real Save-As content path, and the preview-source invariant — all numerically.
+   - Requires an HDR-enabled display and `UseModernCapture` (DXGI). On an SDR display `capture-is-rgba-f16` fails by design (the test reports which mode it actually captured).
+   - The self-test hides the main window and uses its own single-instance mutex, so it can run while the normal app instance is open.
+   - Implementation: `src/desktop/app/XerahS.UI/Diagnostics/HdrSelfTestRunner.cs`; entry point in `Program.cs` (`OnPostUIInitialization`).
+
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
 - Create or update GitHub issues only when the user explicitly asks for it.

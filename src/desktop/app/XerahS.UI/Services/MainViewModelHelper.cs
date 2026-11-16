@@ -184,6 +184,16 @@ public static class MainViewModelHelper
         }
     }
 
+    /// <summary>
+    /// Runs the real Save-As content path without a file picker (used by the HDR self-test).
+    /// Mirrors what the embedded editor does: the working source (fp16 for HDR captures) is the
+    /// authoritative input for depth/tone-aware saving.
+    /// </summary>
+    public static Task<string?> SaveToPathForDiagnosticsAsync(MainViewModel viewModel, string path)
+    {
+        return SaveToPathAsync(viewModel, null, () => viewModel.CreateSourceImageCopyForPersistence(), path);
+    }
+
     private static async Task<string?> SaveToPathAsync(MainViewModel viewModel, Func<SKBitmap?>? getEditedSnapshot, Func<SKBitmap?>? getSource, string path)
     {
         // The PNG depth setting decides the saved content for an HDR (fp16) source:
