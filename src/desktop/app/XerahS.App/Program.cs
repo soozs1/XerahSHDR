@@ -42,6 +42,7 @@ namespace XerahS.App
         private static XerahS.Common.SingleInstanceManager? _singleInstanceManager;
         private static string[] _startupArguments = Array.Empty<string>();
         private static string? _hdrSelfTestDirectory;
+        private static string? _hdrCaptureDirectory;
 
         private sealed class StartupOptions
         {
@@ -50,6 +51,8 @@ namespace XerahS.App
             public string? PersonalFolderOverride { get; init; }
 
             public string? HdrSelfTestDirectory { get; init; }
+
+            public string? HdrCaptureDirectory { get; init; }
         }
 
         private sealed class IncomingPathSet
@@ -71,6 +74,7 @@ namespace XerahS.App
                 StartupOptions startupOptions = ParseStartupOptions(args ?? Array.Empty<string>());
                 _startupArguments = startupOptions.ForwardedArguments;
                 _hdrSelfTestDirectory = startupOptions.HdrSelfTestDirectory;
+                _hdrCaptureDirectory = startupOptions.HdrCaptureDirectory;
 
                 if (!string.IsNullOrWhiteSpace(startupOptions.PersonalFolderOverride))
                 {
@@ -79,8 +83,9 @@ namespace XerahS.App
 
                 (string mutexName, string pipeName) = GetSingleInstanceIdentifiers(startupOptions.PersonalFolderOverride);
 
-                // The HDR self-test must be able to run alongside a normal app instance.
-                if (!string.IsNullOrWhiteSpace(startupOptions.HdrSelfTestDirectory))
+                // The HDR self-test / capture modes must be able to run alongside a normal app instance.
+                if (!string.IsNullOrWhiteSpace(startupOptions.HdrSelfTestDirectory) ||
+                    !string.IsNullOrWhiteSpace(startupOptions.HdrCaptureDirectory))
                 {
                     mutexName += ".HdrSelfTest";
                     pipeName += ".HdrSelfTest";
@@ -246,6 +251,7 @@ namespace XerahS.App
             List<string> forwardedArguments = new List<string>(args.Length);
             string? personalFolderOverride = null;
             string? hdrSelfTestDirectory = null;
+            string? hdrCaptureDirectory = null;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -266,6 +272,24 @@ namespace XerahS.App
                     hdrSelfTestDirectory = !string.IsNullOrWhiteSpace(value)
                         ? NormalizePersonalFolder(value)
                         : Path.Combine(Path.GetTempPath(), $"XerahS-HdrSelfTest-{DateTime.Now:yyyyMMdd-HHmmss}");
+                    continue;
+                }
+
+                if (arg.Equals("--hdr-capture", StringComparison.OrdinalIgnoreCase))
+                {
+                    hdrCaptureDirectory = i + 1 < args.Length && !args[i + 1].StartsWith("--", StringComparison.Ordinal)
+                        ? NormalizePersonalFolder(args[++i])
+                        : Path.Combine(Path.GetTempPath(), $"XerahS-HdrCapture-{DateTime.Now:yyyyMMdd-HHmmss}");
+                    continue;
+                }
+
+                string capturePrefix = "--hdr-capture=";
+                if (arg.StartsWith(capturePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    string value = arg.Substring(capturePrefix.Length);
+                    hdrCaptureDirectory = !string.IsNullOrWhiteSpace(value)
+                        ? NormalizePersonalFolder(value)
+                        : Path.Combine(Path.GetTempPath(), $"XerahS-HdrCapture-{DateTime.Now:yyyyMMdd-HHmmss}");
                     continue;
                 }
 
@@ -300,7 +324,8 @@ namespace XerahS.App
             {
                 ForwardedArguments = forwardedArguments.ToArray(),
                 PersonalFolderOverride = personalFolderOverride,
-                HdrSelfTestDirectory = hdrSelfTestDirectory
+                HdrSelfTestDirectory = hdrSelfTestDirectory,
+                HdrCaptureDirectory = hdrCaptureDirectory
             };
         }
 
@@ -834,6 +859,36 @@ namespace XerahS.App
                     catch (Exception ex)
                     {
                         XerahS.Common.DebugHelper.WriteException(ex, "HDR self-test crashed");
+                    }
+                    finally
+                    {
+                        XerahS.Common.DebugHelper.Flush();
+                    }
+
+                    if (Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime lifetime)
+                    {
+                        lifetime.Shutdown(exitCode);
+                    }
+                    else
+                    {
+                        Environment.Exit(exitCode);
+                    }
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(_hdrCaptureDirectory))
+            {
+                string outputDir = _hdrCaptureDirectory!;
+                Avalonia.Threading.Dispatcher.UIThread.Post(async () =>
+                {
+                    int exitCode = 1;
+                    try
+                    {
+                        exitCode = await XerahS.UI.Diagnostics.HdrSelfTestRunner.CaptureScreenAsync(outputDir);
+                    }
+                    catch (Exception ex)
+                    {
+                        XerahS.Common.DebugHelper.WriteException(ex, "HDR screen capture crashed");
                     }
                     finally
                     {

@@ -304,6 +304,120 @@ public static class HdrSelfTestRunner
         return Finish(outputDir, report, metrics, pass);
     }
 
+    // ── screen capture mode (no test card) ────────────────────────────────────
+
+    /// <summary>
+    /// Captures the current desktop (whatever the user has on screen — an HDR photo/video/game)
+    /// and writes the production SDR/HDR outputs plus every tone-map variant and a report.
+    /// Used for full manual verification against the live screen.
+    /// </summary>
+    public static async Task<int> CaptureScreenAsync(string outputDir)
+    {
+        Directory.CreateDirectory(outputDir);
+        var report = new List<string>();
+        var metrics = new Dictionary<string, object>();
+        bool pass = true;
+
+        void Note(bool ok, string name, string detail = "")
+        {
+            pass &= ok;
+            report.Add($"[{(ok ? "PASS" : "INFO")}] {name}{(string.IsNullOrEmpty(detail) ? string.Empty : "  — " + detail)}");
+            DebugHelper.WriteLine($"[HdrCapture] {(ok ? "PASS" : "INFO")} {name} {detail}");
+        }
+
+        try
+        {
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
+                {
+                    lifetime.MainWindow?.Hide();
+                }
+            });
+            await Task.Delay(900); // let the window manager settle
+
+            using var capture = await PlatformServices.ScreenCapture.CaptureFullScreenAsync();
+            Note(capture != null, "capture-not-null");
+            if (capture == null)
+            {
+                return Finish(outputDir, report, metrics, false);
+            }
+
+            bool isHdr = capture.ColorType == SKColorType.RgbaF16;
+            report.Add($"capture: {capture.Width}x{capture.Height} {capture.ColorType} alpha={capture.AlphaType}");
+
+            if (!isHdr)
+            {
+                // SDR display (or DXGI fell back to 8-bit): save as-is and mark the capture SDR.
+                SavePng(capture, Path.Combine(outputDir, "capture-8bit.png"));
+                ImageHelpers.SaveBitmap(capture, Path.Combine(outputDir, "saved-sdr-8bit.png"), PNGBitDepth.Default);
+                ImageHelpers.SaveBitmap(capture, Path.Combine(outputDir, "saved-hdr-16bit.png"), PNGBitDepth.Bit16);
+                report.Add("display/capture is 8-bit SDR: HDR checks are not applicable.");
+                DumpCapture(capture, outputDir);
+                return Finish(outputDir, report, metrics, pass);
+            }
+
+            var (white, peakRatio) = HdrContentAnalyzer.Analyze(capture);
+            bool effectivelySdr = peakRatio <= 1.05f;
+            metrics["sdrWhite"] = Math.Round(white, 4);
+            metrics["peakRatio"] = Math.Round(peakRatio, 4);
+            report.Add($"HDR profile: sdrWhite={white:F3} scRGB, peak/white={peakRatio:F2} -> {(effectivelySdr ? "EFFECTIVELY SDR" : "REAL HDR")}");
+
+            // Raw capture (exact linear samples).
+            DumpCapture(capture, outputDir);
+
+            // Real production encoders, exactly as the pipeline calls them.
+            string hdrPath = Path.Combine(outputDir, "saved-hdr-16bit.png");
+            ImageHelpers.SaveBitmap(capture, hdrPath, PNGBitDepth.Bit16);
+            CheckPng(hdrPath, expect16Bit: true, (ok, name, detail) => Note(ok, name, detail), "saved-hdr-16bit", requireHdrProfile: !effectivelySdr);
+
+            using (var sdr = HdrTonemapper.TonemapToBgra8888(capture, HdrToneMappingMode.TonemapHable))
+            {
+                if (sdr != null)
+                {
+                    string sdrPath = Path.Combine(outputDir, "saved-sdr-8bit.png");
+                    ImageHelpers.SaveBitmap(sdr, sdrPath, PNGBitDepth.Default);
+                    CheckPng(sdrPath, expect16Bit: false, (ok, name, detail) => Note(ok, name, detail), "saved-sdr-8bit");
+
+                    var (clip, meanLum) = AnalyzeToned(sdr);
+                    metrics["savedSdr"] = new { clippedFraction = Math.Round(clip, 5), meanLuminance = Math.Round(meanLum, 4) };
+                    report.Add($"saved-sdr-8bit: meanLum={meanLum:F3} clipped={clip:P2} (mode=TonemapHable)");
+                }
+            }
+
+            // Display-referred 16-bit reference (what the screen should look like).
+            ImageHelpers.SaveSdr16Png(capture, Path.Combine(outputDir, "reference-screen-sdr16.png"));
+
+            // All tone-map variants for visual comparison against the live screen.
+            string variantsDir = Path.Combine(outputDir, "variants");
+            Directory.CreateDirectory(variantsDir);
+            int index = 0;
+            foreach (var variant in HdrTonemapVariants.All)
+            {
+                using var rendered = HdrTonemapVariants.Apply(capture, variant, white);
+                if (rendered == null)
+                {
+                    continue;
+                }
+
+                index++;
+                SavePng(rendered, Path.Combine(variantsDir, $"{index:00}-{variant.Id}.png"));
+                var (vClip, vLum) = AnalyzeToned(rendered);
+                metrics[$"variant-{variant.Id}"] = new { meanLuminance = Math.Round(vLum, 4), clippedFraction = Math.Round(vClip, 5) };
+                report.Add($"variant {index:00} {variant.Id,-14} meanLum={vLum:F3} clipped={vClip:P2} ({variant.Label})");
+            }
+
+            report.Add("visual check: compare saved-sdr-8bit.png / variants/*.png with the live screen;");
+            report.Add("compare saved-hdr-16bit.png with the original content in an HDR-capable viewer.");
+        }
+        catch (Exception ex)
+        {
+            Note(false, "capture-exception", ex.ToString());
+        }
+
+        return Finish(outputDir, report, metrics, pass);
+    }
+
     // ── test card ────────────────────────────────────────────────────────────
 
     private static CardGeometry ShowTestCard()
