@@ -26,6 +26,7 @@
 using System.Buffers.Binary;
 using SkiaSharp;
 using XerahS.Common;
+using XerahS.Common.Helpers;
 
 namespace XerahS.Core.Helpers;
 
@@ -182,6 +183,12 @@ public static class HdrTonemapper
         int width = hdrBitmap.Width;
         int height = hdrBitmap.Height;
 
+        // TonemapHable anchors its curve at the capture's SDR white level (one analysis per
+        // bitmap); other modes keep the fixed scRGB-white interpretation.
+        float sdrWhite = mode == HdrToneMappingMode.TonemapHable
+            ? MathF.Max(HdrContentAnalyzer.Analyze(hdrBitmap).WhiteLevel, 1e-3f)
+            : 1f;
+
         SKBitmap result = new SKBitmap(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb()));
 
         try
@@ -217,8 +224,9 @@ public static class HdrTonemapper
                             HdrToneMappingMode.TonemapReinhard => TonemapReinhardNormalized(lum),
                             HdrToneMappingMode.TonemapAces => TonemapAcesNormalized(lum),
                             HdrToneMappingMode.TonemapBt2446C => TonemapBt2446C(lum),
+                            HdrToneMappingMode.TonemapHable => TonemapHableNormalized(lum, sdrWhite),
                             HdrToneMappingMode.None => lum,
-                            _ => TonemapReinhardNormalized(lum) // legacy Auto
+                            _ => TonemapHableNormalized(lum, sdrWhite) // legacy Auto
                         };
                         scale = mapped / lum;
                     }
@@ -279,6 +287,31 @@ public static class HdrTonemapper
             : MathF.Log(normalized / Bt2446Knee - Bt2446K3) * Bt2446K2 + Bt2446K4;
 
         return MathF.Max(toneMapped / Bt2446SdrWhiteCurve, 0f);
+    }
+
+    /// <summary>
+    /// Hable/Uncharted-2 filmic curve anchored at the capture's SDR white level: the signal is
+    /// normalized so SDR white maps to 1.0, then the filmic shoulder compresses only the range
+    /// above it. Chosen by visual assessment of real HDR photographs: natural sky/highlight
+    /// rolloff with near-reference colors. On effectively-SDR captures the white level is ~1.0
+    /// and the curve acts as a mild contrast curve instead of clipping highlights.
+    /// </summary>
+    public static float TonemapHableNormalized(float luminanceScRgb, float sdrWhite)
+    {
+        if (!float.IsFinite(luminanceScRgb))
+        {
+            return 0f;
+        }
+
+        float white = float.IsFinite(sdrWhite) && sdrWhite > 1e-3f ? sdrWhite : 1f;
+        float x = MathF.Max(luminanceScRgb, 0f) / white;
+        return Math.Clamp(HableCurve(x) / HableCurve(1f), 0f, 1f);
+    }
+
+    private static float HableCurve(float v)
+    {
+        const float A = 0.15f, B = 0.50f, C = 0.10f, D = 0.20f, E = 0.02f, F = 0.30f;
+        return ((v * (A * v + C * B) + D * E) / (v * (A * v + B) + D * F)) - E / F;
     }
 
     private static float DecodeHalf(ReadOnlySpan<byte> buffer, int offset)

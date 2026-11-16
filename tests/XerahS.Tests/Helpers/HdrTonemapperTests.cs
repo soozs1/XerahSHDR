@@ -202,6 +202,50 @@ public class HdrTonemapperTests
     }
 
     // ──────────────────────────────────────────────────────────────────────
+    // TonemapHable
+    // ──────────────────────────────────────────────────────────────────────
+
+    [Test]
+    public void TonemapHable_Black_IsZero()
+    {
+        Assert.That(HdrTonemapper.TonemapHableNormalized(0f, 1f), Is.EqualTo(0f).Within(1e-6f));
+    }
+
+    [Test]
+    public void TonemapHable_SdrWhite_MapsToWhite()
+    {
+        // The curve is normalized so the estimated SDR white maps to 1.0.
+        Assert.That(HdrTonemapper.TonemapHableNormalized(1f, 1f), Is.EqualTo(1f).Within(1e-5f));
+        Assert.That(HdrTonemapper.TonemapHableNormalized(3.36f, 3.36f), Is.EqualTo(1f).Within(1e-5f));
+    }
+
+    [Test]
+    public void TonemapHable_MidtonesStayBelowWhite()
+    {
+        // Chosen visual profile (photo assessment): mids are lifted slightly, peaks above white
+        // saturate to white (the sun disc), but nothing goes negative/NaN.
+        float mid = HdrTonemapper.TonemapHableNormalized(0.5f, 1f);
+        Assert.That(mid, Is.GreaterThan(0.1f));
+        Assert.That(mid, Is.LessThan(1f));
+
+        float peak = HdrTonemapper.TonemapHableNormalized(55f, 1f);
+        Assert.That(peak, Is.EqualTo(1f).Within(1e-6f));
+    }
+
+    [Test]
+    public void TonemapHable_IsMonotonic()
+    {
+        float previous = 0f;
+
+        for (float linear = 0f; linear <= 200f; linear += 0.5f)
+        {
+            float mapped = HdrTonemapper.TonemapHableNormalized(linear, 3.36f);
+            Assert.That(mapped, Is.GreaterThanOrEqualTo(previous - 1e-6f));
+            previous = mapped;
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
     // TonemapToBgra8888
     // ──────────────────────────────────────────────────────────────────────
 
@@ -211,6 +255,43 @@ public class HdrTonemapperTests
         using var sdr = new SKBitmap(2, 2, SKColorType.Bgra8888, SKAlphaType.Premul);
 
         Assert.That(HdrTonemapper.TonemapToBgra8888(sdr, HdrToneMappingMode.TonemapReinhard), Is.Null);
+    }
+
+    [Test]
+    public void TonemapToBgra8888_TonemapHable_MatchesVisuallySelectedVariant()
+    {
+        // The production TonemapHable mode must render exactly like the "hable-norm" variant the
+        // operator selected from the real HDR photo comparison (see HdrPhotoVariantTests).
+        using var hdr = MakeF16Bitmap(
+            (0f, 0f, 0f, 1f),
+            (0.2f, 0.2f, 0.2f, 1f),
+            (0.5f, 0.5f, 0.5f, 1f),
+            (1f, 1f, 1f, 1f),
+            (3f, 3f, 3f, 1f),
+            (10f, 10f, 10f, 1f),
+            (1f, 0f, 0f, 1f),
+            (0f, 0f, 1f, 1f));
+
+        var (white, _) = XerahS.Common.Helpers.HdrContentAnalyzer.Analyze(hdr);
+        var variant = HdrTonemapVariants.All.First(v => v.Id == "hable-norm");
+
+        using var expected = HdrTonemapVariants.Apply(hdr, variant, white);
+        using var actual = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapHable);
+
+        Assert.That(expected, Is.Not.Null);
+        Assert.That(actual, Is.Not.Null);
+
+        for (int i = 0; i < hdr.Width; i++)
+        {
+            var e = ReadPixel(expected!, i);
+            var a = ReadPixel(actual!, i);
+            Assert.Multiple(() =>
+            {
+                Assert.That(a.R, Is.EqualTo(e.R).Within(1), $"R mismatch at {i}");
+                Assert.That(a.G, Is.EqualTo(e.G).Within(1), $"G mismatch at {i}");
+                Assert.That(a.B, Is.EqualTo(e.B).Within(1), $"B mismatch at {i}");
+            });
+        }
     }
 
     [Test]

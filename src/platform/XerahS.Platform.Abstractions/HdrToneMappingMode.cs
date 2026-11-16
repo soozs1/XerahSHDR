@@ -38,6 +38,10 @@ namespace XerahS.Common
         Auto = 1,
         TonemapReinhard = 2,
         TonemapAces = 3,
-        TonemapBt2446C = 4
+        TonemapBt2446C = 4,
+        // Filmic (Hable) curve anchored at the capture's estimated SDR white level. Chosen by
+        // visual assessment of real HDR photographs (best sky/highlight rendering with
+        // near-reference colors); also behaves like a mild contrast curve on SDR desktops.
+        TonemapHable = 5
     }
 }

@@ -334,7 +334,7 @@ public sealed class WorkflowOrchestrator : IWorkflowOrchestrator
             if (sdrOnly)
             {
                 var toned = HdrTonemapper.TonemapToBgra8888(previewCopy,
-                    imgSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapReinhard);
+                    imgSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapHable);
                 if (toned != null)
                 {
                     previewCopy.Dispose();

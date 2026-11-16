@@ -103,7 +103,7 @@ public class HdrPipelineDiagnostics
         }
 
         // 2. SDR tonemap paths (file saving with depth=SDR), all modes.
-        foreach (var mode in new[] { HdrToneMappingMode.None, HdrToneMappingMode.TonemapReinhard, HdrToneMappingMode.TonemapAces, HdrToneMappingMode.TonemapBt2446C })
+        foreach (var mode in new[] { HdrToneMappingMode.None, HdrToneMappingMode.TonemapReinhard, HdrToneMappingMode.TonemapAces, HdrToneMappingMode.TonemapBt2446C, HdrToneMappingMode.TonemapHable })
         {
             using var toned = HdrTonemapper.TonemapToBgra8888(hdr, mode);
             Assert.That(toned, Is.Not.Null, $"TonemapToBgra8888({mode}) must succeed");

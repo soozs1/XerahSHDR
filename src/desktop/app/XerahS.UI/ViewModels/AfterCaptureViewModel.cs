@@ -81,7 +81,7 @@ public partial class AfterCaptureViewModel : ViewModelBase
         {
             // The after-capture UI is 8-bit; preview an HDR (fp16) capture tonemapped to SDR
             // (HDR_CAPTURE_PLAN §6.4). The source image is owned by the caller — never dispose it.
-            using var tonemapped = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapReinhard);
+            using var tonemapped = HdrTonemapper.TonemapToBgra8888(image, HdrToneMappingMode.TonemapHable);
             if (tonemapped != null)
             {
                 return BitmapConversionHelpers.ToAvaloniBitmap(tonemapped);

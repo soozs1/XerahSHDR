@@ -205,7 +205,7 @@ public static class MainViewModelHelper
         // from what the user sees in the workflow editor.
         var imageSettings = (LastCaptureTaskSettings ?? SettingsManager.DefaultTaskSettings)?.ImageSettings;
         bool sdrOnlyOutput = imageSettings?.ImagePNGBitDepth != PNGBitDepth.Bit16;
-        HdrToneMappingMode hdrSaveMode = imageSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapReinhard;
+        HdrToneMappingMode hdrSaveMode = imageSettings?.ImageHdrSaveToneMapping ?? HdrToneMappingMode.TonemapHable;
         DebugHelper.WriteLine($"MainViewModelHelper: SaveToPath depth={imageSettings?.ImagePNGBitDepth}, hdrSaveMode={hdrSaveMode}");
 
         SKBitmap? source = null;

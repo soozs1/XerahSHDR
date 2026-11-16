@@ -142,6 +142,7 @@ public static class HdrSelfTestRunner
                 HdrToneMappingMode.TonemapReinhard,
                 HdrToneMappingMode.TonemapAces,
                 HdrToneMappingMode.TonemapBt2446C,
+                HdrToneMappingMode.TonemapHable,
             })
             {
                 using var toned = HdrTonemapper.TonemapToBgra8888(capture, mode);
@@ -216,7 +217,7 @@ public static class HdrSelfTestRunner
                 ImageSettings = new TaskSettingsImage
                 {
                     ImagePNGBitDepth = PNGBitDepth.Default,
-                    ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapBt2446C,
+                    ImageHdrSaveToneMapping = HdrToneMappingMode.TonemapHable,
                 },
             };
             var settingsHdr = new TaskSettings
