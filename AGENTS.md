@@ -66,6 +66,9 @@
    - Prefer it over manual screenshots for any color/depth regression: it verifies channel order (red/green/blue/cyan/magenta/yellow stripes), neutral white/gray, tone-mapping clipping metrics, PNG bit depth/markers (8-bit SDR vs 16-bit linear iCCP), the real Save-As content path, and the preview-source invariant — all numerically.
    - Requires an HDR-enabled display and `UseModernCapture` (DXGI). On an SDR display `capture-is-rgba-f16` fails by design (the test reports which mode it actually captured).
    - The self-test hides the main window and uses its own single-instance mutex, so it can run while the normal app instance is open.
+   - It also writes `variants/` (10 tone-map candidates: clamp / clamp at SDR white / Reinhard / ACES / BT.2446C, plain and anchored at the estimated SDR white, plus Hable and gamma) and `capture-sdr16.png` (display-referred 16-bit reference that must match the screen). Use these for visual tuning: pick the variant closest to the live screen and promote it to a production mode.
+   - `report.json` records the capture profile (`sdrWhite`, `peakRatio`), per-stripe means and clipping for every variant, so tone-curve decisions stay numeric.
+   - **16-bit PNG rule ("SDR+HDR" depth):** `ImageHelpers.SaveBitmap` now checks `HdrContentAnalyzer` — a capture whose peak is within 5% of its estimated SDR white is written as **display-referred 16-bit sRGB** (looks identical to the screen in any viewer); only captures with real HDR highlights keep raw linear samples + linear `iCCP`. Do not revert to always-raw linear: users reported such files as "darker than the screen with shifted palette".
    - Implementation: `src/desktop/app/XerahS.UI/Diagnostics/HdrSelfTestRunner.cs`; entry point in `Program.cs` (`OnPostUIInitialization`).
 
 ## GitHub Issues

@@ -166,6 +166,50 @@ public static class HdrSelfTestRunner
                 CheckStripes(means, Check, $"tonemap-{mode}");
             }
 
+            // ── 2b. HDR content profile + tone-map variants for visual selection ──
+            bool effectivelySdr = true;
+            if (isHdr)
+            {
+                var (white, peakRatio) = HdrContentAnalyzer.Analyze(capture);
+                effectivelySdr = peakRatio <= 1.05f;
+                metrics["sdrWhite"] = Math.Round(white, 4);
+                metrics["peakRatio"] = Math.Round(peakRatio, 4);
+                report.Add($"HDR profile: sdrWhite={white:F3} scRGB, peak/white={peakRatio:F2} -> {(effectivelySdr ? "EFFECTIVELY SDR (save as sRGB 16-bit)" : "REAL HDR (save as raw linear 16-bit)")}");
+
+                string variantsDir = Path.Combine(outputDir, "variants");
+                Directory.CreateDirectory(variantsDir);
+                int index = 0;
+                foreach (var variant in HdrTonemapVariants.All)
+                {
+                    using var rendered = HdrTonemapVariants.Apply(capture, variant, white);
+                    if (rendered == null)
+                    {
+                        continue;
+                    }
+
+                    index++;
+                    string vPath = Path.Combine(variantsDir, $"{index:00}-{variant.Id}.png");
+                    SavePng(rendered, vPath);
+
+                    var vMeans = SampleStripes(rendered, card, cardRect.Left, cardRect.Top);
+                    var (vClip, vLum) = AnalyzeToned(rendered);
+                    metrics[$"variant-{variant.Id}"] = new
+                    {
+                        label = variant.Label,
+                        file = vPath,
+                        meanLuminance = Math.Round(vLum, 4),
+                        clippedFraction = Math.Round(vClip, 5),
+                        stripes = vMeans.ToDictionary(kv => kv.Key, kv => kv.Value.Select(v => Math.Round(v, 4)).ToArray()),
+                    };
+                    report.Add($"variant {variant.Id}: meanLum={vLum:F3} clipped={vClip:P2} ({variant.Label})");
+                }
+
+                string sdr16Path = Path.Combine(outputDir, "capture-sdr16.png");
+                ImageHelpers.SaveSdr16Png(capture, sdr16Path);
+                report.Add($"reference file (should match the screen): {sdr16Path}");
+                report.Add($"visual review: open variants/*.png and compare against the live screen; report the best file name.");
+            }
+
             // ── 3. File encoders: bit depth and markers ───────────────────────
             var settingsSdr = new TaskSettings
             {
@@ -197,7 +241,7 @@ public static class HdrSelfTestRunner
 
             string hdrPath = Path.Combine(outputDir, "encoder-hdr.png");
             ImageHelpers.SaveBitmap(capture, hdrPath, PNGBitDepth.Bit16);
-            CheckPng(hdrPath, expect16Bit: true, Check, "encoder-hdr");
+            CheckPng(hdrPath, expect16Bit: true, Check, "encoder-hdr", requireHdrProfile: !effectivelySdr);
 
             // ── 4. Real Save-As content path ──────────────────────────────────
             var editorViewModel = new MainViewModel(ThemeService.CreateImageEditorOptions());
@@ -219,7 +263,7 @@ public static class HdrSelfTestRunner
             Check(savedHdr != null && File.Exists(saveHdrPath), "saveas-hdr-file-written", savedHdr ?? "<null>");
             if (File.Exists(saveHdrPath))
             {
-                CheckPng(saveHdrPath, expect16Bit: true, Check, "saveas-hdr");
+                CheckPng(saveHdrPath, expect16Bit: true, Check, "saveas-hdr", requireHdrProfile: !effectivelySdr);
             }
 
             // The preview/source must still be the capture (no stale-image regression).
@@ -433,16 +477,20 @@ public static class HdrSelfTestRunner
         return n == 0 ? (0, 0) : (clipped / (double)n, lum / n);
     }
 
-    private static void CheckPng(string path, bool expect16Bit, Action<bool, string, string> check, string stage)
+    private static void CheckPng(string path, bool expect16Bit, Action<bool, string, string> check, string stage, bool requireHdrProfile = false)
     {
         byte[] bytes = File.ReadAllBytes(path);
         bool is16 = bytes.Length > 25 && bytes[24] == 16;
         bool hasIccp = HasPngChunk(bytes, "iCCP");
         bool hasSrgb = HasPngChunk(bytes, "sRGB");
         check(is16 == expect16Bit, $"{stage}:bit-depth", $"16bit={is16} expected={expect16Bit}");
-        if (expect16Bit)
+        if (expect16Bit && requireHdrProfile)
         {
             check(hasIccp && !hasSrgb, $"{stage}:hdr-profile", $"iCCP={hasIccp} sRGB={hasSrgb}");
+        }
+        else if (expect16Bit)
+        {
+            check(hasSrgb, $"{stage}:sdr16-profile", $"sRGB chunk required for display-referred 16-bit (iCCP={hasIccp})");
         }
         else
         {

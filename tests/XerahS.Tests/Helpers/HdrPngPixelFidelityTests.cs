@@ -115,6 +115,37 @@ public class HdrPngPixelFidelityTests
     }
 
     [Test]
+    public void SaveBitmap_EffectivelySdrHdrSource_Bit16File_WritesSrgb16Png()
+    {
+        // A capture with no content above SDR white (a normal desktop on an HDR output) must be
+        // written display-referred: 16-bit sRGB so it looks the same in any viewer. Raw linear
+        // samples would look dark to the user ("16-bit file is darker than the screen").
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        try
+        {
+            // 100 pixels so the p99 SDR-white estimate is meaningful (real captures are millions).
+            var pixels = new (float R, float G, float B, float A)[100];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                float v = i < 34 ? 0.2f : i < 67 ? 0.5f : 1f;
+                pixels[i] = (v, v, v, 1f);
+            }
+
+            using var hdr = MakeF16Bitmap(pixels);
+            ImageHelpers.SaveBitmap(hdr, path, PNGBitDepth.Bit16);
+
+            var bytes = File.ReadAllBytes(path);
+            Assert.That(bytes[24], Is.EqualTo(16), "file must stay 16-bit");
+            Assert.That(HasChunk(bytes, "sRGB"), Is.True, "effectively-SDR capture must carry the sRGB chunk");
+            Assert.That(HasChunk(bytes, "iCCP"), Is.False, "effectively-SDR capture must not be raw linear");
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Test]
     public void SaveBitmap_HdrSource_Bit16File_WritesHdrIccpPng()
     {
         // The FILE path for "SDR+HDR" depth must produce a true HDR PNG (raw linear + iCCP),

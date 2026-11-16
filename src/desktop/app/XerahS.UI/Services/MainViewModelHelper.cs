@@ -271,10 +271,10 @@ public static class MainViewModelHelper
             {
                 if (isHdrSource && !sdrOnlyOutput)
                 {
-                    // "SDR+HDR" depth with an HDR source: write a true 16-bit HDR PNG holding the
-                    // raw linear (scRGB) samples with a linear iCCP profile — full range preserved
-                    // (no sRGB encoding, no clipping to display white).
-                    ImageHelpers.SaveHdrF16Png(bitmap, path);
+                    // "SDR+HDR" depth with an HDR source: SaveBitmap decides between raw linear
+                    // HDR samples (real HDR highlights, linear iCCP) and display-referred 16-bit
+                    // sRGB (effectively-SDR frames, so the file matches the screen in any viewer).
+                    ImageHelpers.SaveBitmap(bitmap, path, PNGBitDepth.Bit16);
                 }
                 else
                 {

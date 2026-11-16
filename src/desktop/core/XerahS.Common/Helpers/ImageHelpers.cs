@@ -24,6 +24,7 @@
 #endregion License Information (GPL v3)
 
 using XerahS.Common.GIF;
+using XerahS.Common.Helpers;
 using SkiaSharp;
 // REMOVED: System.Drawing, System.Drawing.Drawing2D, System.Drawing.Imaging
 
@@ -74,11 +75,21 @@ public static class ImageHelpers
                 {
                     if (pngBitDepth == PNGBitDepth.Bit16)
                     {
-                        // "SDR+HDR" depth: write a true HDR PNG — raw fp16 linear samples with a
-                        // linear iCCP profile (extended range preserved, no sRGB encoding, no
-                        // clipping to display white). Without this the sRGB-encoded 16-bit output
-                        // looked over-bright (highlights clipped to white) on HDR captures.
-                        SaveHdrF16Png(bitmap, filePath);
+                        // "SDR+HDR" depth: decide whether this capture actually carries HDR range.
+                        // Effectively-SDR content (a normal desktop on an HDR output) is written
+                        // display-referred (sRGB-encoded, 16-bit) so the file looks identical in any
+                        // viewer; real HDR highlights keep raw linear samples with a linear iCCP.
+                        bool effectivelySdr = HdrContentAnalyzer.IsEffectivelySdr(bitmap, out float peakRatio);
+                        if (effectivelySdr)
+                        {
+                            SaveSdr16Png(bitmap, filePath);
+                        }
+                        else
+                        {
+                            SaveHdrF16Png(bitmap, filePath);
+                        }
+
+                        DebugHelper.WriteLine($"[HDR] SaveBitmap(16-bit): peak/white={peakRatio:F3} -> {(effectivelySdr ? "SDR sRGB-encoded" : "raw linear HDR")}: {filePath}");
                         return;
                     }
 
@@ -246,6 +257,34 @@ public static class ImageHelpers
         WritePngChunk(file, "iCCP", BuildIccpChunkData(icc));
         WritePngChunk(file, "IDAT", idat);
         WritePngChunk(file, "IEND", Array.Empty<byte>());
+    }
+
+    /// <summary>
+    /// Writes an fp16 (linear scRGB) capture as a display-referred 16-bit PNG: sRGB-encoded
+    /// samples with an sRGB profile, so standard viewers show the frame the way it looked on
+    /// screen (16-bit precision preserved). Used for effectively-SDR captures ("SDR+HDR" depth
+    /// must not turn a normal desktop into a dark raw-linear file).
+    /// </summary>
+    public static void SaveSdr16Png(SKBitmap hdrBitmap, string filePath)
+    {
+        if (hdrBitmap is null) throw new ArgumentNullException(nameof(hdrBitmap));
+        if (hdrBitmap.ColorType != SKColorType.RgbaF16)
+        {
+            throw new ArgumentException("SaveSdr16Png requires an RgbaF16 bitmap.", nameof(hdrBitmap));
+        }
+
+        FileHelpers.CreateDirectoryFromFilePath(filePath);
+
+        using var converted = ConvertLinearF16ToSrgb16(hdrBitmap);
+        if (converted is null)
+        {
+            throw new InvalidOperationException("linear fp16 -> sRGB 16-bit conversion failed.");
+        }
+
+        using SKImage image = SKImage.FromBitmap(converted);
+        using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
+        using FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+        data.SaveTo(stream);
     }
 
     private static byte[] ZLibCompress(byte[] data)
