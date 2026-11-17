@@ -127,8 +127,26 @@ Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/Task
 
 ### Current state of the ported tree
 
-- Worktree `.upstream` (detached at `v0.34.1`) has the result committed as `0d56ad0b`:
-  **66 files, +49 665 / −596**, no conflict markers.
+- Worktree `.upstream` (detached at `v0.34.1`) holds two commits:
+  `0d56ad0b` — the feature port (66 files, +49 665 / −596);
+  the follow-up commit that makes it compile (shared helpers, upstream send-to API).
+- **It builds:** `XerahS.UI` and `XerahS.App` compile on Linux with
+  `-p:EnableWindowsTargeting=true -p:SkipBundlePlugins=true -p:EnableAppDrivenPluginBuild=false`.
+  Building the UI is the meaningful gate here, because it compiles every ported XAML file.
+- Compile fixes that were required (each was a genuine semantic gap, not a mechanical merge):
+  - `FileHelpers.IsPathWithinDirectory` — SEC-18 helper referenced by the ported `TaskHelpers`.
+  - `SecretMasker` — used by `CaptureJobProcessor`, lived only in this fork.
+  - `SettingsSerializationBinder` — lives only in this fork.
+  - `Localization.cs` — culture switching (`ApplyCulture`) behind the language selector.
+  - `SavePathDebugDump` — Save-As diagnostics referenced by `MainViewModelHelper`.
+  - `BitmapConversionHelpers.ConvertF16ToSrgb8` lives in the editor **submodule**; the self-test now
+    uses `ImageHelpers.ConvertF16ToSrgb8` instead. The preview path in
+    `BitmapConversionHelpers.ToAvaloniBitmap` still needs the submodule change.
+  - `CaptureJobProcessor` used `result.ToneMapping` from the after-capture window; upstream's result
+    tuple has no such field, so the configured mode is used (gap 3).
+  - `SettingsViewModel.cs` reverted to v0.34.1: this fork and upstream have **different** send-to
+    implementations (`SendToDefaultFolderPolicy` observables vs `SendToFolderPolicySelectedIndex`).
+    Upstream's is kept; our send-to UI work is dropped from the port.
 - Present and verified by path: `Markup/LocalizeExtension.cs`, `XerahS.Common/Resources.resx`,
   `XerahS.Core/Helpers/HdrTonemapper.cs`, `XerahS.Core/SendTo/SendToPolicyResolver.cs`,
   the HDR helpers and `Diagnostics/HdrSelfTestRunner.cs`.
@@ -136,11 +154,13 @@ Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/Task
 
 ### Remaining work on the expanded port
 
-1. Resolve the 22 localization conflicts against a building tree.
+1. Resolve the 22 localization conflicts (each is a UI file where upstream changed the same lines).
 2. Re-apply localization to the 10 files that upstream replaced (new onboarding, hotkey view).
-3. Restore `HdrSdrWhiteNormalizer` usage inside `DxgiDesktopDuplicationBackend`.
-4. Replace `{local:Localize}` in `TaskImageSettingsPanel.axaml` if the patch is to be proposed alone.
-5. Initialize the upstream submodules (`Omacut`, `native/omasnap`, `ShareX.ImageEditor`) and build.
+3. Restore `HdrSdrWhiteNormalizer` usage inside `DxgiDesktopDuplicationBackend` and decide whether to
+   keep upstream's 8-bit tone mapping or reintroduce the fp16 path.
+4. Re-localize `SettingsViewModel.cs` (reverted to upstream to keep their send-to implementation).
+5. Runtime verification on Windows: `--hdr-self-test`, `--hdr-capture`, Save-As depth behaviour, and
+   the localized UI.
 
 ## Recommended patch scope for the author
 
