@@ -44,6 +44,9 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                     </Grid>
+                                    <TextBlock Text="{local:Localize TaskSettings_PngDepthHelp}"
+                                               Opacity="0.75" FontSize="11" TextWrapping="Wrap"
+                                               AutomationProperties.Name="PNG bit depth explanation"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -87,7 +90,7 @@
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto, 16, *">
                                         <TextBlock Grid.Column="0" Text="{local:Localize TaskSettings_HdrSave}" VerticalAlignment="Center" TextWrapping="Wrap"/>
-                                        <ComboBox Grid.Column="2" ItemsSource="{Binding HdrToneMappingOptions}" SelectedItem="{Binding ImageHdrSaveToneMapping}" HorizontalAlignment="Stretch" MinWidth="200" AutomationProperties.Name="HDR Save Tone Mapping">
+                                        <ComboBox Grid.Column="2" ItemsSource="{Binding HdrToneMappingOptions}" SelectedItem="{Binding ImageHdrSaveToneMapping}" IsEnabled="{Binding IsHdrSaveToneMappingEnabled}" HorizontalAlignment="Stretch" MinWidth="200" AutomationProperties.Name="HDR Save Tone Mapping">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate x:DataType="x:Object">
                                                     <TextBlock Text="{Binding ., Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -95,6 +98,10 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                     </Grid>
+                                    <TextBlock Text="{local:Localize TaskSettings_HdrSaveDisabledHint}"
+                                               Opacity="0.75" FontSize="11" TextWrapping="Wrap"
+                                               IsVisible="{Binding !IsHdrSaveToneMappingEnabled}"
+                                               AutomationProperties.Name="HDR save tone mapping disabled hint"/>
                                     <Grid ColumnDefinitions="Auto, 16, *">
                                         <TextBlock Grid.Column="0" Text="{local:Localize TaskSettings_HdrClipboard}" VerticalAlignment="Center" TextWrapping="Wrap"/>
                                         <ComboBox Grid.Column="2" ItemsSource="{Binding HdrToneMappingOptions}" SelectedItem="{Binding ImageHdrClipboardToneMapping}" HorizontalAlignment="Stretch" MinWidth="200" AutomationProperties.Name="HDR Clipboard Tone Mapping">
@@ -106,6 +113,9 @@
                                         </ComboBox>
                                     </Grid>
                                     <StackPanel Spacing="6">
+                                        <TextBlock Text="{local:Localize TaskSettings_HdrLegend}"
+                                                   Opacity="0.75" FontSize="11" TextWrapping="Wrap"
+                                                   AutomationProperties.Name="HDR tone mapping legend"/>
                                         <TextBlock Text="{local:Localize TaskSettings_HdrPreview}" FontWeight="SemiBold"/>
                                         <Image Source="{Binding HdrPreviewBitmap}"
                                                Width="440" Height="96"

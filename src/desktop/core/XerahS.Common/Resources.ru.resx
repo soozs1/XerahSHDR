@@ -3293,22 +3293,22 @@
     <value>Избранные эффекты изображения (правый клик)</value>
   </data>
   <data name="HdrToneMappingMode_None" xml:space="preserve">
-    <value>Нет</value>
+    <value>None (без конвертации)</value>
   </data>
   <data name="HdrToneMappingMode_Auto" xml:space="preserve">
     <value>Авто</value>
   </data>
   <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
-    <value>Рейнхард</value>
+    <value>Reinhard (мягкий спад)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
-    <value>ACES</value>
+    <value>ACES (кинематографическая)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapBt2446C" xml:space="preserve">
-    <value>BT.2446 C</value>
+    <value>BT.2446 C (вещательный)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapHable" xml:space="preserve">
-    <value>Hable (HDR)</value>
+    <value>Hable (рекомендуется)</value>
   </data>
   <data name="PNGBitDepth_Default" xml:space="preserve">
     <value>SDR</value>
@@ -3330,5 +3330,14 @@
   </data>
   <data name="TaskSettings_HdrClipboard" xml:space="preserve">
     <value>Буфер обмена:</value>
+  </data>
+  <data name="TaskSettings_PngDepthHelp" xml:space="preserve">
+    <value>SDR = 8-битный PNG; HDR-кадры переводятся в SDR кривой «Сохранение в файл». SDR+HDR = 16-битный PNG: плавнее градиенты, но значения выше белого точка клиппируются, а кривая для файла не применяется.</value>
+  </data>
+  <data name="TaskSettings_HdrSaveDisabledHint" xml:space="preserve">
+    <value>Не используется при 16-битной глубине: 16-битный PNG пишется display-referred (sRGB) без тон-кривой.</value>
+  </data>
+  <data name="TaskSettings_HdrLegend" xml:space="preserve">
+    <value>Кривые работают только с содержимым ярче белого точка, поэтому обычный SDR-рабочий стол сохраняется без изменений. None = без конвертации, блики обрезаются по белому; Reinhard = мягкий спад, сохраняет детали в светах; ACES = кинематографическая, сильнее контраст; BT.2446 C = вещательный стандарт HDR→SDR (ITU-R); Hable = кинематографическая, настроена под фото (рекомендуется).</value>
   </data>
 </root>

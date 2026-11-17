@@ -3293,22 +3293,22 @@ This will permanently remove the file from the remote storage. This cannot be un
     <value>Favorite image effects (Right click)</value>
   </data>
   <data name="HdrToneMappingMode_None" xml:space="preserve">
-    <value>None</value>
+    <value>None (no conversion)</value>
   </data>
   <data name="HdrToneMappingMode_Auto" xml:space="preserve">
     <value>Auto</value>
   </data>
   <data name="HdrToneMappingMode_TonemapReinhard" xml:space="preserve">
-    <value>Reinhard</value>
+    <value>Reinhard (soft roll-off)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapAces" xml:space="preserve">
-    <value>ACES</value>
+    <value>ACES (filmic)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapBt2446C" xml:space="preserve">
-    <value>BT.2446 C</value>
+    <value>BT.2446 C (broadcast)</value>
   </data>
   <data name="HdrToneMappingMode_TonemapHable" xml:space="preserve">
-    <value>Hable (HDR)</value>
+    <value>Hable (recommended)</value>
   </data>
   <data name="PNGBitDepth_Default" xml:space="preserve">
     <value>SDR</value>
@@ -3330,5 +3330,14 @@ This will permanently remove the file from the remote storage. This cannot be un
   </data>
   <data name="TaskSettings_HdrClipboard" xml:space="preserve">
     <value>Clipboard:</value>
+  </data>
+  <data name="TaskSettings_PngDepthHelp" xml:space="preserve">
+    <value>SDR = 8-bit PNG; HDR captures are converted to SDR with the "Save to file" curve below. SDR+HDR = 16-bit PNG: smoother gradients, but values above display white are clipped and the file curve does not apply.</value>
+  </data>
+  <data name="TaskSettings_HdrSaveDisabledHint" xml:space="preserve">
+    <value>Ignored at 16-bit depth: a 16-bit PNG is written display-referred (sRGB) without a tone curve.</value>
+  </data>
+  <data name="TaskSettings_HdrLegend" xml:space="preserve">
+    <value>Curves only act on content brighter than display white, so an ordinary SDR desktop is saved unchanged. None = no conversion, highlights clip at white; Reinhard = soft roll-off that keeps highlight detail; ACES = filmic, stronger contrast; BT.2446 C = broadcast HDR-to-SDR standard (ITU-R); Hable = filmic, tuned for photos (recommended).</value>
   </data>
 </root>

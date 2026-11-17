@@ -75,9 +75,18 @@ namespace XerahS.UI.ViewModels
                 {
                     _settings.ImageSettings.ImagePNGBitDepth = value;
                     OnPropertyChanged();
+                    // The saved file ignores the tone curve at 16-bit depth (it is written
+                    // display-referred), so the "Save to file" selector must follow the depth.
+                    OnPropertyChanged(nameof(IsHdrSaveToneMappingEnabled));
                 }
             }
         }
+
+        /// <summary>
+        /// False when the selected PNG depth ("SDR+HDR" = 16-bit) makes the file tone curve
+        /// irrelevant: the encoder writes display-referred sRGB samples without applying it.
+        /// </summary>
+        public bool IsHdrSaveToneMappingEnabled => ImagePNGBitDepth != PNGBitDepth.Bit16;
 
         public int ThumbnailWidth
         {
