@@ -175,10 +175,11 @@ public class MainViewModelHelperSaveTests
     }
 
     [Test]
-    public async Task SaveToPathAsync_HdrSource_Bit16Depth_Writes16BitHdrPng()
+    public async Task SaveToPathAsync_HdrSource_Bit16Depth_Writes16BitSrgbPng()
     {
-        // Design: "SDR+HDR" depth keeps HDR content and writes a true 16-bit HDR PNG: raw
-        // linear samples (including > 1.0) with a linear iCCP profile — not sRGB-encoded.
+        // Design: "SDR+HDR" depth keeps 16-bit precision but writes display-referred sRGB samples.
+        // Raw linear samples with a linear iCCP profile look dark in every Windows viewer (WIC/GDI+
+        // ignore PNG profiles), so the file must carry an sRGB chunk instead.
         string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
         TaskSettings? previous = null;
 
@@ -201,14 +202,14 @@ public class MainViewModelHelperSaveTests
 
             var savedBytes = await File.ReadAllBytesAsync(path);
             Assert.That(savedBytes[24], Is.EqualTo(16), "SDR+HDR depth must write a 16-bit PNG");
-            Assert.That(HasChunk(savedBytes, "iCCP"), Is.True, "HDR PNG must carry a linear iCCP profile");
-            Assert.That(HasChunk(savedBytes, "sRGB"), Is.False, "HDR PNG must not carry an sRGB chunk");
+            Assert.That(HasChunk(savedBytes, "sRGB"), Is.True, "16-bit PNG must be display-referred (sRGB chunk)");
+            Assert.That(HasChunk(savedBytes, "iCCP"), Is.False, "16-bit PNG must not be raw linear");
 
             using var decoded = SKBitmap.Decode(SKData.CreateCopy(savedBytes));
             Assert.That(decoded, Is.Not.Null);
-            // Raw linear values preserved: 4.0 sample must be brighter than 0.5 (not sRGB 188/137).
-            Assert.That(decoded!.GetPixel(1, 0).Red, Is.GreaterThan(decoded.GetPixel(0, 0).Red),
-                "HDR highlight must stay brighter than midtone (raw linear, not sRGB-encoded)");
+            // Display-referred: linear 0.5 -> sRGB 188 and the 4.0 highlight clamps at white.
+            Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(2), "linear 0.5 must decode to sRGB 188");
+            Assert.That(decoded.GetPixel(1, 0).Red, Is.EqualTo(255), "linear 4.0 must clamp to display white");
         }
         finally
         {
