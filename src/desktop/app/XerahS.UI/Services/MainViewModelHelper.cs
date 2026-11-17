@@ -269,11 +269,13 @@ public static class MainViewModelHelper
             Exception? imageSaveError = null;
             try
             {
-                if (isHdrSource && !sdrOnlyOutput)
+                bool pngRequested = Path.GetExtension(path).ToLowerInvariant() is ".png" or "";
+                if (!sdrOnlyOutput && pngRequested)
                 {
-                    // "SDR+HDR" depth with an HDR source: SaveBitmap decides between raw linear
-                    // HDR samples (real HDR highlights, linear iCCP) and display-referred 16-bit
-                    // sRGB (effectively-SDR frames, so the file matches the screen in any viewer).
+                    // "SDR+HDR" depth always produces a 16-bit PNG, even when the working source is
+                    // already 8-bit (SDR desktop, GDI fallback, or an opened SDR image). Widening the
+                    // pixels keeps the selected depth meaningful instead of silently writing 32-bit
+                    // RGBA, which users reported as "the depth setting has no effect".
                     ImageHelpers.SaveBitmap(bitmap, path, PNGBitDepth.Bit16);
                 }
                 else

@@ -110,8 +110,26 @@ public static class HdrSelfTestRunner
             card = await Dispatcher.UIThread.InvokeAsync(ShowTestCard);
             await Task.Delay(600); // let the compositor settle
 
+            WakeDisplay();
             var cardRect = new SKRectI(card.Left, card.Top, card.Left + card.WidthPx, card.Top + card.HeightPx);
-            using var capture = await PlatformServices.ScreenCapture.CaptureRectAsync(new SKRect(cardRect.Left, cardRect.Top, cardRect.Right, cardRect.Bottom));
+
+            Window? nudge = await CreateNudgeWindowAsync();
+            using var nudgeCts = new CancellationTokenSource();
+            Task nudgeTask = nudge != null ? NudgeLoopAsync(nudge, nudgeCts.Token) : Task.CompletedTask;
+
+            SKBitmap? captured;
+            try
+            {
+                captured = await PlatformServices.ScreenCapture.CaptureRectAsync(new SKRect(cardRect.Left, cardRect.Top, cardRect.Right, cardRect.Bottom));
+            }
+            finally
+            {
+                nudgeCts.Cancel();
+                await CloseNudgeWindowAsync(nudge);
+                await nudgeTask;
+            }
+
+            using var capture = captured;
             Check(capture != null, "capture-not-null");
             if (capture == null)
             {
@@ -121,6 +139,19 @@ public static class HdrSelfTestRunner
             bool isHdr = capture.ColorType == SKColorType.RgbaF16;
             report.Add($"capture: {capture.Width}x{capture.Height} {capture.ColorType} alpha={capture.AlphaType} rect={cardRect}");
             Check(isHdr, "capture-is-rgba-f16", capture.ColorType.ToString());
+
+            if (!isHdr)
+            {
+                report.Add(string.Empty);
+                report.Add("DIAGNOSIS: the capture came back 8-bit, so this run contains no HDR data at all.");
+                report.Add("  * Windows HDR is off (Settings > System > Display > Use HDR), or");
+                report.Add("  * DXGI Desktop Duplication returned no frame (0x887A0027) and the service fell back to GDI.");
+                report.Add("    That happens when the display is asleep, or when the process was started from a");
+                report.Add("    non-interactive host (CI shell, WSL-spawned cmd) instead of the logged-in desktop.");
+                report.Add("  HDR-only checks (tone curves, variants, preview LUT) are skipped, not failed;");
+                report.Add("  the encoder and Save-As checks still run against the 8-bit frame.");
+                report.Add(string.Empty);
+            }
 
             DumpCapture(capture, outputDir);
 
@@ -136,14 +167,15 @@ public static class HdrSelfTestRunner
             CheckStripes(rawMeans, Check, "capture");
 
             // ── 2. Tone mapping: hue preservation + clipping metrics ──────────
-            foreach (var mode in new[]
+            // Only meaningful for a real fp16 source: TonemapToBgra8888 returns null for 8-bit input.
+            foreach (var mode in isHdr ? new[]
             {
                 HdrToneMappingMode.None,
                 HdrToneMappingMode.TonemapReinhard,
                 HdrToneMappingMode.TonemapAces,
                 HdrToneMappingMode.TonemapBt2446C,
                 HdrToneMappingMode.TonemapHable,
-            })
+            } : Array.Empty<HdrToneMappingMode>())
             {
                 using var toned = HdrTonemapper.TonemapToBgra8888(capture, mode);
                 if (toned == null)
@@ -175,7 +207,7 @@ public static class HdrSelfTestRunner
                 effectivelySdr = peakRatio <= 1.05f;
                 metrics["sdrWhite"] = Math.Round(white, 4);
                 metrics["peakRatio"] = Math.Round(peakRatio, 4);
-                report.Add($"HDR profile: sdrWhite={white:F3} scRGB, peak/white={peakRatio:F2} -> {(effectivelySdr ? "EFFECTIVELY SDR (save as sRGB 16-bit)" : "REAL HDR (save as raw linear 16-bit)")}");
+                report.Add($"HDR profile: sdrWhite={white:F3} scRGB, peak/white={peakRatio:F2} -> {(effectivelySdr ? "EFFECTIVELY SDR" : "HDR content (highlights clamp at display white in a 16-bit PNG)")}");
 
                 string variantsDir = Path.Combine(outputDir, "variants");
                 Directory.CreateDirectory(variantsDir);
@@ -230,8 +262,9 @@ public static class HdrSelfTestRunner
             };
 
             string sdrPath = Path.Combine(outputDir, "encoder-sdr.png");
-            using (var sdrBitmap = HdrTonemapper.TonemapToBgra8888(capture, settingsSdr.ImageSettings.ImageHdrSaveToneMapping))
+            if (isHdr)
             {
+                using var sdrBitmap = HdrTonemapper.TonemapToBgra8888(capture, settingsSdr.ImageSettings.ImageHdrSaveToneMapping);
                 Check(sdrBitmap != null, "encoder-sdr-tonemap");
                 if (sdrBitmap != null)
                 {
@@ -239,10 +272,15 @@ public static class HdrSelfTestRunner
                     CheckPng(sdrPath, expect16Bit: false, Check, "encoder-sdr");
                 }
             }
+            else
+            {
+                ImageHelpers.SaveBitmap(capture, sdrPath, PNGBitDepth.Default);
+                CheckPng(sdrPath, expect16Bit: false, Check, "encoder-sdr");
+            }
 
             string hdrPath = Path.Combine(outputDir, "encoder-hdr.png");
             ImageHelpers.SaveBitmap(capture, hdrPath, PNGBitDepth.Bit16);
-            CheckPng(hdrPath, expect16Bit: true, Check, "encoder-hdr", requireHdrProfile: !effectivelySdr);
+            CheckPng(hdrPath, expect16Bit: true, Check, "encoder-hdr");
 
             // ── 4. Real Save-As content path ──────────────────────────────────
             var editorViewModel = new MainViewModel(ThemeService.CreateImageEditorOptions());
@@ -255,7 +293,10 @@ public static class HdrSelfTestRunner
             if (File.Exists(saveSdrPath))
             {
                 CheckPng(saveSdrPath, expect16Bit: false, Check, "saveas-sdr");
-                CompareWithTonemap(saveSdrPath, capture, settingsSdr.ImageSettings.ImageHdrSaveToneMapping, Check, "saveas-sdr");
+                if (isHdr)
+                {
+                    CompareWithTonemap(saveSdrPath, capture, settingsSdr.ImageSettings.ImageHdrSaveToneMapping, Check, "saveas-sdr");
+                }
             }
 
             MainViewModelHelper.LastCaptureTaskSettings = settingsHdr;
@@ -264,7 +305,8 @@ public static class HdrSelfTestRunner
             Check(savedHdr != null && File.Exists(saveHdrPath), "saveas-hdr-file-written", savedHdr ?? "<null>");
             if (File.Exists(saveHdrPath))
             {
-                CheckPng(saveHdrPath, expect16Bit: true, Check, "saveas-hdr", requireHdrProfile: !effectivelySdr);
+                // "SDR+HDR" must produce a 16-bit PNG even when the working source is 8-bit.
+                CheckPng(saveHdrPath, expect16Bit: true, Check, "saveas-hdr");
             }
 
             // The preview/source must still be the capture (no stale-image regression).
@@ -278,9 +320,10 @@ public static class HdrSelfTestRunner
             }
 
             // ── 5. Preview conversion matches Tonemap(None) ───────────────────
-            using (var lut = BitmapConversionHelpers.ConvertF16ToSrgb8(capture))
-            using (var none = HdrTonemapper.TonemapToBgra8888(capture, HdrToneMappingMode.None))
+            if (isHdr)
             {
+                using var lut = BitmapConversionHelpers.ConvertF16ToSrgb8(capture);
+                using var none = HdrTonemapper.TonemapToBgra8888(capture, HdrToneMappingMode.None);
                 if (lut != null && none != null)
                 {
                     double meanDiff = MeanAbsRgbDiff(lut, none);
@@ -295,6 +338,7 @@ public static class HdrSelfTestRunner
         }
         finally
         {
+            RestoreExecutionState();
             if (card != null)
             {
                 await Dispatcher.UIThread.InvokeAsync(() => card.Window.Close());
@@ -336,7 +380,24 @@ public static class HdrSelfTestRunner
             });
             await Task.Delay(900); // let the window manager settle
 
-            using var capture = await PlatformServices.ScreenCapture.CaptureFullScreenAsync();
+            WakeDisplay();
+            Window? nudge = await CreateNudgeWindowAsync();
+            using var nudgeCts = new CancellationTokenSource();
+            Task nudgeTask = nudge != null ? NudgeLoopAsync(nudge, nudgeCts.Token) : Task.CompletedTask;
+
+            SKBitmap? captured;
+            try
+            {
+                captured = await PlatformServices.ScreenCapture.CaptureFullScreenAsync();
+            }
+            finally
+            {
+                nudgeCts.Cancel();
+                await CloseNudgeWindowAsync(nudge);
+                await nudgeTask;
+            }
+
+            using var capture = captured;
             Note(capture != null, "capture-not-null");
             if (capture == null)
             {
@@ -369,7 +430,7 @@ public static class HdrSelfTestRunner
             // Real production encoders, exactly as the pipeline calls them.
             string hdrPath = Path.Combine(outputDir, "saved-hdr-16bit.png");
             ImageHelpers.SaveBitmap(capture, hdrPath, PNGBitDepth.Bit16);
-            CheckPng(hdrPath, expect16Bit: true, (ok, name, detail) => Note(ok, name, detail), "saved-hdr-16bit", requireHdrProfile: !effectivelySdr);
+            CheckPng(hdrPath, expect16Bit: true, (ok, name, detail) => Note(ok, name, detail), "saved-hdr-16bit");
 
             using (var sdr = HdrTonemapper.TonemapToBgra8888(capture, HdrToneMappingMode.TonemapHable))
             {
@@ -414,8 +475,168 @@ public static class HdrSelfTestRunner
         {
             Note(false, "capture-exception", ex.ToString());
         }
+        finally
+        {
+            RestoreExecutionState();
+        }
 
         return Finish(outputDir, report, metrics, pass);
+    }
+
+    // ── composition nudge ───────────────────────────────────────────────────
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern bool SetCursorPos(int x, int y);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    private static extern uint SetThreadExecutionState(uint esFlags);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+    private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct INPUT
+    {
+        public uint Type;
+        public MOUSEINPUT Mouse;
+    }
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int Dx;
+        public int Dy;
+        public uint MouseData;
+        public uint DwFlags;
+        public uint Time;
+        public IntPtr DwExtraInfo;
+    }
+
+    private const uint ES_CONTINUOUS = 0x80000000;
+    private const uint ES_SYSTEM_REQUIRED = 0x00000001;
+    private const uint ES_DISPLAY_REQUIRED = 0x00000002;
+    private const uint INPUT_MOUSE = 0;
+    private const uint MOUSEEVENTF_MOVE = 0x0001;
+
+    /// <summary>
+    /// Wakes the display and forces composition updates. A sleeping/idle display stops DWM from
+    /// presenting frames: DXGI Duplication then returns DXGI_ERROR_WAIT_TIMEOUT (0x887A0027) on
+    /// every acquire while GDI still returns stale content (8-bit), silently breaking HDR capture.
+    /// </summary>
+    private static void WakeDisplay()
+    {
+        try
+        {
+            SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED);
+
+            var bounds = PlatformServices.Screen.GetVirtualScreenBounds();
+            int cx = Math.Max(1, bounds.Width / 2);
+            int cy = Math.Max(1, bounds.Height / 2);
+            SetCursorPos(cx, cy);
+            Thread.Sleep(40);
+
+            // Synthetic input also resets the display idle timer on most systems.
+            var inputs = new[]
+            {
+                new INPUT { Type = INPUT_MOUSE, Mouse = new MOUSEINPUT { Dx = 2, Dy = 2, DwFlags = MOUSEEVENTF_MOVE } },
+                new INPUT { Type = INPUT_MOUSE, Mouse = new MOUSEINPUT { Dx = -2, Dy = -2, DwFlags = MOUSEEVENTF_MOVE } },
+            };
+            SendInput((uint)inputs.Length, inputs, System.Runtime.InteropServices.Marshal.SizeOf<INPUT>());
+
+            Thread.Sleep(250);
+            DebugHelper.WriteLine("[HDR] WakeDisplay: display idle timer reset");
+        }
+        catch (Exception ex)
+        {
+            DebugHelper.WriteLine($"[HDR] WakeDisplay failed: {ex.Message}");
+        }
+    }
+
+    private static void RestoreExecutionState()
+    {
+        try
+        {
+            SetThreadExecutionState(ES_CONTINUOUS);
+        }
+        catch
+        {
+        }
+    }
+
+    /// <summary>
+    /// DXGI Desktop Duplication only delivers a frame when the desktop composition changes; on a
+    /// static screen every AcquireNextFrame times out and the service falls back to 8-bit GDI
+    /// (silently turning HDR captures into SDR). While a capture runs (it executes on a worker
+    /// thread), flash a tiny topmost window in the bottom-right corner so the duplication always
+    /// has a fresh frame to deliver.
+    /// </summary>
+    private static async Task<Window?> CreateNudgeWindowAsync()
+    {
+        return await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            try
+            {
+                var bounds = PlatformServices.Screen.GetVirtualScreenBounds();
+                int x = Math.Max(0, bounds.Right - 8);
+                int y = Math.Max(0, bounds.Bottom - 8);
+
+                var nudge = new Window
+                {
+                    Width = 6,
+                    Height = 6,
+                    Topmost = true,
+                    ShowInTaskbar = false,
+                    WindowStartupLocation = WindowStartupLocation.Manual,
+                    Position = new PixelPoint(x, y),
+                    Content = new Border { Background = Brushes.Magenta },
+                };
+                nudge.Show();
+                DebugHelper.WriteLine($"[HDR] nudge window shown at ({x},{y})");
+                return nudge;
+            }
+            catch (Exception ex)
+            {
+                DebugHelper.WriteLine($"[HDR] nudge window failed: {ex.Message}");
+                return null;
+            }
+        });
+    }
+
+    private static async Task NudgeLoopAsync(Window nudge, CancellationToken token)
+    {
+        var colors = new IBrush[] { Brushes.Cyan, Brushes.Magenta, Brushes.Yellow, Brushes.Lime, Brushes.White };
+        int index = 0;
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                var brush = colors[index++ % colors.Length];
+                await Dispatcher.UIThread.InvokeAsync(() => nudge.Content = new Border { Background = brush });
+                await Task.Delay(70, token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            DebugHelper.WriteLine($"[HDR] nudge loop: {ex.Message}");
+        }
+    }
+
+    private static async Task CloseNudgeWindowAsync(Window? nudge)
+    {
+        if (nudge == null) return;
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            try
+            {
+                nudge.Close();
+            }
+            catch
+            {
+            }
+        });
     }
 
     // ── test card ────────────────────────────────────────────────────────────
@@ -494,17 +715,17 @@ public static class HdrSelfTestRunner
         {
             for (int x = ix0; x < ix1; x += stepX)
             {
-                int o = y * stride + x;
+                int rowOffset = y * stride;
                 if (bitmap.ColorType == SKColorType.RgbaF16)
                 {
-                    o *= 8;
+                    int o = rowOffset + x * 8;
                     sr += DecodeHalf(span, o);
                     sg += DecodeHalf(span, o + 2);
                     sb += DecodeHalf(span, o + 4);
                 }
                 else
                 {
-                    o *= 4;
+                    int o = rowOffset + x * 4;
                     sr += span[o + 2] / 255.0;
                     sg += span[o + 1] / 255.0;
                     sb += span[o] / 255.0;

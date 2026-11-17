@@ -114,7 +114,7 @@ public class HdrPipelineDiagnostics
             });
         }
 
-        // 3. HDR file path (SDR+HDR depth) — must be raw linear with iCCP.
+        // 3. Raw diagnostic writer (stage dumps only) — keeps exact linear samples + iCCP.
         string tmp = Path.Combine(Path.GetTempPath(), $"hdr-diag-{Guid.NewGuid():N}.png");
         try
         {
@@ -130,6 +130,25 @@ public class HdrPipelineDiagnostics
         finally
         {
             if (File.Exists(tmp)) File.Delete(tmp);
+        }
+
+        // 3b. Production FILE path for depth=SDR+HDR — must be display-referred 16-bit sRGB so
+        // Windows viewers (which ignore PNG iCCP) show the same brightness as the screen.
+        string sdr16 = Path.Combine(Path.GetTempPath(), $"hdr-file-{Guid.NewGuid():N}.png");
+        try
+        {
+            ImageHelpers.SaveBitmap(hdr, sdr16, PNGBitDepth.Bit16);
+            using var decoded = SKBitmap.Decode(sdr16);
+            Assert.That(decoded, Is.Not.Null, "SaveBitmap(Bit16) output must decode");
+            Row("hdr-file SaveBitmap(Bit16)", i =>
+            {
+                var p = decoded!.GetPixel(i, 0);
+                return (p.Red, p.Green, p.Blue);
+            });
+        }
+        finally
+        {
+            if (File.Exists(sdr16)) File.Delete(sdr16);
         }
 
         // 4. 16-bit sRGB stream path (uploads) — display-referred, clipped to 255.

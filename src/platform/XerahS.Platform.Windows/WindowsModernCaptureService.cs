@@ -25,6 +25,7 @@
 
 using XerahS.Platform.Abstractions;
 using XerahS.Common;
+using XerahS.Common.Helpers;
 using SkiaSharp;
 using Vortice.Direct3D;
 using Vortice.Direct3D11;
@@ -374,8 +375,10 @@ namespace XerahS.Platform.Windows
                         for (int attempt = 0; attempt <= DxgiFrameAcquisitionHelper.MaxZeroFrameRetries; attempt++)
                         {
                             // Later attempts wait longer for the desktop to produce a real frame.
-                            int timeoutMs = attempt == 0 ? 250 : 500;
+                            int timeoutMs = attempt == 0 ? 500 : 800;
                             var acquireResult = duplication.AcquireNextFrame((uint)timeoutMs, out var frameInfo, out var desktopResource);
+                            XerahS.Common.DebugHelper.WriteLine(
+                                $"CaptureFullScreenDxgi: AcquireNextFrame attempt {attempt + 1}: success={acquireResult.Success}, hr=0x{acquireResult.Code:X8}, resource={(desktopResource != null)}, timeout={timeoutMs}ms");
 
                             if (DxgiFrameAcquisitionHelper.ShouldRetryFrameAcquisition(acquireResult.Success, desktopResource != null))
                             {
@@ -442,6 +445,13 @@ namespace XerahS.Platform.Windows
                                     }
 
                                     // Draw to combined bitmap, applying output rotation correction.
+                                    // HDR frames are linear scRGB (1.0 == 80 cd/m²); they are
+                                    // rescaled to the display's SDR white level so that every
+                                    // downstream stage can rely on 1.0 == SDR white.
+                                    float sdrWhite = isHdr
+                                        ? DisplaySdrWhiteLevelHelper.GetSdrWhiteLevelScRgb(deviceName)
+                                        : 1f;
+
                                     DrawMappedTextureToCanvas(
                                         dataBox,
                                         (int)sourceDesc.Width,
@@ -452,6 +462,7 @@ namespace XerahS.Platform.Windows
                                         bounds.Height,
                                         rotation,
                                         isHdr,
+                                        sdrWhite,
                                         canvas);
 
                                     capturedOutputCount++;
@@ -594,6 +605,7 @@ namespace XerahS.Platform.Windows
             int destHeight,
             ModeRotation rotation,
             bool isHdr,
+            float sdrWhiteScRgb,
             SKCanvas canvas)
         {
             // Create a temporary SKBitmap wrapping the data.
@@ -611,6 +623,18 @@ namespace XerahS.Platform.Windows
                 destStride,
                 bytesPerRow,
                 sourceHeight);
+
+            if (isHdr)
+            {
+                // DXGI synchronous frames are scRGB (1.0 == 80 cd/m²) but Windows composites SDR
+                // content at the user's SDR white level (often 200-300 cd/m²). Rescaling here keeps
+                // the pipeline invariant "1.0 == SDR white" true for every consumer.
+                if (HdrSdrWhiteNormalizer.NormalizeToSdrWhite(sourceBitmap, sdrWhiteScRgb))
+                {
+                    XerahS.Common.DebugHelper.WriteLine(
+                        $"CaptureFullScreenDxgi: normalized scRGB to SDR white (divisor {sdrWhiteScRgb:F3})");
+                }
+            }
 
             using SKBitmap bitmapToDraw = RotateBitmapForDesktop(sourceBitmap, rotation);
             var destRect = new SKRect(destX, destY, destX + destWidth, destY + destHeight);

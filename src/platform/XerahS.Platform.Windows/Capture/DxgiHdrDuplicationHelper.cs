@@ -62,6 +62,7 @@ internal static class DxgiHdrDuplicationHelper
     public static IDXGIOutputDuplication CreateDuplication(IDXGIOutput1 output, ID3D11Device device, out bool isHdr)
     {
         isHdr = IsOutputHdr(output);
+        DebugHelper.WriteLine($"HDR: output detected as {(isHdr ? "HDR (requesting fp16)" : "SDR")}");
 
         if (isHdr)
         {
@@ -70,6 +71,7 @@ internal static class DxgiHdrDuplicationHelper
             {
                 using var output5 = output.QueryInterface<IDXGIOutput5>();
                 hdrDup = output5.DuplicateOutput1(device, new[] { Format.R16G16B16A16_Float });
+                DebugHelper.WriteLine($"HDR: DuplicateOutput1 format={hdrDup.Description.ModeDescription.Format}");
                 if (hdrDup.Description.ModeDescription.Format == Format.R16G16B16A16_Float)
                 {
                     return hdrDup;

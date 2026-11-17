@@ -115,6 +115,35 @@ public class HdrPngPixelFidelityTests
     }
 
     [Test]
+    public void SaveBitmap_SdrSource_Bit16Depth_Writes16BitPng()
+    {
+        // Regression guard for "SDR+HDR depth still saves 32-bit": the depth setting must apply
+        // to an 8-bit working source too (SDR desktop, GDI fallback, opened SDR image), not only
+        // to fp16 captures.
+        string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        try
+        {
+            using var sdr = new SKBitmap(new SKImageInfo(2, 1, SKColorType.Bgra8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb()));
+            sdr.SetPixel(0, 0, new SKColor(255, 0, 0));
+            sdr.SetPixel(1, 0, new SKColor(0, 0, 255));
+
+            ImageHelpers.SaveBitmap(sdr, path, PNGBitDepth.Bit16);
+
+            var bytes = File.ReadAllBytes(path);
+            Assert.That(bytes[24], Is.EqualTo(16), "IHDR bit depth must be 16");
+
+            using var decoded = SKBitmap.Decode(SKData.CreateCopy(bytes));
+            Assert.That(decoded, Is.Not.Null);
+            Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(255), "red stays red after widening");
+            Assert.That(decoded.GetPixel(1, 0).Blue, Is.EqualTo(255), "blue stays blue after widening");
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Test]
     public void SaveBitmap_EffectivelySdrHdrSource_Bit16File_WritesSrgb16Png()
     {
         // A capture with no content above SDR white (a normal desktop on an HDR output) must be
@@ -146,11 +175,13 @@ public class HdrPngPixelFidelityTests
     }
 
     [Test]
-    public void SaveBitmap_HdrSource_Bit16File_WritesHdrIccpPng()
+    public void SaveBitmap_HdrSource_Bit16File_IsDisplayReferred()
     {
-        // The FILE path for "SDR+HDR" depth must produce a true HDR PNG (raw linear + iCCP),
-        // not sRGB-encoded output. The in-memory stream path (SaveImageAsStream, used for
-        // uploads) intentionally stays sRGB-encoded for web compatibility.
+        // The FILE path for "SDR+HDR" depth must stay viewable in Windows viewers. A raw-linear
+        // sample set with a linear iCCP profile decodes dark everywhere the profile is ignored
+        // (WIC/GDI+, i.e. Photos, Explorer preview, Paint, Chromium on Windows — measured:
+        // 122/158/135 instead of 183/205/191 for the same frame). So the encoder writes 16-bit
+        // sRGB-encoded samples for HDR content too.
         string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
         try
         {
@@ -159,8 +190,14 @@ public class HdrPngPixelFidelityTests
 
             var bytes = File.ReadAllBytes(path);
             Assert.That(bytes[24], Is.EqualTo(16), "file must be bit depth 16");
-            Assert.That(HasChunk(bytes, "iCCP"), Is.True, "file must carry the linear iCCP profile");
-            Assert.That(HasChunk(bytes, "sRGB"), Is.False, "file must not carry an sRGB chunk");
+            Assert.That(HasChunk(bytes, "sRGB"), Is.True, "16-bit file must carry the sRGB chunk");
+            Assert.That(HasChunk(bytes, "iCCP"), Is.False, "16-bit file must not be raw linear");
+
+            // linear 0.5 must decode as sRGB 188, not as raw 128, and 4.0 must clamp to white.
+            using var decoded = SKBitmap.Decode(SKData.CreateCopy(bytes));
+            Assert.That(decoded, Is.Not.Null);
+            Assert.That(decoded!.GetPixel(0, 0).Red, Is.EqualTo(188).Within(2), "linear 0.5 must decode to sRGB 188");
+            Assert.That(decoded.GetPixel(1, 0).Red, Is.EqualTo(255), "linear 4.0 must clamp to display white");
         }
         finally
         {
@@ -171,8 +208,9 @@ public class HdrPngPixelFidelityTests
     [Test]
     public void F16Bitmap_SavedAsHdr16Png_PreservesRawLinearRange()
     {
-        // "SDR+HDR" depth must write a true HDR file: raw linear samples (including > 1.0)
-        // with a linear iCCP profile — NOT sRGB-encoded, NOT clipped to display white.
+        // SaveHdrF16Png is the diagnostic writer (raw dumps, self-test stage files): it keeps the
+        // exact linear samples, including values above 1.0, with a linear iCCP profile. It is NOT
+        // used for user-facing saves because Windows viewers ignore iCCP for PNG.
         string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
         try
         {

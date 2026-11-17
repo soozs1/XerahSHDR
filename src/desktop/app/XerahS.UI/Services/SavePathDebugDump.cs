@@ -36,7 +36,12 @@ namespace XerahS.UI.Services;
 /// </summary>
 public static class SavePathDebugDump
 {
-    public static bool Enabled { get; } = true;
+    /// <summary>
+    /// Dumps are opt-in: set <c>XERAHS_SAVE_DEBUG_DUMP=1</c> before launching XerahS. The dumps
+    /// write a full-resolution 16-bit PNG per Save-As stage, which noticeably slows saving and
+    /// fills the Documents folder, so they must stay off for normal use.
+    /// </summary>
+    public static bool Enabled { get; } = Environment.GetEnvironmentVariable("XERAHS_SAVE_DEBUG_DUMP") == "1";
 
     /// <summary>Last content signature logged by the preview pipeline, to detect a stale
     /// (non-current-capture) source at Save-As time.</summary>
@@ -49,27 +54,40 @@ public static class SavePathDebugDump
     public static string Signature(SKBitmap? bitmap)
     {
         if (bitmap == null) return "<null>";
+        if (bitmap.ColorType != SKColorType.RgbaF16 && bitmap.ColorType != SKColorType.Bgra8888)
+        {
+            // Only the two capture formats carry a well-known layout; anything else (e.g. 16-bit
+            // SDR readback) has no comparable signature and must not be sampled as BGRA.
+            return $"{bitmap.Width}x{bitmap.Height} ct={bitmap.ColorType}";
+        }
+
         double sr = 0, sg = 0, sb = 0;
         int n = 0;
         int w = bitmap.Width, h = bitmap.Height;
         Span<byte> span = bitmap.GetPixelSpan();
         int stride = bitmap.RowBytes;
+        int bytesPerPixel = bitmap.ColorType == SKColorType.RgbaF16 ? 8 : 4;
         int step = Math.Max(1, Math.Max(w, h) / 40);
         for (int y = 0; y < h; y += step)
         {
+            int rowOffset = y * stride;
             for (int x = 0; x < w; x += step)
             {
-                int o = y * stride + x;
+                int o = rowOffset + (x * bytesPerPixel);
+                if (o + bytesPerPixel > span.Length)
+                {
+                    // Defensive: a padded/odd stride must not crash the save path.
+                    continue;
+                }
+
                 if (bitmap.ColorType == SKColorType.RgbaF16)
                 {
-                    o *= 8;
                     sr += DecodeClampedHalf(span, o);
                     sg += DecodeClampedHalf(span, o + 2);
                     sb += DecodeClampedHalf(span, o + 4);
                 }
                 else
                 {
-                    o *= 4;
                     sr += span[o + 2] / 255.0; // BGRA -> R
                     sg += span[o + 1] / 255.0;
                     sb += span[o] / 255.0;

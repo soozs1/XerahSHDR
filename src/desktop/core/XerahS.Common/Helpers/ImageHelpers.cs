@@ -75,21 +75,22 @@ public static class ImageHelpers
                 {
                     if (pngBitDepth == PNGBitDepth.Bit16)
                     {
-                        // "SDR+HDR" depth: decide whether this capture actually carries HDR range.
-                        // Effectively-SDR content (a normal desktop on an HDR output) is written
-                        // display-referred (sRGB-encoded, 16-bit) so the file looks identical in any
-                        // viewer; real HDR highlights keep raw linear samples with a linear iCCP.
+                        // 16-bit output is always display-referred sRGB. Raw linear samples plus a
+                        // linear iCCP profile are only correct in a color-managed viewer; Windows
+                        // decoders (WIC/GDI+, and therefore Photos, Explorer preview, Paint, browsers
+                        // on Windows) IGNORE iCCP for PNG and read the samples as sRGB, which renders
+                        // midtones ~35% too dark while highlights stay near white — the exact
+                        // "16-bit file is darker than the screen" report. Keeping 16-bit precision
+                        // with the sRGB transfer function is viewable everywhere.
+                        //
+                        // NOTE: a 16-bit PNG cannot carry data above display white. For genuine HDR
+                        // output the container has to change (Ultra HDR JPEG / AVIF).
                         bool effectivelySdr = HdrContentAnalyzer.IsEffectivelySdr(bitmap, out float peakRatio);
-                        if (effectivelySdr)
-                        {
-                            SaveSdr16Png(bitmap, filePath);
-                        }
-                        else
-                        {
-                            SaveHdrF16Png(bitmap, filePath);
-                        }
-
-                        DebugHelper.WriteLine($"[HDR] SaveBitmap(16-bit): peak/white={peakRatio:F3} -> {(effectivelySdr ? "SDR sRGB-encoded" : "raw linear HDR")}: {filePath}");
+                        SaveSdr16Png(bitmap, filePath);
+                        DebugHelper.WriteLine(
+                            $"[HDR] SaveBitmap(16-bit): peak/white={peakRatio:F3} " +
+                            $"({(effectivelySdr ? "effectively SDR" : "HDR content, highlights clamped to white")}) " +
+                            $"-> 16-bit sRGB: {filePath}");
                         return;
                     }
 
@@ -107,8 +108,28 @@ public static class ImageHelpers
                 else
                 {
                     // Widen SDR pixels to 16-bit sRGB so the encoder emits bitDepth=16
-                    // while preserving the encoded appearance.
-                    converted = bitmap.Copy(SKColorType.Rgba16161616);
+                    // while preserving the encoded appearance. The destination is tagged sRGB
+                    // explicitly: a capture bitmap may carry no color space, and untagged output
+                    // would make Skia skip the sRGB chunk that viewers rely on.
+                    var widenedInfo = new SKImageInfo(
+                        bitmap.Width,
+                        bitmap.Height,
+                        SKColorType.Rgba16161616,
+                        bitmap.AlphaType,
+                        SKColorSpace.CreateSrgb());
+                    var widened = new SKBitmap(widenedInfo);
+                    using (SKImage sourceImage = SKImage.FromBitmap(bitmap))
+                    {
+                        if (sourceImage.ReadPixels(widenedInfo, widened.GetPixels(), widened.RowBytes))
+                        {
+                            converted = widened;
+                        }
+                        else
+                        {
+                            widened.Dispose();
+                            converted = bitmap.Copy(SKColorType.Rgba16161616);
+                        }
+                    }
                 }
             }
 
