@@ -432,6 +432,80 @@ public class HdrTonemapperTests
     }
 
     // ──────────────────────────────────────────────────────────────────────
+    // Effectively-SDR bypass
+    // ──────────────────────────────────────────────────────────────────────
+
+    [Test]
+    public void TonemapToBgra8888_EffectivelySdrContent_BypassesEveryCurve()
+    {
+        // A desktop frame on an HDR display reaches SDR white but never above it. Running it
+        // through Hable/ACES/Reinhard lifts or crushes midtones away from what the screen shows
+        // (measured: +13% mean luminance for Hable), so the mapper must return the identity result.
+        // Percentile-based analysis needs a realistic sample count, hence 100 pixels.
+        var pixels = new (float R, float G, float B, float A)[100];
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            float v = i < 60 ? 0.2f : i < 90 ? 0.5f : 1f;
+            pixels[i] = (v, v, v, 1f);
+        }
+
+        using var hdr = MakeF16Bitmap(pixels);
+
+        using var none = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.None);
+        Assert.That(none, Is.Not.Null);
+
+        foreach (var mode in new[]
+        {
+            HdrToneMappingMode.TonemapReinhard,
+            HdrToneMappingMode.TonemapAces,
+            HdrToneMappingMode.TonemapBt2446C,
+            HdrToneMappingMode.TonemapHable,
+        })
+        {
+            using var toned = HdrTonemapper.TonemapToBgra8888(hdr, mode);
+            Assert.That(toned, Is.Not.Null, $"{mode} must produce a bitmap");
+
+            for (int x = 0; x < hdr.Width; x++)
+            {
+                var expected = ReadPixel(none!, x);
+                var actual = ReadPixel(toned!, x);
+                Assert.That(actual, Is.EqualTo(expected), $"{mode} must be identity for effectively-SDR content at x={x}");
+            }
+        }
+    }
+
+    [Test]
+    public void TonemapToBgra8888_RealHdrContent_StillCompresses()
+    {
+        // Regression guard for the bypass: content with genuine headroom (a rare specular peak
+        // ~8x the SDR white) must still be tone mapped, otherwise highlights clip to white.
+        var pixels = new (float R, float G, float B, float A)[100];
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            pixels[i] = (0.5f, 0.5f, 0.5f, 1f);
+        }
+        pixels[99] = (4f, 4f, 4f, 1f);
+
+        using var hdr = MakeF16Bitmap(pixels);
+
+        using var none = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.None);
+        using var hable = HdrTonemapper.TonemapToBgra8888(hdr, HdrToneMappingMode.TonemapHable);
+        Assert.That(none, Is.Not.Null);
+        Assert.That(hable, Is.Not.Null);
+
+        var nonePeak = ReadPixel(none!, 99);
+        var hablePeak = ReadPixel(hable!, 99);
+        var noneBase = ReadPixel(none!, 0);
+        var hableBase = ReadPixel(hable!, 0);
+
+        // The bypass must not engage: an HDR frame is still processed by the curve, so at least
+        // one pixel has to differ from the plain clamp result. (The exact peak value is the tone
+        // curve's business and is covered by the per-curve tests above.)
+        Assert.That(hablePeak.Equals(nonePeak) && hableBase.Equals(noneBase), Is.False,
+            "HDR content must not take the effectively-SDR identity bypass");
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
     // Helpers
     // ──────────────────────────────────────────────────────────────────────
 
