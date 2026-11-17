@@ -188,10 +188,31 @@ Still to do; see the plan below.
   the HDR helpers and `Diagnostics/HdrSelfTestRunner.cs`.
 - `WindowsModernCaptureService.cs` stays at the upstream version (see above).
 
+### Re-localization progress
+
+`scripts/localize-xaml.py` re-applies translations onto upstream's XAML by **exact match**: it reads
+`Resources.resx`, keeps only values that map to a single key (976 of them) and rewrites a plain
+attribute into `{local:Localize Key}` only when the text matches verbatim. Nothing is guessed; text
+upstream added stays English.
+
+| Round | Result |
+|---|---|
+| 22 formerly conflicting views | **286 strings localized across 13 XAML files** (`ApplicationSettingsView` 142, `TaskSettingsPanel` 80, `MainWindow` 52, `FFmpegOptionsWindow` 36, `AfterCaptureWindow` 15, `SendToPromptWindow` 12, `App` 9, `FileTypeSelectorControl` 5, `OpenImageChoiceDialog` 4, `PinToScreenStartupDialog` 4, `OnboardingWizardWindow` 3, `DebugView` 3, `ImageEffectsBrowserDialog` 1) |
+| Whole ported UI | **693 `Localize` usages in 35 XAML files** |
+
+The script picks a distinct `localize:` prefix when a file already declares `xmlns:local` for
+`using:XerahS.UI.Views` (that collision broke `App.axaml` on the first run).
+
+Still English: strings inside **code** (`OcrToolService`, `PinToScreenToolService`,
+`ScrollingCaptureToolService`, `TrayIconHelper`, `RecordingViewModel`, `SendToPromptViewModel`,
+`WorkflowsViewModel`, `SettingsViewModel.Integration`) — the script only rewrites XAML attributes —
+plus upstream text that does not match our resource values, and the 10 files upstream replaced.
+
 ### Remaining work on the expanded port
 
-1. Re-apply localization to the 22 views listed above (upstream structure, our resource keys).
-2. Re-apply localization to the 10 files that upstream replaced (new onboarding, hotkey view).
+1. Localize the code-side strings listed above via `Resources.GetString(...)`.
+2. Translate upstream text that has no matching key yet (new settings, onboarding).
+3. Re-apply localization to the 10 files that upstream replaced (new onboarding, hotkey view).
 3. Decide whether to keep upstream's 8-bit capture or reintroduce the fp16 path; upstream's SDR
    white handling can be reused either way.
 4. Add Ultra HDR JPEG output for the "SDR+HDR" depth (the only container that carries real HDR on
