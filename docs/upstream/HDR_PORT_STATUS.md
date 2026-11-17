@@ -125,11 +125,47 @@ Views/ImageEffectsBrowserDialog.axaml, Views/MainWindow.axaml,
 Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/TaskSettingsPanel.axaml
 ```
 
+### Localization conflicts — resolved
+
+All 22 conflicting views were resolved by keeping **upstream's** version: every one of them is a file
+upstream restructured (new after-capture window, onboarding redesign, send-to API, dialog commands),
+so merging our localized variant line-by-line would either drop upstream behaviour or break their
+bindings. The tree is free of conflict markers and builds; the recipe to restore translations in
+these views is to localize upstream's current text against the existing `Resources.resx` keys:
+
+```
+App.axaml, App.axaml.cs, Controls/FileTypeSelectorControl.axaml,
+Onboarding/OnboardingWizardWindow.axaml, Services/OcrToolService.cs,
+Services/PinToScreenToolService.cs, Services/ScrollingCaptureToolService.cs,
+TrayIconHelper.cs, ViewModels/RecordingViewModel.cs, ViewModels/SendToPromptViewModel.cs,
+ViewModels/SettingsViewModel.Integration.cs, ViewModels/WorkflowsViewModel.cs,
+Views/AfterCaptureWindow.axaml, Views/ApplicationSettingsView.axaml, Views/DebugView.axaml,
+Views/Dialogs/OpenImageChoiceDialog.axaml, Views/FFmpegOptionsWindow.axaml,
+Views/ImageEffectsBrowserDialog.axaml, Views/MainWindow.axaml,
+Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/TaskSettingsPanel.axaml
+```
+
+Concrete upstream changes that forced this: `SendToPromptWindow` became a `UserControl`, the
+send-to settings moved to `SendToFolderPolicySelectedIndex`, `OpenImageChoiceDialog` switched from
+`Click` handlers to `Command` bindings, and `Watermark` was renamed to `PlaceholderText`.
+
+### Capture integration — already upstream
+
+Upstream queries the SDR white level itself: `DisplayConfigHelper.GetSdrWhiteScale(deviceName)` feeds
+`HdrToneMapContext.SdrWhiteScale`, and `DxgiHdrToneMapper` divides by it before applying its curve.
+That is the same fix this fork shipped as `DisplaySdrWhiteLevelHelper` +
+`HdrSdrWhiteNormalizer`, so both files (and the unused `DxgiHdrDuplicationHelper`) were **removed**
+from the port rather than kept as a second source of truth. What remains unique to this fork on the
+capture path is the fp16-preserving pipeline, which is incompatible with upstream's 8-bit mapper.
+
+### Ultra HDR JPEG output — not started
+
+Still to do; see the plan below.
+
 ### Current state of the ported tree
 
-- Worktree `.upstream` (detached at `v0.34.1`) holds two commits:
-  `0d56ad0b` — the feature port (66 files, +49 665 / −596);
-  the follow-up commit that makes it compile (shared helpers, upstream send-to API).
+- Worktree `.upstream` (detached at `v0.34.1`) holds four commits on top of the release, the latest
+  being the cleanup above: **67 files, +53 194 / −589**, no conflict markers.
 - **It builds:** `XerahS.UI` and `XerahS.App` compile on Linux with
   `-p:EnableWindowsTargeting=true -p:SkipBundlePlugins=true -p:EnableAppDrivenPluginBuild=false`.
   Building the UI is the meaningful gate here, because it compiles every ported XAML file.
@@ -154,11 +190,12 @@ Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/Task
 
 ### Remaining work on the expanded port
 
-1. Resolve the 22 localization conflicts (each is a UI file where upstream changed the same lines).
+1. Re-apply localization to the 22 views listed above (upstream structure, our resource keys).
 2. Re-apply localization to the 10 files that upstream replaced (new onboarding, hotkey view).
-3. Restore `HdrSdrWhiteNormalizer` usage inside `DxgiDesktopDuplicationBackend` and decide whether to
-   keep upstream's 8-bit tone mapping or reintroduce the fp16 path.
-4. Re-localize `SettingsViewModel.cs` (reverted to upstream to keep their send-to implementation).
+3. Decide whether to keep upstream's 8-bit capture or reintroduce the fp16 path; upstream's SDR
+   white handling can be reused either way.
+4. Add Ultra HDR JPEG output for the "SDR+HDR" depth (the only container that carries real HDR on
+   Windows).
 5. Runtime verification on Windows: `--hdr-self-test`, `--hdr-capture`, Save-As depth behaviour, and
    the localized UI.
 
