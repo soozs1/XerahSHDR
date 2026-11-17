@@ -108,18 +108,57 @@ namespace XerahS.UI.ViewModels
             Services.ThemeService.ApplyTheme(value);
         }
 
-        [ObservableProperty]
-        private SupportedLanguage _selectedLanguage;
-
-        public SupportedLanguage[] LanguageOptions => (SupportedLanguage[])Enum.GetValues(typeof(SupportedLanguage));
-
-        partial void OnSelectedLanguageChanged(SupportedLanguage value)
+        /// <summary>One entry of the language selector: a culture code plus its own-language name.</summary>
+        public sealed record LanguageChoice(string Code, string DisplayName)
         {
-            if (_isLoading) return;
+            public override string ToString() => DisplayName;
+        }
+
+        [ObservableProperty]
+        private LanguageChoice _selectedLanguage;
+
+        /// <summary>
+        /// Languages that actually ship translations, discovered from satellite assemblies, plus
+        /// "follow the system". Adding a <c>Resources.&lt;culture&gt;.resx</c> file is enough for the
+        /// language to show up here.
+        /// </summary>
+        public IReadOnlyList<LanguageChoice> LanguageOptions { get; } = BuildLanguageOptions();
+
+        private static IReadOnlyList<LanguageChoice> BuildLanguageOptions()
+        {
+            var options = new List<LanguageChoice>
+            {
+                new(string.Empty, SupportedLanguage.Automatic.GetLocalizedDescription())
+            };
+
+            foreach (var culture in Localization.GetAvailableCultures())
+            {
+                options.Add(new LanguageChoice(culture.Name, Localization.GetDisplayName(culture)));
+            }
+
+            return options;
+        }
+
+        private static LanguageChoice ResolveLanguageChoice(string? languageCode, SupportedLanguage legacy)
+        {
+            string resolved = !string.IsNullOrWhiteSpace(languageCode)
+                ? languageCode!
+                : legacy.ToCultureCode() ?? string.Empty;
+
+            return BuildLanguageOptions().FirstOrDefault(
+                       option => string.Equals(option.Code, resolved, StringComparison.OrdinalIgnoreCase))
+                   ?? new LanguageChoice(string.Empty, SupportedLanguage.Automatic.GetLocalizedDescription());
+        }
+
+        partial void OnSelectedLanguageChanged(LanguageChoice value)
+        {
+            if (_isLoading || value == null) return;
+
+            XerahS.Core.SettingsManager.Settings.LanguageCode = value.Code;
 
             // Apply the UI culture immediately so newly created views/windows pick it up.
             // Existing views keep their already-resolved strings until the next restart.
-            Localization.ApplyCulture(value.ToCultureCode());
+            Localization.ApplyCulture(value.Code);
         }
 
         [ObservableProperty]
@@ -289,7 +328,7 @@ namespace XerahS.UI.ViewModels
             SilentRun = settings.SilentRun;
             SelectedTheme = settings.SelectedTheme;
             ThemeMode = settings.ThemeMode;
-            SelectedLanguage = settings.Language;
+            SelectedLanguage = ResolveLanguageChoice(settings.LanguageCode, settings.Language);
             TrayIconProgressEnabled = settings.TrayIconProgressEnabled;
             TaskbarProgressEnabled = settings.TaskbarProgressEnabled;
             DisableToastNotification = settings.DisableToastNotification;
@@ -419,7 +458,7 @@ namespace XerahS.UI.ViewModels
             settings.UpdateChannel = UpdateChannel;
             settings.PreReleaseUpdateSource = PreReleaseUpdateSource;
             settings.CustomPreReleaseUpdateSource = CustomPreReleaseUpdateSource?.Trim() ?? string.Empty;
-            settings.Language = SelectedLanguage;
+            settings.LanguageCode = SelectedLanguage?.Code ?? string.Empty;
             settings.SendToFolderPolicy = SendToDefaultFolderPolicy;
             settings.SendToBatchExecutionPolicy = SendToDefaultBatchPolicy;
             settings.SendToBatchConfirmThreshold = SendToDefaultBatchThreshold;

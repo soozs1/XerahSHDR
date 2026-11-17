@@ -96,14 +96,17 @@
 
 ## Adding a language
 
-The UI is localized through satellite assemblies, so a new language needs **two** steps and no code
-changes in the views:
+The UI is localized through satellite assemblies and the selector is **discovered at runtime**, so a
+new language needs exactly **one** step and no code change:
 
 1. Add `src/desktop/core/XerahS.Common/Resources.<culture>.resx` (for example `Resources.fr.resx`)
    next to `Resources.resx`. Copy the file, translate the values, leave keys untouched. Missing keys
    automatically fall back to the neutral (English) value, so a partial translation is valid.
-2. Expose it in the selector: add the value to `SupportedLanguage` and map it in
-   `SupportedLanguageExtensions.ToCultureCode`.
+
+The next start lists the new language: `Localization.GetAvailableCultures()` scans the satellite
+assemblies next to the executable (`<culture>/XerahS.Common.resources.dll`) and the settings store the
+chosen culture as a free-form string (`ApplicationConfig.LanguageCode`), not as an enum value.
+`SupportedLanguage`/`ToCultureCode` remain only to read configs written by older builds.
 
 `Localization.ApplyCulture(code)` sets `CurrentUICulture`/`CurrentCulture` for the UI and the
 formatted values; `Resources.GetString(key)` and the `{local:Localize Key}` markup extension both read

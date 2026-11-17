@@ -90,8 +90,14 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        // Apply the persisted UI language before any views are constructed.
-        XerahS.Common.Localization.ApplyCulture(XerahS.Core.SettingsManager.Settings.Language.ToCultureCode());
+        // Apply the persisted UI language before any views are constructed. LanguageCode wins;
+        // the enum is only a fallback for configs written before the code became a free-form
+        // culture string (so a new Resources.<culture>.resx needs no code change).
+        var startupSettings = XerahS.Core.SettingsManager.Settings;
+        XerahS.Common.Localization.ApplyCulture(
+            string.IsNullOrWhiteSpace(startupSettings.LanguageCode)
+                ? startupSettings.Language.ToCultureCode()
+                : startupSettings.LanguageCode);
 
         // Share the host's localization with the editor library so tool names and editor
         // hints follow the selected language without coupling the library to XerahS.Common.
