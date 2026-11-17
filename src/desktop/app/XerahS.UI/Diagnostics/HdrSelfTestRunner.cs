@@ -60,6 +60,8 @@ namespace XerahS.UI.Diagnostics;
 /// </summary>
 public static class HdrSelfTestRunner
 {
+    private const string CaptureTitle = "HDR SCREEN CAPTURE";
+
     private static readonly (string Name, Color Color)[] Stripes =
     {
         ("red",     Color.FromRgb(255, 0, 0)),
@@ -401,7 +403,7 @@ public static class HdrSelfTestRunner
             Note(capture != null, "capture-not-null");
             if (capture == null)
             {
-                return Finish(outputDir, report, metrics, false);
+                return Finish(outputDir, report, metrics, false, CaptureTitle);
             }
 
             bool isHdr = capture.ColorType == SKColorType.RgbaF16;
@@ -415,7 +417,7 @@ public static class HdrSelfTestRunner
                 ImageHelpers.SaveBitmap(capture, Path.Combine(outputDir, "saved-hdr-16bit.png"), PNGBitDepth.Bit16);
                 report.Add("display/capture is 8-bit SDR: HDR checks are not applicable.");
                 DumpCapture(capture, outputDir);
-                return Finish(outputDir, report, metrics, pass);
+                return Finish(outputDir, report, metrics, pass, CaptureTitle);
             }
 
             var (white, peakRatio) = HdrContentAnalyzer.Analyze(capture);
@@ -480,7 +482,7 @@ public static class HdrSelfTestRunner
             RestoreExecutionState();
         }
 
-        return Finish(outputDir, report, metrics, pass);
+        return Finish(outputDir, report, metrics, pass, CaptureTitle);
     }
 
     // ── composition nudge ───────────────────────────────────────────────────
@@ -913,9 +915,9 @@ public static class HdrSelfTestRunner
         }
     }
 
-    private static int Finish(string outputDir, List<string> report, Dictionary<string, object> metrics, bool pass)
+    private static int Finish(string outputDir, List<string> report, Dictionary<string, object> metrics, bool pass, string title = "HDR SELF-TEST")
     {
-        report.Insert(0, pass ? "HDR SELF-TEST: PASS" : "HDR SELF-TEST: FAIL");
+        report.Insert(0, $"{title}: {(pass ? "PASS" : "FAIL")}");
         string txt = string.Join(Environment.NewLine, report);
         File.WriteAllText(Path.Combine(outputDir, "report.txt"), txt);
         File.WriteAllText(
