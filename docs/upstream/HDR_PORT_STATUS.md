@@ -83,6 +83,65 @@ Goal: carry the HDR work of this fork (`v0.24.18` + 80 commits) onto the officia
 | SDR white | not queried; `1.0 == 80 cd/m²` assumed | `DISPLAYCONFIG_SDR_WHITE_LEVEL` per output, frame normalized to it |
 | Verification | none | `--hdr-self-test` / `--hdr-capture` with numeric report |
 
+## Expanded port: localization and send-to policies
+
+The port covers everything this fork has that v0.34.1 does not, not just HDR.
+
+### What upstream v0.34.1 actually has
+
+- Localization exists only for statistics strings: `src/desktop/app/XerahS.UI/Localization/StatisticsStrings.*.resx`
+  (29 files). There is no app-wide resource file, no XAML markup extension, and
+  `grep -c "local:Localize"` is 0 outside the patched panel.
+- Send-to policies exist as UI; our `SendToPolicyResolver` (default policy per destination +
+  batch confirmation) is an addition.
+
+### Localization patch
+
+`git diff v0.24.18..HEAD` over the 79 files touched by the localization commits
+(84c73555, 6ba2b088, 439d77db, 9c1cda0a, 6c5fa86c, bf183737, c43ea028, 16374d03, 6addc85e,
+788ef2c8, 18f78258, 62c33b80, 8ff6e720, a91ca4ff, 43ab2866, e8f36788, 28c8f015, 26bbb73c,
+2d9eba20, cefb8605) = 24 594 lines.
+
+| Outcome | Files |
+|---|---|
+| Applied (new infrastructure, resx, view models, non-conflicting XAML) | 47 |
+| Refer to files upstream deleted (onboarding redesign, `HotkeySettingsView`, `ProviderExplorerViewModel`) | 10 |
+| Conflicted and left at the upstream version | 22 |
+
+The conflicted files are the ones where upstream changed the same lines: plain strings we wrapped in
+`{local:Localize ...}`, and one Avalonia rename (`Watermark` → `PlaceholderText`). Resolving them
+needs a build loop, because a wrong pick silently drops either upstream's UI change or our
+translation. They were therefore reverted to upstream and recorded here instead of guessed at:
+
+```
+App.axaml, App.axaml.cs, Controls/FileTypeSelectorControl.axaml,
+Onboarding/OnboardingWizardWindow.axaml, Services/OcrToolService.cs,
+Services/PinToScreenToolService.cs, Services/ScrollingCaptureToolService.cs,
+TrayIconHelper.cs, ViewModels/RecordingViewModel.cs, ViewModels/SendToPromptViewModel.cs,
+ViewModels/SettingsViewModel.Integration.cs, ViewModels/WorkflowsViewModel.cs,
+Views/AfterCaptureWindow.axaml, Views/ApplicationSettingsView.axaml, Views/DebugView.axaml,
+Views/Dialogs/OpenImageChoiceDialog.axaml, Views/FFmpegOptionsWindow.axaml,
+Views/ImageEffectsBrowserDialog.axaml, Views/MainWindow.axaml,
+Views/PinToScreenStartupDialog.axaml, Views/SendToPromptWindow.axaml, Views/TaskSettingsPanel.axaml
+```
+
+### Current state of the ported tree
+
+- Worktree `.upstream` (detached at `v0.34.1`) has the result committed as `0d56ad0b`:
+  **66 files, +49 665 / −596**, no conflict markers.
+- Present and verified by path: `Markup/LocalizeExtension.cs`, `XerahS.Common/Resources.resx`,
+  `XerahS.Core/Helpers/HdrTonemapper.cs`, `XerahS.Core/SendTo/SendToPolicyResolver.cs`,
+  the HDR helpers and `Diagnostics/HdrSelfTestRunner.cs`.
+- `WindowsModernCaptureService.cs` stays at the upstream version (see above).
+
+### Remaining work on the expanded port
+
+1. Resolve the 22 localization conflicts against a building tree.
+2. Re-apply localization to the 10 files that upstream replaced (new onboarding, hotkey view).
+3. Restore `HdrSdrWhiteNormalizer` usage inside `DxgiDesktopDuplicationBackend`.
+4. Replace `{local:Localize}` in `TaskImageSettingsPanel.axaml` if the patch is to be proposed alone.
+5. Initialize the upstream submodules (`Omacut`, `native/omasnap`, `ShareX.ImageEditor`) and build.
+
 ## Recommended patch scope for the author
 
 **A. Small and reviewable (propose first)**
