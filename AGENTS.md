@@ -94,6 +94,29 @@
    - As of 2026-11-17 upstream `develop` is **5230 commits ahead** of `v0.24.18` (latest tag `v0.34.1`) and a trial merge yields **76 conflicted files** across CI, onboarding UI, packaging and the editor submodule pointer. Do not attempt it as a routine merge.
    - Updating = porting, not merging: take upstream in a separate clone and re-apply the HDR patch set (`HdrSdrWhiteNormalizer`, `DisplaySdrWhiteLevelHelper`, the `HdrTonemapper` SDR bypass, the `ImageHelpers` encoders, `MainViewModelHelper` Save-As depth handling, `TaskImageSettingsPanel` + resx, `HdrSelfTestRunner`, the HDR tests and §9 here). Validate with the HDR test filter and `--hdr-self-test` before switching over.
 
+## Adding a language
+
+The UI is localized through satellite assemblies, so a new language needs **two** steps and no code
+changes in the views:
+
+1. Add `src/desktop/core/XerahS.Common/Resources.<culture>.resx` (for example `Resources.fr.resx`)
+   next to `Resources.resx`. Copy the file, translate the values, leave keys untouched. Missing keys
+   automatically fall back to the neutral (English) value, so a partial translation is valid.
+2. Expose it in the selector: add the value to `SupportedLanguage` and map it in
+   `SupportedLanguageExtensions.ToCultureCode`.
+
+`Localization.ApplyCulture(code)` sets `CurrentUICulture`/`CurrentCulture` for the UI and the
+formatted values; `Resources.GetString(key)` and the `{local:Localize Key}` markup extension both read
+through the same `ResourceManager`, so a new satellite file covers XAML and code at once.
+
+Rules that keep translations cheap to add:
+
+- Never hard-code user-visible text — use `Resources.GetString("Key")` in code and
+  `{local:Localize Key}` in XAML. Keys are shared across views on purpose (e.g. `Common_Cancel`).
+- Keep the neutral file the single source of key names; translators only copy it.
+- `scripts/localize-xaml.py` re-applies translations to a ported tree by exact value match, so
+  upstream text that already has a key is localized without hand-editing.
+
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
 - Create or update GitHub issues only when the user explicitly asks for it.
