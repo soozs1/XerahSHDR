@@ -79,6 +79,20 @@
    - **Screen-content mode:** `XerahS.exe --hdr-capture <outDir>` captures whatever is currently on the desktop (no test card), writes the raw fp16 dump, the production SDR and 16-bit outputs (through the real encoders), a display-referred `reference-screen-sdr16.png`, all tone-map variants under `variants/`, and `report.txt`/`report.json` with the HDR profile. Use it to verify an HDR photo/video/game against the live screen. The main window is hidden first; the app exits when done (exit code 0). The userlog records `[HDR] screen capture mode requested: <dir>` / `[HDR] starting screen capture` — if those lines are missing, the running binary predates the mode (rebuild).
    - **Real HDR test image:** `HdrPhotoLoader` decodes Radiance RGBE photos; `UltraHdrJpegGeneratorTests` writes `Documents\XerahS\HdrVariants\UltraHDR_venice_sunset.jpg` — a standards-compliant Ultra HDR JPEG (ISO 21496-1: base SDR JPEG + APP1 `hdrgm:*` XMP + APP2 MPF + appended gain-map JPEG, offsets verified against the reference libultrahdr layout). Open it in Windows Photos on an HDR display to get genuine HDR highlights for `--hdr-capture`.
 
+10. **Single source of truth and the Windows build mirror**
+   - The WSL checkout at `/home/XR/programs/XerahS-develop` is **the only repository**: git history, submodules and every source edit live here.
+   - `C:\programs\XerahS-develop` is a **generated build mirror** (no `.git`, never edited by hand). It exists because the desktop target is Windows-only and `cmd.exe` cannot build inside a UNC path (`\\wsl.localhost\...`); running a `.cmd` from the WSL folder fails with "UNC paths are not supported".
+   - Rebuild everything from the WSL checkout with one command: `./build-windows.sh`. It cleans WSL leftovers, syncs `src`, `tests` and the build props (excluding `bin`, `obj`, `node_modules`), writes `.xerahs-mirror`, runs `build-windows.cmd --no-pause` and prints the EXE path.
+   - From Windows, `C:\programs\XerahS-develop\build-windows.cmd` performs the build without syncing and warns that the tree has no `.git`.
+   - EXE: `C:\programs\XerahS-develop\src\desktop\app\XerahS.App\bin\Debug\net10.0-windows10.0.26100.0\XerahS.exe`. There is no `win-x64` folder — that only appears on `publish` with a RID.
+   - **Never** name a build-script variable `OutDir`, `OutputPath` or `BaseOutputPath`: MSBuild inherits environment variables as global properties, so an `OUTDIR` variable silently redirected every assembly into `<project>\src\desktop\app\...` while the real EXE stayed stale.
+
+11. **Upstream relationship (ShareX/XerahS)**
+   - Local history was imported without ancestry. `git replace --graft 34736625 v0.24.18` records the true fork point so `git merge-base HEAD upstream/develop` works; `git replace -d 34736625` restores the flat view.
+   - Remote: `upstream = https://github.com/ShareX/XerahS`. Fetch with `git -c submodule.recurse=false fetch --tags --no-recurse-submodules upstream develop` (recurse-submodules fails: the submodule remotes do not have the parent's objects).
+   - As of 2026-11-17 upstream `develop` is **5230 commits ahead** of `v0.24.18` (latest tag `v0.34.1`) and a trial merge yields **76 conflicted files** across CI, onboarding UI, packaging and the editor submodule pointer. Do not attempt it as a routine merge.
+   - Updating = porting, not merging: take upstream in a separate clone and re-apply the HDR patch set (`HdrSdrWhiteNormalizer`, `DisplaySdrWhiteLevelHelper`, the `HdrTonemapper` SDR bypass, the `ImageHelpers` encoders, `MainViewModelHelper` Save-As depth handling, `TaskImageSettingsPanel` + resx, `HdrSelfTestRunner`, the HDR tests and §9 here). Validate with the HDR test filter and `--hdr-self-test` before switching over.
+
 ## GitHub Issues
 - Do not create GitHub issues automatically when a bug or feature is discussed.
 - Create or update GitHub issues only when the user explicitly asks for it.

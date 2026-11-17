@@ -25,8 +25,16 @@ echo "[1/4] Cleaning WSL leftovers (node_modules/.bin symlinks, locked.zip)..."
 echo "[2/4] Syncing sources to $WIN_TREE ..."
 tar -C . \
     --exclude='bin' --exclude='obj' --exclude='node_modules' \
-    -cf - src tests Directory.Build.props Directory.Packages.props Directory.Build.rsp build-windows.cmd \
+    -cf - src tests AGENTS.md Directory.Build.props Directory.Packages.props Directory.Build.rsp build-windows.cmd \
   | tar -C "$WIN_TREE" -xf -
+
+# Mark the destination as a generated mirror so nobody edits it by hand.
+{
+    echo "This tree is a generated build mirror. Do not edit it."
+    echo "Sources live in: $PWD"
+    echo "Commit: $(git rev-parse HEAD 2>/dev/null || echo unknown)"
+    echo "Synced: $(date -Is)"
+} > "$WIN_TREE/.xerahs-mirror"
 
 echo "[3/4] Building on Windows..."
 WIN_TREE_WIN="C:\\programs\\XerahS-develop"

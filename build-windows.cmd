@@ -28,6 +28,10 @@ if /I "%~1"=="--no-pause" set "PAUSE_AT_END=0"
 echo === XerahS build ===
 echo Folder : %ROOT%
 echo Log    : %LOG%
+if not exist "%ROOT%.git" (
+    echo Note   : this tree has no .git - it is a generated build mirror.
+    echo          Edit sources in the WSL checkout and rebuild with build-windows.sh.
+)
 echo.
 
 if "%ROOT:~0,2%"=="\\" (
