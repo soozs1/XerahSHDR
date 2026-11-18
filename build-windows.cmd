@@ -21,7 +21,12 @@ setlocal EnableExtensions
 set "ROOT=%~dp0"
 set "LOG=%ROOT%build.log"
 set "PROJ=src\desktop\app\XerahS.App\XerahS.App.csproj"
-set "APP_BIN_DIR=src\desktop\app\XerahS.App\bin\Debug\net10.0-windows10.0.26100.0"
+REM Pick the TFM the build produced instead of hard-coding one; the baseline
+REM moved from net10.0 to net11.0 and will move again.
+set "APP_BIN_DIR="
+for /d %%D in ("src\desktop\app\XerahS.App\bin\Debug\net*-windows*") do set "APP_BIN_DIR=%%D"
+if not defined APP_BIN_DIR set "APP_BIN_DIR=src\desktop\app\XerahS.App\bin\Debug\net11.0-windows10.0.26100.0"
+et11.0-windows10.0.26100.0"
 set "PAUSE_AT_END=1"
 if /I "%~1"=="--no-pause" set "PAUSE_AT_END=0"
 
@@ -49,6 +54,9 @@ if errorlevel 1 (
     goto :fail
 )
 
+REM The upstream baseline moved to .NET 11. Prefer the per-user SDK when it exists,
+REM because the machine-wide install may still be on an older major version.
+if exist "%LOCALAPPDATA%\Microsoft\dotnet\dotnet.exe" set "PATH=%LOCALAPPDATA%\Microsoft\dotnet;%PATH%"
 where dotnet >nul 2>&1
 if errorlevel 1 (
     echo [FATAL] dotnet is not on PATH. Install the .NET 10 SDK or open a shell where it resolves.

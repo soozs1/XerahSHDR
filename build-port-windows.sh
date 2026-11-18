@@ -32,4 +32,5 @@ rm -f "$TAR_FILE"
 
 echo "[3/3] Building on Windows (cmd.exe must run from a local drive)..."
 cd "$TARGET"
-cmd.exe /c "cd /d $WINDOWS_TARGET && build-windows.cmd --no-pause"
+# The upstream baseline moved to .NET 11; prefer the per-user SDK when the machine-wide one is older.
+cmd.exe /c 'set "PATH=%LOCALAPPDATA%\Microsoft\dotnet;%PATH%" && cd /d C:\programs\XerahS-port && build-windows.cmd --no-pause'
