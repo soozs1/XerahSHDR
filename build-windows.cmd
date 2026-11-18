@@ -65,6 +65,8 @@ if errorlevel 1 (
 
 echo [1/4] Stopping running XerahS instances (they lock bin\ DLLs)...
 taskkill /F /IM XerahS.exe >nul 2>&1
+REM The port is often started as "dotnet XerahS.dll"; that host locks the same DLLs.
+powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter \"Name='dotnet.exe'\" | Where-Object { $_.CommandLine -like '*XerahS.dll*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }" >nul 2>&1
 taskkill /F /IM XerahS.Assistant.exe >nul 2>&1
 taskkill /F /IM xerahs-watchfolder-daemon.exe >nul 2>&1
 
