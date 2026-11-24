@@ -80,7 +80,15 @@ internal readonly record struct HdrToneMapContext(float SdrWhiteScale, float Pea
 
     public static bool IsHdrOutput(OutputDescription1 description)
     {
-        return description.AttachedToDesktop &&
-            description.ColorSpace == ColorSpaceType.RgbFullG2084NoneP2020;
+        if (!description.AttachedToDesktop ||
+            description.ColorSpace != ColorSpaceType.RgbFullG2084NoneP2020)
+        {
+            return false;
+        }
+
+        // The PQ colour space alone can survive an HDR toggle that Windows did not actually apply to
+        // the composition, so confirm it with the OS. When the query is unavailable, trust DXGI.
+        DisplayConfigHelper.AdvancedColorState? state = DisplayConfigHelper.GetAdvancedColorState(description.DeviceName);
+        return state is null || state.Value.Enabled;
     }
 }
